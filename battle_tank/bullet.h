@@ -2,31 +2,35 @@
 #define BULLET_H
 
 #include "sceneobject.h"
+#include "rotationalmotion.h"
+#include "forwardmovement.h"
 
-#define BULLET_READY_TO_FIRE 0 // Пуля в пушке
-#define BULLET_IS_FLYING 1// В полете
-#define BULLET_FLOWN -1// Улетела
-
-#define BULLET_DEFAULT_SPEED 100
+#define BULLET_DEFAULT_FORWARD_SPEED 500
+#define BULLET_DEFAULT_ROTATION_SPEED 0
 
 class Bullet : public SceneObject
 {
 public:
-    Bullet(int _speed = BULLET_DEFAULT_SPEED,
-           Position _position = Position(),
+    // Явное задание первых двух параметров, чтобы вызывающие
+    // классы точно передавали сюда позицию и угол юнита
+    Bullet(Position _position, double angle,
+           int _speed = BULLET_DEFAULT_FORWARD_SPEED,
            QImage _texture = QImage("bullet.png")) :
         SceneObject(_position, _texture),
-        speed(_speed), point_of_departure(position),
-        status(BULLET_READY_TO_FIRE){}
+        point_of_departure(position),
+        forward(_speed,_speed),
+        rotation(BULLET_DEFAULT_ROTATION_SPEED, angle),
+        isFly(false){}
     
     void get_speed();
 
     void isDistanceMax();
 private:
-    int speed;
     Position point_of_departure;
     int range;
-    int status;
+    bool isFly;
+    ForwardMovement forward;
+    RotationalMotion rotation;
 };
 
 #endif // BULLET_H

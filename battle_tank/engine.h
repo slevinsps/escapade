@@ -2,22 +2,36 @@
 #define ENGINE_H
 
 #include "component.h"
+#include "forwardmovement.h"
 
-#define ENGINE_SPEED 100
-#define ENGINE_BACKSPEED 20
+#define ENGINE_DEFAULT_SPEED 0
+#define ENGINE_MAX_SPEED 100
+#define ENGINE_MAX_BACKSPEED -20
 
 class Engine : public Component
 {
 public:
-    Engine(Position _position = Position(),
-           QImage _texture = QImage("weapon.png"),
-           int _speed = ENGINE_SPEED,
-           int _backspeed = ENGINE_BACKSPEED) :
-        Component(_position, _texture),
-        speed(_speed), backspeed(_backspeed){}
-protected:
-    int speed;
-    int backspeed;
+    // Ожидается позиция юнита, поэтому она задается явно
+    // Дальше идут необязательные параметры конкретной модели
+    // Поскольку не планируется изменение картинки, она
+    // стоит в конце
+    Engine(Position _position,
+           int max_speed = ENGINE_MAX_SPEED,
+           int max_backspeed = ENGINE_MAX_BACKSPEED,
+           std::string name = "default engine",
+           QImage _texture = QImage("engine.png")) :
+        Component(_position, _texture, name),
+        movement(ENGINE_DEFAULT_SPEED, max_speed,
+                 max_backspeed){}
+
+    int get_speed() const;
+    int get_max_speed() const;
+    int get_max_backspeed() const;
+
+    void applyBonus(Bonus bonus) override;
+
+private:
+    ForwardMovement movement;
 };
 
 #endif // ENGINE_H
