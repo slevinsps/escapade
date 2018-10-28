@@ -18,12 +18,4 @@ public:
     }
 };
 
-#include "scene.h"
-class BattleGround
-{
-    Scene
-    UnitControl unit1;
-
-};
-
 #endif // TANK_CONTROL_H
