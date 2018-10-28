@@ -6,29 +6,20 @@
 #define ROTATION_MOVEMENT_DEFAULT_SPEED 0
 #define ROTATION_MOVEMENT_DEFAULT_ANGLE 0
 
-class RotationalMotion: public Movement
+#define ROTATE_MOVEMENT_H
+
+#include "movement.h"
+class RotateMovement : public Movement
 {
 public:
-    RotationalMotion(int _speed = ROTATION_MOVEMENT_DEFAULT_SPEED,
-                    int _angle = ROTATION_MOVEMENT_DEFAULT_ANGLE
-                    )
-        : current_speed(_speed), angle(_angle){}
-
-    int getAngle() const;
-    int getMaxSpeed() const;
-    int getMaxBackSpeed() const;
-
-    // В установке угла нет необходимости
-    //void setAngle(int angle);
-
-    //
-    void setMaxSpeed(int speed);
-    void setMaxBackSpeed(int speed);
+    RotateMovement(int max_speed, int current_angle) : current_angle_(current_angle), Movement(max_speed){}
+    virtual ~RotateMovement(){}
+    int get_current_angle() const;
+    void set_current_angle(int);
+    const bool operator == (const RotateMovement &v1, const RotateMovement &v2);
 private:
-    float current_speed;
-
-    // Не задается const, поскольку может меняться бонусом
-    float angle;
+    int current_angle_;
 };
 
-#endif // ROTATIONALMOTION_H
+#endif // ROTATE_MOVEMENT_H
+

@@ -5,31 +5,37 @@
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
-typedef struct Position
+class Position
 {
 public:
-    Position(int _x = 0, int _y = 0) : x(_x), y(_y) {}
+    Position(int x = 0, int y = 0) : x(x), y(y) {}
+    const bool operator == (const Position &v1, const Position &v2)
+    {
+        return (v1.x == v2.x) && (v1.y == v2.y);
+    }
+
     int x, y;
-} Position;
+};
 
 class SceneObject
 {
 public:
-    SceneObject(Position _position = Position(),
-                QImage _texture = QImage("default.png")) :
-        texture(_texture),
-        texture_width(_texture.width()), texture_height(_texture.height()),
-        position(_position){}
+    SceneObject(Position position = Position(),
+                QImage texture = QImage("default.png")) :
+        texture_(texture),
+        texture_width_(texture.width()),
+        texture_height_(texture.height()),
+        position(position){}
 
     QImage getImage() const;
     int getImageWidth() const;
     int getImageHeigh() const;
-
     Position getPosition() const;
+
 private:
-    QImage texture;
-    int texture_width;
-    int texture_height;
+    QImage texture_;
+    int texture_width_;
+    int texture_height_;
 protected:
     void setPosition();
     Position position;
