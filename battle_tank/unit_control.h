@@ -27,6 +27,3 @@ class BattleGround
 };
 
 #endif // TANK_CONTROL_H
-нельзя называть настоящте имена
-один из
-разве нет
