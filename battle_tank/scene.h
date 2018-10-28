@@ -2,6 +2,11 @@
 #define SCENE_H
 
 #include <vector>
+#include "unit.h"
+#include "socket.h"
+#include "map.h"
+#include "bonuscontrol.h"
+
 
 #include "unit.h"
 #include "socket.h"
@@ -23,8 +28,6 @@ private:
     std::vector<Unit> units_;
     Map map_;
     bonusControl bonuses_;
-
-
 };
 
 #endif // SCENE_H

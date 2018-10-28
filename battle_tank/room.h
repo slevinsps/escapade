@@ -2,7 +2,6 @@
 #define ROOM_H
 
 #include <vector>
-
 #include "user_control_bundle.h"
 #include "static_room_parameters.h"
 #include "dynamic_room_parameters.h"
@@ -33,7 +32,6 @@ private:
     // Количество игроков не превышает максимум
     // Все подтвердили готовность
     bool isEverybodyOK_;
-
 };
 
 #endif // ROOM_H
