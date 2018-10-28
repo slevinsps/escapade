@@ -8,9 +8,7 @@
 
 // Получаем с сервера
 #include "lobby.h"
-
-// Отправляем на сервер
-#include "user_control.h"
+#include "user_control_bundle.h"
 
 // В опциях проекта, в разделе Linker, в пункте Additional Dependancies укажите Ws2_32.lib
 

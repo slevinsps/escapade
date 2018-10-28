@@ -20,8 +20,8 @@ public:
     Unit(int _team_id,
          Position _position = Position(),
          QImage _texture = QImage("red_circle.png")) :
-        SceneObject(_position, _texture),
-        team_id(_team_id){}
+         SceneObject(_position, _texture),
+         team_id(_team_id){}
 
     // Является ли юнит союзником
     bool is_friend(const Unit& unit) const;
