@@ -12,19 +12,9 @@ private:
     Body body;
     Engine engine;
 
-    void collect_health() override;
-    void collect_speed() override;
-    void collect_damage() override;
-
 public:
-    Tank(Weapon _weapon = Weapon(),
-         Body _body = Body(),
-         Engine _engine = Engine()) :
+    Tank(Weapon _weapon, Body _body, Engine _engine) :
     weapon(_weapon), body(_body), engine(_engine){}
-
-    // Является ли юнит союзником
-    virtual bool isFriendlyFire(const Unit& unit) const;
-
 
 };
 
