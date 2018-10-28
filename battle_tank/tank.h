@@ -12,20 +12,12 @@ private:
     Body body;
     Engine engine;
 
-    void collect_health() override;
-    void collect_speed() override;
-    void collect_damage() override;
-
 public:
-    Tank(Weapon _weapon = Weapon(),
-         Body _body = Body(),
-         Engine _engine = Engine()) :
-    weapon(_weapon), body(_body), engine(_engine){}
-
-    // Является ли юнит союзником
-    virtual bool isFriendlyFire(const Unit& unit) const;
-
-
+    Tank(Weapon _weapon, Body _body, Engine _engine,
+         int _team_id,
+         Position _position = Position(),
+         QImage _texture = QImage("red_circle.png")
+         ) : Unit(_team_id, _position, _texture), weapon(_weapon), body(_body), engine(_engine){}
 };
 
 #endif // TANK_H

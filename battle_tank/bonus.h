@@ -9,7 +9,6 @@
 
 #define BONUS_DEFAULT_COEFFICIENT 1.1
 
-#include "unit.h"
 #include "sceneobject.h"
 
 class Bonus : public SceneObject
@@ -18,14 +17,11 @@ public:
     Bonus( Position _position = Position(),
            QImage _texture = QImage("damage_type.png"),
            int _type = BONUS_TYPE_DAMAGE,
-           int _coefficient = BONUS_DEFAULT_COEFFICIENT) :
+           double _coefficient = BONUS_DEFAULT_COEFFICIENT) :
         SceneObject(_position, _texture),
         controlled_by(BONUS_NOBODY),
         type(_type), coefficient(_coefficient){}
 
-    void apply_bonus(Unit &unit){
-        controlled_by = unit.get_unit_id();
-    }
 protected:
     int controlled_by;
     int type;

@@ -1,7 +1,7 @@
 #ifndef TANK_CONTROL_H
 #define TANK_CONTROL_H
 
-#include "tank.h"
+#include "unit.h"
 #include <string>
 
 class UnitControl
@@ -9,11 +9,12 @@ class UnitControl
 public:
     UnitControl();
 
-    const int id = 1;
-    const std::string name;
+    std::string name_of_tank;
+    double version;
+    int tank_model;
 
-    void run(Tank tank){
-         tank.fire();
+    void run(Unit unit){
+         unit.fire();
     }
 };
 
