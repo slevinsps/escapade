@@ -86,7 +86,6 @@ HEADERS += \
     bullet.h \
     sceneobject.h \
     component.h \
-    engine.h \
     body.h \
     scene.h \
     bonuscontrol.h \
@@ -100,7 +99,6 @@ HEADERS += \
     lobby.h \
     client.h \
     network.h \
-    user_control.h \
     socket.h \
     loader.h \
     rotational_movement.h \
@@ -111,7 +109,6 @@ HEADERS += \
     bullet.h \
     component.h \
     dynamic_room_parameters.h \
-    engine.h \
     forward_movement.h \
     loader.h \
     lobby.h \
@@ -130,9 +127,11 @@ HEADERS += \
     unit.h \
     unit_control.h \
     user.h \
-    user_control.h \
     visualizer.h \
-    weapon.h
+    weapon.h \
+    user_control_bundle.h \
+    base_visualizer.h \
+    baseunitcontrol.h
 
 FORMS += \
         mainwindow.ui
