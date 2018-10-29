@@ -11,13 +11,13 @@ class Component : public SceneObject
 public:
     // Component абстрактный класс, поэтому без дефолтных
     // значений
-    Component(Position position, QImage texture,
-              std::string name):
-        SceneObject(position, texture), name(name){}
+    Component(Position _position, QImage _texture,
+              std::string _name);
+    ~Component() = default;
 protected:
-    std::string name_;
+    std::string name;
 
-    virtual void applyBonus(Bonus bonus);
+    virtual void applyBonus(Bonus bonus) = 0;
 };
 
 #endif // COMPONENT_H

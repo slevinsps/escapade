@@ -6,8 +6,8 @@
 class Loader
 {
 public:
-    Loader();
-    ~Loader();
+    Loader() = default;
+    ~Loader() = default;
 protected:
     // Возвращают код ошибки
     // Переводит объект типа Loader в std::string

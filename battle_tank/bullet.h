@@ -4,7 +4,6 @@
 #include "sceneobject.h"
 #include "rotational_movement.h"
 #include "forward_movement.h"
-#include "rotational_movement.h"
 
 #define BULLET_DEFAULT_FORWARD_SPEED 500
 #define BULLET_DEFAULT_ROTATION_SPEED 0
@@ -14,31 +13,24 @@ class Bullet : public SceneObject
 public:
     // Явное задание первых двух параметров, чтобы вызывающие
     // классы точно передавали сюда позицию и угол юнита
-    Bullet(Position position_begin = Position(),
-           Position position_cur = Position(),
-           double angle = 0,
-           int speed = BULLET_DEFAULT_FORWARD_SPEED,
-           QImage texture = QImage("bullet.png")) :
-        SceneObject(position_cur, texture),
-        begin_point_(position_begin),
-        forward_(speed,speed),
-        rotation_(BULLET_DEFAULT_ROTATION_SPEED, angle),
-        isLaunch_(false),
-        range_(0){}
+    Bullet(Position _position, double angle,
+           int _speed = BULLET_DEFAULT_FORWARD_SPEED,
+           QImage _texture = QImage("bullet.png")) :
+        SceneObject(_position, _texture),
+        point_of_departure(position),
+        forward(_speed,_speed),
+        rotation(RotateMovement(angle)),
+        isFly(false){}
     
-    ForwardMovement& get_forward_movement();
-    bool get_islaunch();
-    int get_range();
-    bool is_distance_max();
-    void count_range();
-    int move();
+    void get_speed();
 
+    void isDistanceMax();
 private:
-    Position begin_point_;
-    int range_;
-    bool isLaunch_;
-    ForwardMovement forward_;
-    RotateMovement rotation_;
+    Position point_of_departure;
+    int range;
+    bool isFly;
+    ForwardMovement forward;
+    RotateMovement rotation;
 };
 
 #endif // BULLET_H

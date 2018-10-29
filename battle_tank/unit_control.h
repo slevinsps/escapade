@@ -7,14 +7,14 @@
 class UnitControl
 {
 public:
-    UnitControl();
+    UnitControl() = default;
 
     std::string name_of_tank;
     double version;
     int tank_model;
 
-    void run(Unit unit){
-         unit.fire();
+    void run(Unit *unit){
+         unit->fire();
     }
 };
 

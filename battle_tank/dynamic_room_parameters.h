@@ -5,13 +5,7 @@ class DimaicRoomParameters
 {
 public:
     DimaicRoomParameters();
-    DimaicRoomParameters(int amount_of_players,
-                 int status,
-                 int amount_of_matches) :
-                     cur_amount_of_players_(amount_of_players),\
-                     status_(status),
-                     cur_amount_of_matches(amount_of_matches){}
-    virtual ~DimaicRoomParameters();
+    ~DimaicRoomParameters();
 
     int get_amount_of_players() const;
     void set_amount_of_players(int);
@@ -28,5 +22,4 @@ private:
     int status_;
     int cur_amount_of_matches;
 };
-
 #endif // DYNAMIC_ROOM_PARAMETERS_H

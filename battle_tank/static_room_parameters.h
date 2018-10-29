@@ -4,20 +4,20 @@
 class StaticRoomParameters
 {
 public:
-    StaticRoomParameters();
-    StaticRoomParameters(int amount_of_players,
+    StaticRoomParameters(int max_amount_of_players,
                  int status,
                  int time_limit,
                  int time_start,
                  int max_amount_of_matches) :
-                     max_amount_of_players_(amount_of_players),\
+                     max_amount_of_players_(max_amount_of_players),\
                      time_limit_(time_limit),
                      time_start_(time_start),
+                     status_(status),
                      max_amount_of_matches_(max_amount_of_matches){}
-    virtual ~StaticRoomParameters();
+    ~StaticRoomParameters();
 
     int get_max_of_players() const;
-    void set_max_of_players(int);
+    void set_max_of_players(int max_amount_of_players);
 
     int get_time_limit() const;
     void set_time_limit(int);
@@ -34,6 +34,6 @@ private:
     int time_limit_;
     int time_start_;
     int max_amount_of_matches_;
+    int status_;
 };
-
 #endif // STATIC_ROOM_PARAMETERS_H
