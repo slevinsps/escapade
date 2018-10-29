@@ -5,26 +5,20 @@
 #include "user.h"
 #include "loader.h"
 
-class UserControlBundle : public Loader
+class UserControl : public Loader
 {
 private:
-    User user_;
-    UnitControl algorithm_;
+    User user;
+    UnitControl algorithm;
 public:
-    UserControlBundle(User user, UnitControl algorithm);
-
-    ~UserControlBundle();
+    UserControl(User _user, UnitControl _algorithm) :
+        user(_user), algorithm(_algorithm){}
 
     User getUser() const;
 
     UnitControl getUnitControl() const;
     void setUnitControl(UnitControl UC);
-
     // Алгоритм поменяться может, игрок - нет
-
-    bool operator == (const UserControlBundle &other) const;
-
-    bool operator != (const UserControlBundle &other) const;
 
     int load(Socket socket) override;
     int send(Socket socket) override;

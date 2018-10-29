@@ -7,30 +7,29 @@
 #define BONUS_TYPE_HEALTH 2
 #define BONUS_TYPE_SPEED 3
 
-#define BONUS_DEFAULT_COEFFICIENT 1.1
+#define BONUS_DEFAULT_COEFFICIENT 20
 
 #include "sceneobject.h"
 
 class Bonus : public SceneObject
 {
 public:
-    Bonus( int type = BONUS_TYPE_DAMAGE,
-           double coefficient = BONUS_DEFAULT_COEFFICIENT,
-            Position position = Position(),
-            QImage texture = QImage("damage_type.png"));
+    Bonus( int coefficient = BONUS_DEFAULT_COEFFICIENT,
+           int type = BONUS_TYPE_DAMAGE,
+           Position position = Position(),
+           QImage texture = QImage("damage_type.png"),
+           ) :
+        SceneObject(position, texture),
+        controlled_by_(BONUS_NOBODY),
+        type_(type), coefficient_(coefficient){}
+    Bonus operator = (const Bonus &v1);
 
-    void set_type(int Type);
-    int get_type() const;
 
-    void set_coefficient(double coefficient);
-    double get_coefficient() const;
 
-    bool operator == (const Bonus &other) const;
-
-    bool operator != (const Bonus &other) const;
-private:
+protected:
+    int controlled_by_;
     int type_;
-    double coefficient_;
+    int coefficient_;
 };
 
 #endif // BONUS_H

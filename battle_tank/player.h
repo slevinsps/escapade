@@ -6,19 +6,11 @@
 class Player: public User
 {
 public:
-    Player(int kills = 0, int deaths = 0);
-
-    int get_kills() const;
-
-    void increase_kills();
-
-    int get_deaths() const;
-
-    void increase_deaths();
-
+    Player();
 private:
-    int kills_;
-    int deaths_;
+    int kills;
+    int deaths;
+
 };
 
 #endif // PLAYER_H

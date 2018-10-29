@@ -14,8 +14,9 @@ public:
     BattleGround(int time,
                  Scene& scene,
                  Room& room,
-                 std::vector<UserControlBundle>& bundles) :
-                     time_(time), scene_(scene), room_(room), bundles_(bundles){}
+                 std::vector<UserControlBundle>& bundles,
+                 Visualizer& visualizer) :
+                     time_(time), scene_(scene), room_(room), bundles_(bundles), visualizer_(visualizer){}
     virtual ~BattleGround();
 
     int get_time() const;
@@ -23,9 +24,10 @@ public:
     int add_bundle(UserControlBundle);
     int run_battle();
     int stop_battle();
+    void update_scene();
 
 private:
-    Visualizer visualizer;
+    Visualizer visualizer_;
     int time_;
     Scene scene_;
     Room room_;

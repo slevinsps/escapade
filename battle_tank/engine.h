@@ -2,7 +2,7 @@
 #define ENGINE_H
 
 #include "component.h"
-#include "forward_movement.h"
+#include "forwardmovement.h"
 
 #define ENGINE_DEFAULT_SPEED 0
 #define ENGINE_MAX_SPEED 100
@@ -21,7 +21,8 @@ public:
            std::string name = "default engine",
            QImage _texture = QImage("engine.png")) :
         Component(_position, _texture, name),
-        movement(ForwardMovement(max_speed, max_backspeed)){}
+        movement(ENGINE_DEFAULT_SPEED, max_speed,
+                 max_backspeed){}
 
     int get_speed() const;
     int get_max_speed() const;
