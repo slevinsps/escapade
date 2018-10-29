@@ -10,5 +10,5 @@ public:
 protected:
   boost::asio::io_service service;
   bool itWorks;
-  user user;
+  User user;
 };
