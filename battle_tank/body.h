@@ -31,8 +31,8 @@ public:
         max_health_(max_health),
         rotation_(rotation_speed, current_rotation_angle){}
 
-    void apply_health_bonus(Bonus& bonus) override;
-    void apply_speed_bonus(Bonus& bonus) override;
+    void apply_health_bonus(Bonus& bonus)  override;
+    void apply_speed_bonus(Bonus& bonus)  override;
     void decrement_helth(int decr);
     void increment_helth(int incr);
     int get_health();
