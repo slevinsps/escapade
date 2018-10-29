@@ -8,13 +8,19 @@
 class Position
 {
 public:
-    Position(int x = 0, int y = 0) : x(x), y(y) {}
-    const bool operator == (const Position &v1, const Position &v2)
-    {
-        return (v1.x == v2.x) && (v1.y == v2.y);
-    }
+    Position(int x = 0, int y = 0);
 
-    int x, y;
+    bool operator == (const Position &other) const;
+
+    bool operator != (const Position &other) const;
+
+    int get_x() const;
+    void set_x(int x);
+
+    int get_y() const;
+    void set_y(int y);
+private:
+    int x_, y_;
 };
 
 class SceneObject

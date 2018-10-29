@@ -38,7 +38,7 @@ public:
     }
 
     int fire();
-    void apply_damage_bonus(Bonus bonus) override;
+    void apply_damage_bonus(Bonus bonus);
     int get_damage();
     int incr_damage(int);
     int decr_damage(int);
