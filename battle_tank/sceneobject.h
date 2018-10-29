@@ -1,47 +1,41 @@
+#include <QtCore/QCoreApplication>
+#include <QtGui/QImage>
 #include <iostream>
 
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
-class QImage {
-public:
-    QImage(const char*);
-
-    int width();
-    int height();
-};
-
 class Position
 {
 public:
-    Position(int x = 0, int y = 0);
+    Position(int x = 0, int y = 0) : x(x), y(y) {}
+    const bool operator == (const Position &v1, const Position &v2)
+    {
+        return (v1.x == v2.x) && (v1.y == v2.y);
+    }
 
-    bool operator == (const Position &other) const;
-
-    bool operator != (const Position &other) const;
-
-    int get_x() const;
-    void set_x(int x);
-
-    int get_y() const;
-    void set_y(int y);
-private:
-    int x_, y_;
+    int x, y;
 };
 
 class SceneObject
 {
 public:
-    SceneObject(Position _position = Position(),
-                QImage _texture = QImage("default.png"));
+    SceneObject(Position position = Position(),
+                QImage texture = QImage("default.png")) :
+        texture_(texture),
+        texture_width_(texture.width()),
+        texture_height_(texture.height()),
+        position(position){}
 
     QImage getImage() const;
-
+    int getImageWidth() const;
+    int getImageHeigh() const;
     Position getPosition() const;
+
 private:
-    QImage texture;
-    int texture_width;
-    int texture_height;
+    QImage texture_;
+    int texture_width_;
+    int texture_height_;
 protected:
     void setPosition();
     Position position;

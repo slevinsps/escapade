@@ -9,6 +9,7 @@ public:
 
     int get_max_back_speed() const;
     void set_max_back_speed(int);
+    const bool operator == (const ForwardMovement &v1, const ForwardMovement &v2);
 
 private:
     int max_back_speed_;

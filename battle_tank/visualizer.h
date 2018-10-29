@@ -4,16 +4,12 @@
 class Visualizer
 {
 public:
-    Visualizer(Scene scene);
-    ~Visualizer();
+    Visualizer();
+    Visualizer(  Scene& scene) :
+                 scene_(scene){}
+    virtual ~Visualizer();
 
     int update_scene();
-
-    Scene get_scene() const;
-
-    bool operator == (const Visualizer &other) const;
-
-    bool operator != (const Visualizer &other) const;
 
 private:
     Scene scene_;
