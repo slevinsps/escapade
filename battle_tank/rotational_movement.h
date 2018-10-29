@@ -16,7 +16,7 @@ public:
     virtual ~RotateMovement(){}
     int get_current_angle() const;
     void set_current_angle(int);
-    const bool operator == (const RotateMovement &v1, const RotateMovement &v2);
+    bool operator == (const RotateMovement &v1);
 private:
     int current_angle_;
 };

@@ -2,12 +2,14 @@
 #define TANK_CONTROL_H
 
 #include "unit.h"
+#include "baseunitcontrol.h"
 #include <string>
 
-class UnitControl
+class UnitControl : public BaseUnitControl
 {
 public:
     UnitControl();
+    virtual ~UnitControl();
 
     std::string name_of_tank;
     double version;

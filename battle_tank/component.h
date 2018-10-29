@@ -13,7 +13,7 @@ public:
     // значений
     Component(Position position, QImage texture,
               std::string name):
-        SceneObject(position, texture), name(name){}
+        SceneObject(position, texture), name_(name){}
 protected:
     std::string name_;
 

@@ -129,7 +129,9 @@ HEADERS += \
     user.h \
     visualizer.h \
     weapon.h \
-    user_control_bundle.h
+    user_control_bundle.h \
+    base_visualizer.h \
+    baseunitcontrol.h
 
 FORMS += \
         mainwindow.ui

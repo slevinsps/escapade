@@ -1,11 +1,11 @@
 #ifndef DYNAMIC_ROOM_PARAMETERS_H
 #define DYNAMIC_ROOM_PARAMETERS_H
 
-class DimaicRoomParameters
+class DynamicRoomParameters
 {
 public:
-    DimaicRoomParameters();
-    ~DimaicRoomParameters();
+    DynamicRoomParameters();
+    ~DynamicRoomParameters();
 
     int get_amount_of_players() const;
     void set_amount_of_players(int);

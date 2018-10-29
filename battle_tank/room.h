@@ -19,7 +19,7 @@ public:
     Room(int max_amount_of_players = ROOM_DEFAULT_MAX_NUMBER_OF_PLAYERS,
          int max_of_matches = ROOM_DEFAULT_AMOUNT_OF_MATCHES);
 
-    ~Room();
+    virtual ~Room();
 
     int add_user(User&);
 
@@ -38,7 +38,7 @@ public:
 
 
 private:
-    DimaicRoomParameters dynamic_parameters_;
+    DynamicRoomParameters dynamic_parameters_;
     StaticRoomParameters static_parameters_;
     std::vector<User> users_;
     // Работает каждый алгоритм
