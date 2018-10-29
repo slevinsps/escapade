@@ -10,7 +10,7 @@ public:
     int get_amount_of_players() const;
     void set_amount_of_players(int);
 
-    int get_status() const;
+    int get_status()  const;
     void set_status(int);
 
     int get_amount_of_matches() const;
