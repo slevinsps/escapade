@@ -18,14 +18,14 @@ protected:
     ForwardMovement *move;
 };
 
-TEST_F(RotationalMovementTest, Create)
+TEST_F(ForwardMovementTest, Create)
 {
     EXPECT_EQ(move->get_current_speed(), 0);
     EXPECT_EQ(move->get_max_speed(), 70);
     EXPECT_EQ(move->get_max_back_speed(), 20);
 }
 
-TEST_F(RotationalMovementTest, Setter)
+TEST_F(ForwardMovementTest, Setter)
 {
     move->set_max_speed(50);
     move->set_current_speed(20);

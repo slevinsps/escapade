@@ -1,5 +1,8 @@
 include(gtest_dependency.pri)
 
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 TEMPLATE = app
 CONFIG += console c++11
 CONFIG -= app_bundle
@@ -35,4 +38,5 @@ HEADERS +=     tst_test.h \
     dynamic_room_parameters_tests.h \
     static_room_parameters.h
 
-SOURCES +=     main.cpp
+SOURCES += \     
+    main.cpp

@@ -1,6 +1,9 @@
 #include "loader.h"
 
-Loader::Loader()
-{
+Loader::Loader() {
+
+}
+
+Loader::~Loader() {
 
 }

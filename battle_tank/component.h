@@ -12,8 +12,7 @@ public:
     // Component абстрактный класс, поэтому без дефолтных
     // значений
     Component(Position position, QImage texture,
-              std::string name):
-        SceneObject(position, texture), name_(name){}
+              std::string name);
 protected:
     std::string name_;
 

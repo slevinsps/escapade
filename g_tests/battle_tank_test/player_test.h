@@ -4,8 +4,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-#include "../../battle_tank3/battleground.h"
-#include "../../battle_tank3/unit_control.h"
+#include "../../battle_tank/player.h"
 
 class PlayerTest : public ::testing::Test {
 protected:
@@ -23,13 +22,18 @@ protected:
 
 TEST_F(PlayerTest, constructor)
 {
+    Player tester0(100, 15);
+    EXPECT_EQ(tester0.get_kills(), 100);
+    EXPECT_EQ(tester0.get_deaths(), 15);
+
    Player tester;
    EXPECT_EQ(tester.get_kills(), 0);
    EXPECT_EQ(tester.get_deaths(), 0);
 
    Player tester2(10, 2);
-   EXPECT_EQ(tester.get_kills(), 10);
-   EXPECT_EQ(tester.get_deaths(), 2);
+   EXPECT_EQ(tester2.get_kills(), 10);
+   EXPECT_EQ(tester2.get_deaths(), 2);
+
 };
 
 TEST_F(PlayerTest, increaseKills)

@@ -41,6 +41,8 @@ public:
 
     bool operator != (const Unit &other) const;
 
+
+
     virtual void move(int speed) {};
     virtual void rotate(double angle) {};
     virtual void fire() {};

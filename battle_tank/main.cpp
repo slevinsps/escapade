@@ -1,7 +1,11 @@
+#ifndef MAIN_CPP
+#define MAIN_CPP
+
+
 #include "mainwindow.h"
 #include <QApplication>
 
-int main(int argc, char *argv[])
+int main2(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
@@ -9,3 +13,5 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+
+#endif

@@ -25,8 +25,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
     bonus.cpp \
     unit.cpp \
     tank.cpp \
@@ -34,51 +32,28 @@ SOURCES += \
     bullet.cpp \
     sceneobject.cpp \
     component.cpp \
-    engine.cpp \
     body.cpp \
     scene.cpp \
     bonuscontrol.cpp \
-    tank_control.cpp \
     movement.cpp \
-    forwardmovement.cpp \
-    rotationalmotion.cpp \
     user.cpp \
     player.cpp \
-    map.cpp \
     room.cpp \
     lobby.cpp \
-    client.cpp \
-    user_control.cpp \
     socket.cpp \
     loader.cpp \
     rotational_movement.cpp \
-    body.cpp \
-    bonus.cpp \
-    bonuscontrol.cpp \
-    bullet.cpp \
-    component.cpp \
-    engine.cpp \
-    forwardmovement.cpp \
-    loader.cpp \
-    lobby.cpp \
     main.cpp \
     mainwindow.cpp \
-    map.cpp \
-    movement.cpp \
-    player.cpp \
-    room.cpp \
-    rotational_movement.cpp \
-    scene.cpp \
-    sceneobject.cpp \
-    socket.cpp \
-    tank.cpp \
-    unit.cpp \
-    user.cpp \
-    user_control.cpp \
-    weapon.cpp
+    battleground.cpp \
+    dynamic_room_parameters.cpp \
+    static_room_parameters.cpp \
+    user_control_bundle.cpp \
+    visualizer.cpp \
+    forward_movement.cpp \
+    map.cpp
 
 HEADERS += \
-        mainwindow.h \
     bonus.h \
     unit.h \
     tank.h \
@@ -91,44 +66,23 @@ HEADERS += \
     bonuscontrol.h \
     unit_control.h \
     movement.h \
-    rotationalmotion.h \
     user.h \
     player.h \
     map.h \
     room.h \
     lobby.h \
-    client.h \
     network.h \
     socket.h \
     loader.h \
     rotational_movement.h \
     battleground.h \
-    body.h \
-    bonus.h \
-    bonuscontrol.h \
-    bullet.h \
-    component.h \
     dynamic_room_parameters.h \
     forward_movement.h \
-    loader.h \
-    lobby.h \
     mainwindow.h \
-    map.h \
-    movement.h \
     network.h \
-    player.h \
-    room.h \
-    rotational_movement.h \
     scene.h \
-    sceneobject.h \
-    socket.h \
     static_room_parameters.h \
-    tank.h \
-    unit.h \
-    unit_control.h \
-    user.h \
     visualizer.h \
-    weapon.h \
     user_control_bundle.h \
     base_visualizer.h \
     baseunitcontrol.h

@@ -1,14 +1,23 @@
-#include <QtCore/QCoreApplication>
-#include <QtGui/QImage>
+//#include <QtCore/QCoreApplication>
+//#include <QtGui/QImage>
 #include <iostream>
 
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
+class QImage {
+public:
+    QImage(const char*);
+
+    int width();
+    int height();
+};
+
 class Position
 {
 public:
     Position(int x = 0, int y = 0);
+    ~Position();
 
     bool operator == (const Position &other) const;
 
@@ -27,11 +36,7 @@ class SceneObject
 {
 public:
     SceneObject(Position position = Position(),
-                QImage texture = QImage("default.png")) :
-        texture_(texture),
-        texture_width_(texture.width()),
-        texture_height_(texture.height()),
-        position(position){}
+                QImage texture = QImage("default.png"));
 
     QImage getImage() const;
     int getImageWidth() const;
@@ -40,8 +45,6 @@ public:
 
 private:
     QImage texture_;
-    int texture_width_;
-    int texture_height_;
 protected:
     void setPosition();
     Position position;
