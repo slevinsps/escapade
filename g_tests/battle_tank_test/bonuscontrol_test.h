@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-#include "../../battle_tank3/bonuscontrol.h"
+#include "../../battle_tank/bonuscontrol.h"
 
 
 class BonusControlTest : public ::testing::Test {
@@ -32,7 +32,7 @@ TEST_F(BonusControlTest, removeBonus)
      std::vector<Bonus> arr = bcontrol->get_bonuses() ;
      bcontrol->remove_bonus(0);
 
-    EXPECT_EQ(arr.size() - 1, bcontrol->get_bonuses());
+    EXPECT_EQ(arr.size() - 1, bcontrol->get_bonuses().size());
 };
 
 #endif // BONUSCONTROL_TEST_H

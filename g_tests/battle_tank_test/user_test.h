@@ -1,12 +1,10 @@
 #ifndef USER_TEST_H
 #define USER_TEST_H
 
-
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-#include "../../battle_tank3/battleground.h"
-#include "../../battle_tank3/unit_control.h"
+#include "../../battle_tank/user.h"
 
 class UserTest : public ::testing::Test {
 protected:

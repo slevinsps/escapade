@@ -4,8 +4,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-#include "../../battle_tank3/battleground.h"
-#include "../../battle_tank3/unit_control.h"
+#include "../../battle_tank/battleground.h"
+#include "../../battle_tank/player.h"
 
 
 class UnitTestt : public ::testing::Test {

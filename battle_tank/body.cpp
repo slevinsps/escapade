@@ -1,6 +1,1 @@
-#include "body.h"
-
-Body::Body() : public
-{
-
-}
+#include "bonus.h"

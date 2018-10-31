@@ -5,14 +5,17 @@
 class Movement
 {
 public:
-    Movement(int max_speed = 60, int current_speed = 0) :
-        max_speed_(max_speed), current_speed_(current_speed){}
-    virtual ~Movement(){}
+    Movement(int max_speed = 60, int current_speed = 0);
+    virtual ~Movement();
 
-    int get_max_speed() const { return max_speed_; }
-    int get_current_speed() const { return current_speed_; }
-    void set_max_speed(int max_speed) {max_speed_ = max_speed; }
-    void set_current_speed(int current_speed) {current_speed_ = current_speed; }
+    int get_max_speed() const;
+
+    int get_current_speed() const;
+
+    void set_max_speed(int max_speed);
+
+    void set_current_speed(int current_speed);
+
 private:
     int max_speed_;
     int current_speed_;

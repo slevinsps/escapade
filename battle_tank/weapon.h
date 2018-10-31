@@ -25,17 +25,7 @@ public:
            int amount_bullets = WEAPON_AMOUNT_BULLETS,
            int rotation_speed = WEAPON_ROTATION_SPEED,
            std::string name = "default weapon",
-           QImage texture = QImage("weapon.png")) :
-            Component(position, texture, name),
-            damage_(damage), recharge_(recharge),
-            cur_amount_bullets_(amount_bullets),
-            max_amount_bullets_(amount_bullets),
-            rotation_(rotation_speed, angle){
-            for(int i = 0; i < max_amount_bullets_; ++i) {
-                Bullet bullet(position);
-                bullets_.push_back(bullet);
-            }
-    }
+           QImage texture = QImage("weapon.png"));
 
     int fire();
     void apply_damage_bonus(Bonus bonus);

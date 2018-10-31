@@ -6,8 +6,8 @@
 class Map
 {
 public:
-    Map(std::string filename = "map.txt") : filename_(filename){};
-    ~Map(){}
+    Map(std::string filename = "map.txt");
+    ~Map();
 
     std::string get_filename() const;
     void set_filename(std::string filename);

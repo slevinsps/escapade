@@ -1,5 +1,5 @@
-#ifndef TANK_CONTROL_H
-#define TANK_CONTROL_H
+#ifndef UNIT_CONTROLL_H
+#define UNIT_CONTROLL_H
 
 #include "unit.h"
 #include "baseunitcontrol.h"
@@ -8,8 +8,8 @@
 class UnitControl : public BaseUnitControl
 {
 public:
-    UnitControl();
-    virtual ~UnitControl();
+    UnitControl(){}
+    ~UnitControl(){}
 
     std::string name_of_tank;
     double version;

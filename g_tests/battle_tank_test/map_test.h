@@ -4,8 +4,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-#include "../../battle_tank3/battleground.h"
-#include "../../battle_tank3/unit_control.h"
+#include "../../battle_tank/map.h"
 
 class MapTest : public ::testing::Test {
 protected:
@@ -30,8 +29,9 @@ TEST_F(MapTest, constructorMap)
 TEST_F(MapTest, setFilename)
 {
    map->set_filename("test_map1.txt");
-   Map m("test_map.txt");
-   EXPECT_EQ(*map, m);
+   Map m("test_map1.txt");
+   std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!! " << map->get_filename();
+   EXPECT_EQ(map->get_filename(), m.get_filename());
 };
 
 #endif // MAP_TEST_H

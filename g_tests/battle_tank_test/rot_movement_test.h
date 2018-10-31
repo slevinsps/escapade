@@ -2,6 +2,7 @@
 #define ROT_MOVEMENT_TEST_H
 #include <gtest/gtest.h>
 #include "../../battle_tank/rotational_movement.h"
+#include "../../battle_tank/rotational_movement.cpp"
 
 class RotationalMovementTest : public ::testing::Test
 {
