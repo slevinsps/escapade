@@ -5,13 +5,21 @@
 cocos new battle_tank -p escapade.battle_tank -l cpp -d D:\battle_tank 
 
 2. В созданном проекте будут следующие папки:
+
 Classes
+
 cocos2d
+
 proj.android
+
 ...
+
 proj.win32
+
 Resources
+
 .cocos-project.json
+
 CMakeLists.txt
 
 Из папки battle_tank скопируйте classes и Resources.
@@ -27,20 +35,29 @@ CMakeLists.txt
 которая помогла мне
 
 4.1. git clone https://github.com/cocos2d/cocos2d-x.git
+
 4.2. cd cocos2d-x
+
      python download-deps.py
+
 4.3. git submodule update --ini
-     python setup.py
+    
+    python setup.py
 
 5. Вот еще какие ошибки могут быть:
-5.1. Не получается найти екзешник: Зайти в "Средства"-
-     "Импорт и экспорт параметров"-"сбросить все параметры"
+
+5.1. Не получается найти екзешник: 
+
+Зайти в "Средства"- "Импорт и экспорт параметров"-"сбросить все параметры"
+
 5.2. Не удалось загрузить wntdll.pdb или просто в консоли куча
 ошибок, что не загрузились dll или HEAP CORRUPTION DETECTED:
+
      "Отладка"-"параметры"-"Символы"(Речь идет о меню справа,
       Главный пункт - Отладка, внутренние разделы: Общие, Jit,
       Окно вывода и Символы - они то нам и нужны)-поставить
       галочка напротив "Серверы символов(Майкрософт)"
+      
 5.3. Прочее: Очистить проект - собрать, можно для профилактики
      5.1
 
