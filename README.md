@@ -29,18 +29,29 @@ CMakeLists.txt
 
 3. Перейдите в proj.win32 и там будет .sln файл(Да, теперь все
 через студию, поэтому удалил .pro файлы и старые main)
-Должно заработать
+
+3.1. Перейдите в обозревателе решений в "battle_tank"-"src", удалите HelloWorldScene.cpp и .h
+
+3.2. Правой кнопкой мыши по src, 'добавить'-'существующий элемент' и выделите ВСЕ классы(включая AppDelegate, чтобы перезаписать его)
+
+3.3. Запустите и наслаждайтесь. Проверил, запускается без ошибок.
 
 4. Если ругается, что нет кокоса, вот инструкция для установки,
 которая помогла мне
 
-4.1. git clone https://github.com/cocos2d/cocos2d-x.git
+4.1. 
 
-4.2. cd cocos2d-x
+     git clone https://github.com/cocos2d/cocos2d-x.git
+
+4.2. 
+     
+     cd cocos2d-x
 
      python download-deps.py
 
-4.3. git submodule update --ini
+4.3. 
+
+     git submodule update --ini
     
     python setup.py
 
