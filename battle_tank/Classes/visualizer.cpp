@@ -32,7 +32,7 @@ Visualizer::Visualizer(Visualizer &&visualizer) {
 }
 
 
-// Íèæå êîêîñîâñêèå âåùè
+// ÃÃ¨Ã¦Ã¥ ÃªÃ®ÃªÃ®Ã±Ã®Ã¢Ã±ÃªÃ¨Ã¥ Ã¢Ã¥Ã¹Ã¨
 
 USING_NS_CC;
 
@@ -199,7 +199,7 @@ bool Visualizer::init()
 
 
 
-	body = Sprite::create("tank_heavy_telo.png");
+	body = Sprite::create("tank_heavy_body.png");
 	body->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	// add the sprite as a child to this layer
@@ -210,25 +210,25 @@ bool Visualizer::init()
 	body->setPosition(Vec2(-100, 100));
 
 	/*
-	// Ñìåùàåì íà 50 òî÷åê íàâåðõ è íà 10 âïðàâî, çà äâå ñåêóíäû:
+	// Ã‘Ã¬Ã¥Ã¹Ã Ã¥Ã¬ Ã­Ã  50 Ã²Ã®Ã·Ã¥Ãª Ã­Ã Ã¢Ã¥Ã°Ãµ Ã¨ Ã­Ã  10 Ã¢Ã¯Ã°Ã Ã¢Ã®, Ã§Ã  Ã¤Ã¢Ã¥ Ã±Ã¥ÃªÃ³Ã­Ã¤Ã»:
 	auto moveBy = MoveBy::create(5, Vec2(300, 300));
 	heavy_body->runAction(moveBy);
 	moveBy = MoveBy::create(5, Vec2(300, -200));
 	heavy_body->runAction(moveBy);
 	*/
 	/*
-	// ñîçäàåì íåñêîëüêî äåéñòâèé
+	// Ã±Ã®Ã§Ã¤Ã Ã¥Ã¬ Ã­Ã¥Ã±ÃªÃ®Ã«Ã¼ÃªÃ® Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã¨Ã©
 	auto moveBy = MoveBy::create(2, Vec2(300, 100));
 	auto fadeTo = FadeTo::create(2.0f, 3.0f);
 	auto scaleBy = ScaleBy::create(2.0f, 5.0f);
 
-	// ñîçäàåì Spawn
+	// Ã±Ã®Ã§Ã¤Ã Ã¥Ã¬ Spawn
 	auto mySpawn = Spawn::createWithTwoActions(scaleBy, fadeTo);
 
-	// îáúåäèíÿåì âñå â ïîñëåäîâàòåëüíîñòü
+	// Ã®Ã¡ÃºÃ¥Ã¤Ã¨Ã­Ã¿Ã¥Ã¬ Ã¢Ã±Ã¥ Ã¢ Ã¯Ã®Ã±Ã«Ã¥Ã¤Ã®Ã¢Ã Ã²Ã¥Ã«Ã¼Ã­Ã®Ã±Ã²Ã¼
 	auto seq = Sequence::create(moveBy, mySpawn, moveBy, nullptr);
 
-	// çàïóñêàåì
+	// Ã§Ã Ã¯Ã³Ã±ÃªÃ Ã¥Ã¬
 	heavy_body->runAction(seq);
 	*/
 
