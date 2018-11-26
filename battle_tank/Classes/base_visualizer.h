@@ -6,7 +6,7 @@
 class BaseVisualizer
 {
 public:
-	//BaseVisualizer(TScene scene) { tScene_ = scene; };
+	BaseVisualizer() { control_tank = -1; };
 	//virtual ~BaseVisualizer();
 
 	TScene base_get_scene() const {
@@ -53,8 +53,17 @@ public:
 		return 0;
 	}
 
+	// Return i if user_units[i] exists, else  -1
+	int get_user_unit(int i) {
+		if (i < 0 || i >= user_units.size()) {
+			return -1;
+		}
+		return i;
+	}
+
 protected:
 	TScene tScene_;
+	int control_tank; // выбор танка для управления с клавиатуры
 
 	std::vector<UserControlBundle> user_units;
 

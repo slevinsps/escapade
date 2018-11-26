@@ -32,13 +32,26 @@ Visualizer::Visualizer(Visualizer &&visualizer) {
 }
 
 
-// ГЌГЁГ¦ГҐ ГЄГ®ГЄГ®Г±Г®ГўГ±ГЄГЁГҐ ГўГҐГ№ГЁ
+// Ниже кокосовские вещи
 
 USING_NS_CC;
 
 Scene* Visualizer::createScene()
 {
-	return Visualizer::create();
+	// Создаём сцену с физикой
+	auto scene = Scene::createWithPhysics();
+	// Устанавливаем DEBUGDRAW_ALL, чтобы границы всех физических объектов обводились красной линией
+	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+	// Создаём слой
+	auto layer = Visualizer::create();
+	// и передаём в него указатель на физический мир
+	layer->SetPhysicsWorld(scene->getPhysicsWorld());
+
+	// Добавляем созданный слой
+	scene->addChild(layer);
+
+	return scene;
 }
 
 
@@ -118,6 +131,63 @@ void Visualizer::add_players() {
 	addChild(amount);
 }
 
+void Visualizer::chooseTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
+	int i = -1;
+	switch (keyCode) {
+	case EventKeyboard::KeyCode::KEY_1:
+		i = 0;
+		break;
+	case EventKeyboard::KeyCode::KEY_2:
+		i = 1;
+		break;
+	case EventKeyboard::KeyCode::KEY_3:
+		i = 2;
+		break;
+	case EventKeyboard::KeyCode::KEY_4:
+		i = 3;
+		break;
+	case EventKeyboard::KeyCode::KEY_5:
+		i = 4;
+		break;
+	case EventKeyboard::KeyCode::KEY_6:
+		i = 5;
+		break;
+	case EventKeyboard::KeyCode::KEY_7:
+		i = 6;
+		break;
+	case EventKeyboard::KeyCode::KEY_8:
+		i = 7;
+		break;
+	case EventKeyboard::KeyCode::KEY_9:
+		i = 8;
+		break;
+	}
+	this->control_tank = get_user_unit(1);
+}
+
+void chooseTank(EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
+	Vec2 loc = event->getCurrentTarget()->getPosition();
+	switch (keyCode) {
+	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+	case EventKeyboard::KeyCode::KEY_A:
+		event->getCurrentTarget()->setPosition(--loc.x, loc.y);
+		break;
+	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+	case EventKeyboard::KeyCode::KEY_D:
+		event->getCurrentTarget()->setPosition(++loc.x, loc.y);
+		break;
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+	case EventKeyboard::KeyCode::KEY_W:
+		event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
+		break;
+	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+	case EventKeyboard::KeyCode::KEY_S:
+		event->getCurrentTarget()->setPosition(loc.x, --loc.y);
+		break;
+	}
+}
+
+#include "BodyParser.h"
 // on "init" you need to initialize your instance
 bool Visualizer::init()
 {
@@ -130,6 +200,51 @@ bool Visualizer::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	/*
+	Физика - https://habr.com/post/342478/
+	*/
+
+	//Создаём рамку размером visibleSize, то есть во весь экран, с
+	//физическим материалом по умолчанию и толщиной рамки 3 пикселя
+	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize,
+		PHYSICSBODY_MATERIAL_DEFAULT, 3);
+	// Создаём новый узел, то есть объект сцены
+	auto edgeNode = Node::create();
+	// Устанавливаем на позицию по центру экрана
+	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	// Добавляем к узлу физическое тело
+	edgeNode->setPhysicsBody(edgeBody);
+
+	//Добавляем узел к нашей сцене
+	this->addChild(edgeNode);
+
+	// Создаём спрайт
+	body = Sprite::create("tank_heavy_body.png");
+	// Проверяем - существует ли json-файл
+	if (BodyParser::getInstance()->parseJsonFile("tank_heavy_body.json"))
+	{
+		// Создаём физическое тело. Второй параметр - имя тела(не путать с именем файла), третий параметр - материал, с которым вы можете поиграться устанавливая различные значения.
+		auto spriteBody = BodyParser::getInstance()->bodyFormJson(body, "tank_heavy_body", PhysicsMaterial(1.0f, 0.0f, 1.0f));
+		if (spriteBody != nullptr)
+		{
+			// Устанавливаем тело для спрайта
+			body->setPhysicsBody(spriteBody);
+		}
+		else
+		{
+			CCLOG("Object.cpp spriteBody is nullptr");
+		}
+	}
+	else
+	{
+		CCLOG("JSON file not found");
+	}
+
+	// Установим спрайт в центре экрана
+	body->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+
+	this->addChild(body);
 
 	/////////////////////////////
 	// 2. add a menu item with "X" image, which is clicked to quit the program
@@ -196,9 +311,7 @@ bool Visualizer::init()
 		// add the sprite as a child to this layer
 		this->addChild(sprite, 0);
 	}
-
-
-
+	/*
 	body = Sprite::create("tank_heavy_body.png");
 	body->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
@@ -207,28 +320,28 @@ bool Visualizer::init()
 
 	//heavy_body->setColor(Color3B(120, 120, 255));
 
-	body->setPosition(Vec2(-100, 100));
-
+	body->setPosition(Vec2(100, 100));
+	*/
 	/*
-	// Г‘Г¬ГҐГ№Г ГҐГ¬ Г­Г  50 ГІГ®Г·ГҐГЄ Г­Г ГўГҐГ°Гµ ГЁ Г­Г  10 ГўГЇГ°Г ГўГ®, Г§Г  Г¤ГўГҐ Г±ГҐГЄГіГ­Г¤Г»:
+	// Смещаем на 50 точек наверх и на 10 вправо, за две секунды:
 	auto moveBy = MoveBy::create(5, Vec2(300, 300));
 	heavy_body->runAction(moveBy);
 	moveBy = MoveBy::create(5, Vec2(300, -200));
 	heavy_body->runAction(moveBy);
 	*/
 	/*
-	// Г±Г®Г§Г¤Г ГҐГ¬ Г­ГҐГ±ГЄГ®Г«ГјГЄГ® Г¤ГҐГ©Г±ГІГўГЁГ©
+	// создаем несколько действий
 	auto moveBy = MoveBy::create(2, Vec2(300, 100));
 	auto fadeTo = FadeTo::create(2.0f, 3.0f);
 	auto scaleBy = ScaleBy::create(2.0f, 5.0f);
 
-	// Г±Г®Г§Г¤Г ГҐГ¬ Spawn
+	// создаем Spawn
 	auto mySpawn = Spawn::createWithTwoActions(scaleBy, fadeTo);
 
-	// Г®ГЎГєГҐГ¤ГЁГ­ГїГҐГ¬ ГўГ±ГҐ Гў ГЇГ®Г±Г«ГҐГ¤Г®ГўГ ГІГҐГ«ГјГ­Г®Г±ГІГј
+	// объединяем все в последовательность
 	auto seq = Sequence::create(moveBy, mySpawn, moveBy, nullptr);
 
-	// Г§Г ГЇГіГ±ГЄГ ГҐГ¬
+	// запускаем
 	heavy_body->runAction(seq);
 	*/
 
@@ -238,7 +351,71 @@ bool Visualizer::init()
 	
 	add_players();
 
+	auto eventListener = EventListenerKeyboard::create();
+
+
+
+	eventListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+
+		Vec2 loc = event->getCurrentTarget()->getPosition();
+		switch (keyCode) {
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		case EventKeyboard::KeyCode::KEY_A:
+			event->getCurrentTarget()->setPosition(--loc.x, loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		case EventKeyboard::KeyCode::KEY_D:
+			event->getCurrentTarget()->setPosition(++loc.x, loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		case EventKeyboard::KeyCode::KEY_W:
+			event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		case EventKeyboard::KeyCode::KEY_S:
+			event->getCurrentTarget()->setPosition(loc.x, --loc.y);
+			break;
+		}
+	};
+	eventListener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event)
+	{
+		Vec2 loc = event->getCurrentTarget()->getPosition();
+		switch (keyCode)
+		{
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		case EventKeyboard::KeyCode::KEY_A:
+			event->getCurrentTarget()->setPosition(--loc.x, loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		case EventKeyboard::KeyCode::KEY_D:
+			event->getCurrentTarget()->setPosition(++loc.x, loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		case EventKeyboard::KeyCode::KEY_W:
+			event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		case EventKeyboard::KeyCode::KEY_S:
+			event->getCurrentTarget()->setPosition(loc.x, --loc.y);
+			break;
+		}
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, body);
+
+	auto handleControl = EventListenerKeyboard::create();
+
+	this->scheduleUpdate();
 	return true;
+}
+
+void Visualizer::update(float delta) {
+	/*
+	auto position = body->getPosition();
+	position.x -= 250 * delta;
+	if (position.x < 0 - (body->getBoundingBox().size.width / 2))
+		position.x = this->getBoundingBox().getMaxX() + body->getBoundingBox().size.width / 2;
+	body->setPosition(position);
+	*/
 }
 
 
