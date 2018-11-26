@@ -1,9 +1,0 @@
-#ifndef BASE_VISUALIZER_H
-#define BASE_VISUALIZER_H
-class BaseVisualizer
-{
-public:
-    BaseVisualizer();
-    virtual ~BaseVisualizer();
-};
-#endif // BASE_VISUALIZER_H
