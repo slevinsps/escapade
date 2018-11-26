@@ -19,6 +19,11 @@ private:
 	void SetPhysicsWorld(cocos2d::PhysicsWorld *world) {
 		sceneWorld = world; 
 	};
+
+	static std::map<cocos2d::EventKeyboard::KeyCode,
+		std::chrono::high_resolution_clock::time_point> keys;
+	cocos2d::Label * label;
+
 public:
 
 	Visualizer() {}
@@ -38,6 +43,8 @@ public:
 
 	cocos2d::Sprite *body;
 
+	cocos2d::Label* labellll;
+
 	void work();
 
 	void add_players();
@@ -45,6 +52,10 @@ public:
 	// Functions for key listeners
 
 	void chooseTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+
+	void moveTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+
+	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
 
 	// Functions necessary for the cocos2d::Scene
 
