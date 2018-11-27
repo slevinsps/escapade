@@ -96,7 +96,6 @@ public:
 		}
 		if (i != -1)
 			this->control_tank = get_user_unit(i);
-		CCLOG("i clicked %d, but i choose %d", i, control_tank);
 	}
 
 protected:

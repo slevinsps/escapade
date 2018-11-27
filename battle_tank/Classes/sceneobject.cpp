@@ -32,21 +32,21 @@ SceneObject::SceneObject(Position position,
 					spriteBody->setGravityEnable(false);
 					spriteBody->setLinearDamping(0.5);
 					sprite->setPhysicsBody(spriteBody);
-					CCLOG("%s connected", filename_json);
+					CCLOG("%s connected", filename_json.c_str());
 				}
 				else
 				{
-					CCLOG("%s not connected", filename_json);
+					CCLOG("%s not connected", filename_json.c_str());
 				}
 			}
 			else
 			{
-				CCLOG("%s not found", filename_json);
+				CCLOG("%s not found", filename_json.c_str());
 			}
 		}
 		sprite->setPosition(position_.toVec2());
 	} else {
-		CCLOG("%s not found", filename_png);
+		CCLOG("%s not found", filename_png.c_str());
 	}
 }
 

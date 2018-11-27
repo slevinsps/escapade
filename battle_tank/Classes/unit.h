@@ -36,7 +36,7 @@ public:
 		std::string name = "unnamed unit",
 		int type = LIGHT,
          Position _position = Position(),
-         std::string texture = "red_circle.png");
+         std::string texture = "circle");
 
     ~Unit();
 

@@ -31,11 +31,12 @@ Body& Tank::get_body() {
 #include "cocos2d.h"
 void Tank::set_position(Position pos) {
 	cocos2d::Vec2 vec = pos.toVec2();
-	cocos2d::Vec2 vec2 = cocos2d::Vec2(vec.x, vec.y + 15);
+	cocos2d::Vec2 vec2 = cocos2d::Vec2(vec.x, vec.y + 20);
 
 	unit_name->setPosition(vec2);
 	body_.sprite->setPosition(vec);
 	weapon_.sprite->setPosition(vec);
+	sprite->setPosition(vec);
 
 	weapon_.position_ = position_;
 	body_.position_ = position_;
@@ -64,8 +65,6 @@ void Tank::move(float power, bool back) {
 
 	float ax = start_speed * sinf(angle_radians);
 	float ay = start_speed * cosf(angle_radians);
-
-	CCLOG("results: %f %f, start_speed %f %f, angle_radians %f", ax, ay, max_speed, start_speed, angle_radians);
 
 	physic->setVelocity(cocos2d::Vec2(ax, ay));
 	body_.set_speed(powf(ax * ax + ay * ay, 0.5f));
@@ -112,8 +111,17 @@ void Tank::sinchronize() {
 	float y = pos.y;
 
 	weapon_.sprite->setPosition(pos);
-	unit_name->setPosition(x, y + 15);
+	sprite->setPosition(pos);
+	unit_name->setPosition(x, y + 20);
+
 	// ѕоворот пушки измен€етс€ в соотвествии с поворотом корпуса +
 	// в пушке хранитс€ угол поворота оруди€
 	weapon_.sprite->setRotation(body_.sprite->getRotation() + weapon_.get_angle());
+
+	sprite->setRotation(sprite->getRotation() + 1);
+}
+
+
+void Tank::fire(int shot) {
+	weapon_.fire();
 }

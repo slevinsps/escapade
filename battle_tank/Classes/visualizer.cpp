@@ -110,10 +110,31 @@ void Visualizer::add_players() {
 
 				user_units[i].set_position(Position(i * 100 + 50, 100));
 				
+				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
+				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
+				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
+				// Опять же это связано с тем, что нигде не возвращаются ссылки
 				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
+				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
+
+				int size = user_units[i].tank_.get_weapon().get_max_amount_bullets();
+				auto arr = user_units[i].tank_.get_weapon().get_bullets();
+				//CCLOG("LATE");
+				for (int j = 0; j < size; j++) {
+					
+					if (arr[j].sprite) {
+						arr[j].sprite->setTag(TAG_PLAYERS_UNITS);
+						addChild(arr[j].sprite, 0);
+					}
+					else { CCLOG("nullptr found"); }
+				}
 				
+				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
+				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
+
+				addChild(user_units[i].tank_.sprite, 0);
 				addChild(user_units[i].tank_.unit_name);
 				addChild(user_units[i].tank_.get_body().sprite, 0);
 				addChild(user_units[i].tank_.get_weapon().sprite, 0);
@@ -151,7 +172,7 @@ bool Visualizer::init()
 	//Создаём рамку размером visibleSize, то есть во весь экран, с
 	//физическим материалом по умолчанию и толщиной рамки 3 пикселя
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize,
-		PHYSICSBODY_MATERIAL_DEFAULT, 3);
+		PHYSICSBODY_MATERIAL_DEFAULT, 7);
 	// Создаём новый узел, то есть объект сцены
 	auto edgeNode = Node::create();
 	// Устанавливаем на позицию по центру экрана
@@ -269,6 +290,9 @@ void Visualizer::update(float delta) {
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
 			this->user_units[control_tank].tank_.move(1, true);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
+			this->user_units[control_tank].tank_.fire(1);
 		}
 	}
 	for (int i = 0; i < user_units.size(); i++) {
