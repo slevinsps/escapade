@@ -64,7 +64,7 @@ static void problemLoading(const char* filename)
 
 void Visualizer::work() {
 	;
-
+	/*
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
 
@@ -85,7 +85,7 @@ void Visualizer::work() {
 		}
 		Sleep(100);
 	}
-
+	*/
 
 }
 
@@ -131,114 +131,6 @@ void Visualizer::add_players() {
 	addChild(amount);
 }
 
-void Visualizer::chooseTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
-	int i = -1;
-	switch (keyCode) {
-	case EventKeyboard::KeyCode::KEY_1:
-		i = 0;
-		break;
-	case EventKeyboard::KeyCode::KEY_2:
-		i = 1;
-		break;
-	case EventKeyboard::KeyCode::KEY_3:
-		i = 2;
-		break;
-	case EventKeyboard::KeyCode::KEY_4:
-		i = 3;
-		break;
-	case EventKeyboard::KeyCode::KEY_5:
-		i = 4;
-		break;
-	case EventKeyboard::KeyCode::KEY_6:
-		i = 5;
-		break;
-	case EventKeyboard::KeyCode::KEY_7:
-		i = 6;
-		break;
-	case EventKeyboard::KeyCode::KEY_8:
-		i = 7;
-		break;
-	case EventKeyboard::KeyCode::KEY_9:
-		i = 8;
-		break;
-	}
-	this->control_tank = get_user_unit(1);
-}
-
-float get_angle(float ang) {
-	if (ang < 0) {
-		while (ang < -360) {
-			ang += 360;
-		}
-		if (ang < -180) {
-			ang += 360;
-		}
-	}
-	else {
-		while (ang > 360) {
-			ang -= 360;
-		}
-		if (ang > 180) {
-			ang -= 360;
-		}
-	}
-	return ang;
-}
-
-void Visualizer::moveTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
-	Vec2 loc = body->getPosition();
-	float change = 5.f;
-	auto bo = body->getPhysicsBody();
-	bo->setRotationEnable(true);
-	float speed = 50.f;
-
-	auto angle_ = get_angle(bo->getRotation());
-
-	float ax = 40 * sinf(angle_/ 180.f * 3.14);
-	float ay = 40 * cosf(angle_ / 180.f * 3.14);
-
-	CCLOG("rotate %f and %f %f", angle_, ax, ay);
-	auto startingSpeed_ = bo->getVelocity();
-	
-
-	switch (keyCode) {
-	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-	case EventKeyboard::KeyCode::KEY_A:
-		body->setRotation(body->getRotation() - change);
-		//bo->setRotationOffset(bo->getRotationOffset() - 20.f);
-		//bo->setAngularVelocity(20);
-		break;
-	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-	case EventKeyboard::KeyCode::KEY_D:
-		body->setRotation(body->getRotation() + change);
-		break;
-	case EventKeyboard::KeyCode::KEY_SPACE:
-		bo->setVelocity({ 0,0 });
-		bo->resetForces();
-		bo->setAngularVelocity({ 0 });
-		break;
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-	case EventKeyboard::KeyCode::KEY_W:
-		bo->setVelocity(Vec2(ax, ay) * 10);
-		//body->setRotation(body->getRotation - change);
-		break;
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-	case EventKeyboard::KeyCode::KEY_S:
-		bo->setVelocity(Vec2(-10 * cos(bo->getRotation()), -10 * sin(bo->getRotation())));
-		//body->setRotation(body->getRotation - change);
-		break;
-	}
-
-	if (keys.find(keyCode) == keys.end()) {
-		keys[keyCode] = std::chrono::high_resolution_clock::now();
-	}
-
-	CCLOG("rotation:%d", int(bo->getRotation()));
-}
-
-void uu(int i);
-
-#include "BodyParser.h"
 // on "init" you need to initialize your instance
 bool Visualizer::init()
 {
@@ -270,37 +162,6 @@ bool Visualizer::init()
 	//Добавляем узел к нашей сцене
 	this->addChild(edgeNode);
 
-	// Создаём спрайт
-	body = Sprite::create("tank_heavy_body.png");
-	// Проверяем - существует ли json-файл
-	CCLOG("-=-");
-	if (BodyParser::getInstance()->parseJsonFile("tank_heavy_body.json"))
-	{
-		// Создаём физическое тело. Второй параметр - имя тела(не путать с именем файла), третий параметр - материал, с которым вы можете поиграться устанавливая различные значения.
-		auto spriteBody = BodyParser::getInstance()->bodyFormJson(body, "tank_heavy_body", PhysicsMaterial(1.0f, 0.7f, 0.5f));
-		if (spriteBody != nullptr)
-		{
-			// Устанавливаем тело для спрайта
-			spriteBody->setGravityEnable(false);
-			spriteBody->setLinearDamping(0.5);
-			body->setPhysicsBody(spriteBody);
-			CCLOG("WIN");
-		}
-		else
-		{
-			CCLOG("Object.cpp spriteBody is nullptr");
-		}
-	}
-	else
-	{
-		CCLOG("JSON file not found");
-	}
-
-	// Установим спрайт в центре экрана
-	body->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-
-	this->addChild(body);
-
 	/////////////////////////////
 	// 2. add a menu item with "X" image, which is clicked to quit the program
 	//    you may modify it.
@@ -329,54 +190,7 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	/////////////////////////////
-	// 3. add your codes below...
 
-	// add a label shows "Hello World"
-	// create and initialize a label
-
-
-	auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-	if (label == nullptr)
-	{
-		problemLoading("'fonts/Marker Felt.ttf'");
-	}
-	else
-	{
-		// position the label on the center of the screen
-		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - label->getContentSize().height));
-
-		// add the label as a child to this layer
-		this->addChild(label, 1);
-	}
-
-	// add "HelloWorld" splash screen"
-
-	auto sprite = Sprite::create("HelloWorld.png");
-	if (sprite == nullptr)
-	{
-		problemLoading("'HelloWorld.png'");
-	}
-	else
-	{
-		// position the sprite on the center of the screen
-		sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-
-		// add the sprite as a child to this layer
-		this->addChild(sprite, 0);
-	}
-	/*
-	body = Sprite::create("tank_heavy_body.png");
-	body->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-
-	// add the sprite as a child to this layer
-	this->addChild(body, 0);
-
-	//heavy_body->setColor(Color3B(120, 120, 255));
-
-	body->setPosition(Vec2(100, 100));
-	*/
 	/*
 	// Смещаем на 50 точек наверх и на 10 вправо, за две секунды:
 	auto moveBy = MoveBy::create(5, Vec2(300, 300));
@@ -412,6 +226,7 @@ bool Visualizer::init()
 	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
 
 	eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+		chooseTank(keyCode, event);
 		if (keys.find(keyCode) == keys.end()) {
 			keys[keyCode] = std::chrono::high_resolution_clock::now();
 		}
@@ -421,16 +236,6 @@ bool Visualizer::init()
 		keys.erase(keyCode);
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
-
-	auto handleControl = EventListenerKeyboard::create();
-
-	auto bo = body->getPhysicsBody();
-	float speed = 50.f;
-	bo->setVelocity(Vec2(0, 50.f));
-
-	labellll = cocos2d::Label::createWithSystemFont("Press the CTRL Key", "Arial", 32);
-	labellll->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
-	addChild(labellll);
 
 	this->scheduleUpdate();
 	return true;
@@ -446,57 +251,29 @@ bool Visualizer::isKeyPressed(EventKeyboard::KeyCode code) {
 
 void Visualizer::update(float delta) {
 	Node::update(delta);
-	if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-		body->setRotation(body->getRotation() - 1);
-		body->getPhysicsBody()->setAngularVelocity({ 0 });
-	}
-	if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-		body->setRotation(body->getRotation() + 1);
-		body->getPhysicsBody()->setAngularVelocity({ 0 });
-	}
-	if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-		auto angle_ = get_angle(body->getRotation());
-
-		float ax =  sinf(angle_ / 180.f * 3.14);
-		float ay =  cosf(angle_ / 180.f * 3.14);
-		/*
-		float old_speed_x = body->getPhysicsBody()->getVelocity().x;
-		float old_speed_y = body->getPhysicsBody()->getVelocity().y;
-
-		if (old_speed_x < 1) {
-			old_speed_x = 2;
+	if (control_tank >= 0) {
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
+			this->user_units[control_tank].tank_.rotate_body(1, false);
 		}
-
-		if (old_speed_y < 1) {
-			old_speed_y = 2;
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
+			this->user_units[control_tank].tank_.rotate_body(1, true);
 		}
-
-		ax *= old_speed_x;
-		ay *= old_speed_y;
-		*/
-		body->getPhysicsBody()->resetForces();
-		body->getPhysicsBody()->setVelocity(Vec2(ax, ay) * 20);
-
-		CCLOG("rot!!!! %f", get_angle(body->getRotation()));
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
+			this->user_units[control_tank].tank_.rotate_weapon(1, false);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_E)) {
+			this->user_units[control_tank].tank_.rotate_weapon(1, true);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+			this->user_units[control_tank].tank_.move(1, false);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+			this->user_units[control_tank].tank_.move(1, true);
+		}
 	}
-	/*
-	static int num = 1;
-	//auto position = body->getPosition();
-	//position.x -= num * 250 * delta;
-	
-	auto bo = body->getPhysicsBody();
-	float speed = 500.f;
-	if (body->getPositionX() < 0 - (body->getBoundingBox().size.width / 2)) {
-		num *= -1;
-		bo->setVelocity(bo->getVelocity().getNormalized() * speed);
-		//position.x = this->getBoundingBox().getMaxX() + body->getBoundingBox().size.width / 2;
+	for (int i = 0; i < user_units.size(); i++) {
+		user_units[i].tank_.sinchronize();
 	}
-	if (body->getPositionX() > 300) {
-		num *= -1;
-		//position.x = this->getBoundingBox().getMaxX() + body->getBoundingBox().size.width / 2;
-	}
-	//body->setPosition(position);
-	*/
 }
 
 

@@ -10,7 +10,7 @@
 #define BODY_DEFAULT_SPEED 20
 #define BODY_DEFAULT_ANGLE 0
 
-class Body : public Component
+class Body : public UnitComponent
 {
 public:
     // Ожидается позиция юнита, поэтому она задается явно
@@ -18,13 +18,13 @@ public:
     // Поскольку не планируется изменение картинки, она
     // стоит в конце
 	Body(Position position = Position(),
-		int max_health = BODY_MAX_HEALTH,
-		int rotation_speed = BODY_DEFAULT_ROTATION_SPEED,
-		int speed = BODY_DEFAULT_ROTATION_SPEED,
-		int speed_back = BODY_DEFAULT_ROTATION_SPEED,
-		int current_rotation_angle = BODY_DEFAULT_ANGLE,
+		float max_health = BODY_MAX_HEALTH,
+		float rotation_speed = BODY_DEFAULT_ROTATION_SPEED,
+		float speed = BODY_DEFAULT_ROTATION_SPEED,
+		float speed_back = BODY_DEFAULT_ROTATION_SPEED,
+		float current_rotation_angle = BODY_DEFAULT_ANGLE,
 		std::string name = "default body",
-		std::string texture = "tank_light_body.png");
+		std::string texture = "tank_light_body");
 
     void apply_health_bonus(Bonus& bonus);
     void apply_speed_bonus(Bonus& bonus);
@@ -38,6 +38,16 @@ public:
 
     ForwardMovement get_forward_movement() const;
     void set_forward_movement(ForwardMovement);
+
+	void set_speed(int speed);
+	void set_max_speed(int speed);
+	void set_max_backspeed(int speed);
+
+	// Получить экземпляры быстрого и крепкого корпусов
+
+	static Body getLightBody(Position pos = Position());
+
+	static Body getHeavyBody(Position pos = Position());
 
 protected:
     int max_health_;

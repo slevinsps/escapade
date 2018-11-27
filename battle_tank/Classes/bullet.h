@@ -18,7 +18,7 @@ public:
            Position position_cur = Position(),
            double angle = 0,
            int speed = BULLET_DEFAULT_FORWARD_SPEED,
-           std::string texture = "bullet.png") :
+           std::string texture = "bullet") :
         SceneObject(position_cur, texture),
         begin_point_(position_begin),
         forward_(speed,speed),

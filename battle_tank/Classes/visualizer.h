@@ -5,6 +5,7 @@
 
 #define TAG_PLAYERS_TABLE 20
 #define TAG_PLAYERS_UNITS 30
+#include "BodyParser.h"
 
 class Visualizer : public BaseVisualizer, public cocos2d::Scene
 {
@@ -41,19 +42,11 @@ public:
 
 	bool operator != (const Visualizer &other) const;
 
-	cocos2d::Sprite *body;
-
-	cocos2d::Label* labellll;
-
 	void work();
 
 	void add_players();
 
 	// Functions for key listeners
-
-	void chooseTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-
-	void moveTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 
 	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
 

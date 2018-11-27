@@ -3,22 +3,22 @@
 
 #include "map.h"
 
-Map::Map(std::string filename) : filename_(filename){};
-Map::~Map(){}
+BattleMap::BattleMap(std::string filename) : filename_(filename){};
+BattleMap::~BattleMap(){}
 
-std::string Map::get_filename() const {
+std::string BattleMap::get_filename() const {
     return filename_;
 }
 
-void Map::set_filename(std::string filename) {
+void BattleMap::set_filename(std::string filename) {
     filename_ = filename;
 }
 
-bool Map::operator == (const Map &other) const {
+bool BattleMap::operator == (const BattleMap &other) const {
     return filename_ == other.get_filename();
 }
 
-bool Map::operator != (const Map &other) const {
+bool BattleMap::operator != (const BattleMap &other) const {
     return filename_ != other.get_filename();
 }
 

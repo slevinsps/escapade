@@ -3,6 +3,8 @@
 #include <iostream>
 #include "cocos2d.h"
 
+#include "BodyParser.h"
+
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
@@ -36,8 +38,9 @@ public:
 
 	cocos2d::Sprite* sprite;
 
-    SceneObject(Position position = Position(),
-                std::string texture = "default.png");
+	SceneObject(Position position = Position(),
+		std::string filename = "error",
+		bool physic = false);
 
 	bool has_sprite() const;
 };

@@ -15,10 +15,10 @@ void TScene::setUnits(std::vector<Unit> units) {
     units_= units;
 }
 
-Map TScene::getMap() const {
+BattleMap TScene::getMap() const {
     return map_;
 }
-void TScene::setMap(Map map) {
+void TScene::setMap(BattleMap map) {
     map_ = map;
 }
 

@@ -11,7 +11,7 @@
 #define WEAPON_AMOUNT_BULLETS 4
 #define WEAPON_ROTATION_SPEED 20
 
-class Weapon: public Component
+class Weapon: public UnitComponent
 {
 public:
     // Ожидается позиция юнита, поэтому она задается явно
@@ -19,13 +19,13 @@ public:
     // Поскольку не планируется изменение картинки, она
     // стоит в конце
     Weapon(Position position = Position(),
-           int damage = WEAPON_DEFAULT_DAMAGE,
-           int recharge = WEAPON_DEFAULT_RECHANGE,
-           int angle = 0,
-           int amount_bullets = WEAPON_AMOUNT_BULLETS,
-           int rotation_speed = WEAPON_ROTATION_SPEED,
-           std::string name = "default weapon",
-           std::string texture = "tank_light_weapon.png");
+		float damage = WEAPON_DEFAULT_DAMAGE,
+		float recharge = WEAPON_DEFAULT_RECHANGE,
+		float angle = 0,
+		float amount_bullets = WEAPON_AMOUNT_BULLETS,
+		float rotation_speed = WEAPON_ROTATION_SPEED,
+        std::string name = "default weapon",
+        std::string texture = "tank_light_weapon");
 
     int fire();
     void apply_damage_bonus(Bonus bonus);
@@ -41,8 +41,16 @@ public:
     Bullet& get_bullet_at(int i);
     std::vector<Bullet>& get_bullets();
 
-    RotateMovement& get_rotation_movement();
-    void set_get_rotation_movement(RotateMovement);
+	float get_angle_speed() const;
+
+	float get_angle() const;
+    void set_angle(float angle);
+
+	// Получить экземпляры слабой и сильной пушек
+
+	static Weapon getLightWeapon(Position pos = Position());
+
+	static Weapon getHeavyWeapon(Position pos = Position());
 
 private:
     int damage_;

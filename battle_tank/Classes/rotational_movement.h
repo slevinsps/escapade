@@ -9,13 +9,18 @@
 class RotateMovement : public Movement
 {
 public:
-    RotateMovement(int max_speed, int current_angle) :
-        current_angle_(current_angle), Movement(max_speed){}
-    int get_current_angle() const;
+	RotateMovement(float speed, float current_angle);
+	~RotateMovement();
+
+	float get_current_angle() const;
     void set_current_angle(int angle);
+
+	float get_speed() const;
+
     bool operator == (const RotateMovement &other);
 private:
-    int current_angle_;
+    float current_angle_;
+	float speed_;
 };
 
 #endif // ROTATE_MOVEMENT_H

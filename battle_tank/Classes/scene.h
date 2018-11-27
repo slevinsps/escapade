@@ -17,7 +17,7 @@ class TScene : public Loader
 public:
 	TScene() = default;
 	TScene(std::vector<Unit> units,
-          Map map,
+		BattleMap map,
           bonusControl bonuses) :
              units_(units), map_(map), bonuses_(bonuses){};
 
@@ -27,8 +27,8 @@ public:
     std::vector<Unit> getUnits() const;
     void setUnits(std::vector<Unit> units);
 
-    Map getMap() const;
-    void setMap(Map map);
+	BattleMap getMap() const;
+    void setMap(BattleMap map);
 
     bonusControl getBonusControl() const;
     void setBonusControl(bonusControl bonus);
@@ -39,7 +39,7 @@ public:
 
 private:
     std::vector<Unit> units_;
-    Map map_;
+	BattleMap map_;
     bonusControl bonuses_;
 
     // Функция, проверяющая какие объекты с какими
