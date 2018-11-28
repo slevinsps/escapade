@@ -16,13 +16,13 @@ public:
 	// Сначала вызывается init, потом run,
 	// init необходим для инициализации переменных
 
-	void init(Unit unit) {
+	void init(Unit& unit) {
 		unit.setModel(LIGHT);
 		unit.setName("No name");
 	}
 
-    void run(Unit unit){
-         unit.fire();
+    void run(Unit& unit){
+		;
     }
 };
 

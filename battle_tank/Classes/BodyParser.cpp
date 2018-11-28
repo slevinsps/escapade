@@ -86,7 +86,10 @@ PhysicsBody* BodyParser::bodyFormJson(cocos2d::Node *pNode, const std::string& n
                     CCLOG("body: %s not found!", name.c_str());
                 }
                 break;
-            }
+            } else { CCLOG("body: %s not found!", name.c_str()); 
+
+			CCLOG("way: %s compare", bodies[i]["name"].GetString());
+			}
         }
     }
     return body;

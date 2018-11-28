@@ -5,7 +5,8 @@
 class Movement
 {
 public:
-    Movement(int max_speed = 60, int current_speed = 0);
+	Movement() {};
+	/*
     virtual ~Movement();
 
     int get_max_speed() const;
@@ -15,10 +16,13 @@ public:
     void set_max_speed(int max_speed);
 
     void set_current_speed(int current_speed);
-
+	*/
+	static float get_angle(float ang);
+	/*
 private:
     int max_speed_;
     int current_speed_;
+	*/
 };
 
 #endif // MOVEMENT_H

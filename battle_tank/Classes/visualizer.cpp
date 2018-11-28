@@ -64,7 +64,7 @@ static void problemLoading(const char* filename)
 
 void Visualizer::work() {
 	;
-
+	/*
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
 
@@ -85,7 +85,7 @@ void Visualizer::work() {
 		}
 		Sleep(100);
 	}
-
+	*/
 
 }
 
@@ -110,10 +110,31 @@ void Visualizer::add_players() {
 
 				user_units[i].set_position(Position(i * 100 + 50, 100));
 				
+				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
+				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
+				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
+				// Опять же это связано с тем, что нигде не возвращаются ссылки
 				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
+				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
+
+				int size = user_units[i].tank_.get_weapon().get_max_amount_bullets();
+				auto arr = user_units[i].tank_.get_weapon().get_bullets();
+				//CCLOG("LATE");
+				for (int j = 0; j < size; j++) {
+					
+					if (arr[j].sprite) {
+						arr[j].sprite->setTag(TAG_PLAYERS_UNITS);
+						addChild(arr[j].sprite, 0);
+					}
+					else { CCLOG("nullptr found"); }
+				}
 				
+				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
+				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
+
+				addChild(user_units[i].tank_.sprite, 0);
 				addChild(user_units[i].tank_.unit_name);
 				addChild(user_units[i].tank_.get_body().sprite, 0);
 				addChild(user_units[i].tank_.get_weapon().sprite, 0);
@@ -131,63 +152,6 @@ void Visualizer::add_players() {
 	addChild(amount);
 }
 
-void Visualizer::chooseTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
-	int i = -1;
-	switch (keyCode) {
-	case EventKeyboard::KeyCode::KEY_1:
-		i = 0;
-		break;
-	case EventKeyboard::KeyCode::KEY_2:
-		i = 1;
-		break;
-	case EventKeyboard::KeyCode::KEY_3:
-		i = 2;
-		break;
-	case EventKeyboard::KeyCode::KEY_4:
-		i = 3;
-		break;
-	case EventKeyboard::KeyCode::KEY_5:
-		i = 4;
-		break;
-	case EventKeyboard::KeyCode::KEY_6:
-		i = 5;
-		break;
-	case EventKeyboard::KeyCode::KEY_7:
-		i = 6;
-		break;
-	case EventKeyboard::KeyCode::KEY_8:
-		i = 7;
-		break;
-	case EventKeyboard::KeyCode::KEY_9:
-		i = 8;
-		break;
-	}
-	this->control_tank = get_user_unit(1);
-}
-
-void chooseTank(EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
-	Vec2 loc = event->getCurrentTarget()->getPosition();
-	switch (keyCode) {
-	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-	case EventKeyboard::KeyCode::KEY_A:
-		event->getCurrentTarget()->setPosition(--loc.x, loc.y);
-		break;
-	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-	case EventKeyboard::KeyCode::KEY_D:
-		event->getCurrentTarget()->setPosition(++loc.x, loc.y);
-		break;
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-	case EventKeyboard::KeyCode::KEY_W:
-		event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
-		break;
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-	case EventKeyboard::KeyCode::KEY_S:
-		event->getCurrentTarget()->setPosition(loc.x, --loc.y);
-		break;
-	}
-}
-
-#include "BodyParser.h"
 // on "init" you need to initialize your instance
 bool Visualizer::init()
 {
@@ -208,43 +172,16 @@ bool Visualizer::init()
 	//Создаём рамку размером visibleSize, то есть во весь экран, с
 	//физическим материалом по умолчанию и толщиной рамки 3 пикселя
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize,
-		PHYSICSBODY_MATERIAL_DEFAULT, 3);
+		PHYSICSBODY_MATERIAL_DEFAULT, 7);
 	// Создаём новый узел, то есть объект сцены
 	auto edgeNode = Node::create();
 	// Устанавливаем на позицию по центру экрана
-	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 25);
 	// Добавляем к узлу физическое тело
 	edgeNode->setPhysicsBody(edgeBody);
 
 	//Добавляем узел к нашей сцене
 	this->addChild(edgeNode);
-
-	// Создаём спрайт
-	body = Sprite::create("tank_heavy_body.png");
-	// Проверяем - существует ли json-файл
-	if (BodyParser::getInstance()->parseJsonFile("tank_heavy_body.json"))
-	{
-		// Создаём физическое тело. Второй параметр - имя тела(не путать с именем файла), третий параметр - материал, с которым вы можете поиграться устанавливая различные значения.
-		auto spriteBody = BodyParser::getInstance()->bodyFormJson(body, "tank_heavy_body", PhysicsMaterial(1.0f, 0.0f, 1.0f));
-		if (spriteBody != nullptr)
-		{
-			// Устанавливаем тело для спрайта
-			body->setPhysicsBody(spriteBody);
-		}
-		else
-		{
-			CCLOG("Object.cpp spriteBody is nullptr");
-		}
-	}
-	else
-	{
-		CCLOG("JSON file not found");
-	}
-
-	// Установим спрайт в центре экрана
-	body->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-
-	this->addChild(body);
 
 	/////////////////////////////
 	// 2. add a menu item with "X" image, which is clicked to quit the program
@@ -274,54 +211,7 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	/////////////////////////////
-	// 3. add your codes below...
 
-	// add a label shows "Hello World"
-	// create and initialize a label
-
-
-	auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-	if (label == nullptr)
-	{
-		problemLoading("'fonts/Marker Felt.ttf'");
-	}
-	else
-	{
-		// position the label on the center of the screen
-		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - label->getContentSize().height));
-
-		// add the label as a child to this layer
-		this->addChild(label, 1);
-	}
-
-	// add "HelloWorld" splash screen"
-
-	auto sprite = Sprite::create("HelloWorld.png");
-	if (sprite == nullptr)
-	{
-		problemLoading("'HelloWorld.png'");
-	}
-	else
-	{
-		// position the sprite on the center of the screen
-		sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-
-		// add the sprite as a child to this layer
-		this->addChild(sprite, 0);
-	}
-	/*
-	body = Sprite::create("tank_heavy_body.png");
-	body->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-
-	// add the sprite as a child to this layer
-	this->addChild(body, 0);
-
-	//heavy_body->setColor(Color3B(120, 120, 255));
-
-	body->setPosition(Vec2(100, 100));
-	*/
 	/*
 	// Смещаем на 50 точек наверх и на 10 вправо, за две секунды:
 	auto moveBy = MoveBy::create(5, Vec2(300, 300));
@@ -353,69 +243,61 @@ bool Visualizer::init()
 
 	auto eventListener = EventListenerKeyboard::create();
 
+	// Для того, чтобы можно было держать кнопку - https://www.gamefromscratch.com/post/2014/10/07/Cocos2d-x-Tutorial-Series-Handling-the-Keyboard.aspx
+	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
 
-
-	eventListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
-
-		Vec2 loc = event->getCurrentTarget()->getPosition();
-		switch (keyCode) {
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		case EventKeyboard::KeyCode::KEY_A:
-			event->getCurrentTarget()->setPosition(--loc.x, loc.y);
-			break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		case EventKeyboard::KeyCode::KEY_D:
-			event->getCurrentTarget()->setPosition(++loc.x, loc.y);
-			break;
-		case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		case EventKeyboard::KeyCode::KEY_W:
-			event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
-			break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		case EventKeyboard::KeyCode::KEY_S:
-			event->getCurrentTarget()->setPosition(loc.x, --loc.y);
-			break;
+	eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+		chooseTank(keyCode, event);
+		if (keys.find(keyCode) == keys.end()) {
+			keys[keyCode] = std::chrono::high_resolution_clock::now();
 		}
 	};
-	eventListener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event)
-	{
-		Vec2 loc = event->getCurrentTarget()->getPosition();
-		switch (keyCode)
-		{
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		case EventKeyboard::KeyCode::KEY_A:
-			event->getCurrentTarget()->setPosition(--loc.x, loc.y);
-			break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		case EventKeyboard::KeyCode::KEY_D:
-			event->getCurrentTarget()->setPosition(++loc.x, loc.y);
-			break;
-		case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		case EventKeyboard::KeyCode::KEY_W:
-			event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
-			break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		case EventKeyboard::KeyCode::KEY_S:
-			event->getCurrentTarget()->setPosition(loc.x, --loc.y);
-			break;
-		}
+	eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+		// remove the key.  std::map.erase() doesn't care if the key doesnt exist
+		keys.erase(keyCode);
 	};
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, body);
-
-	auto handleControl = EventListenerKeyboard::create();
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
 
 	this->scheduleUpdate();
 	return true;
 }
 
+bool Visualizer::isKeyPressed(EventKeyboard::KeyCode code) {
+	// Check if the key is currently pressed by seeing it it's in the std::map keys
+	// In retrospect, keys is a terrible name for a key/value paried datatype isnt it?
+	if (keys.find(code) != keys.end())
+		return true;
+	return false;
+}
+
 void Visualizer::update(float delta) {
-	/*
-	auto position = body->getPosition();
-	position.x -= 250 * delta;
-	if (position.x < 0 - (body->getBoundingBox().size.width / 2))
-		position.x = this->getBoundingBox().getMaxX() + body->getBoundingBox().size.width / 2;
-	body->setPosition(position);
-	*/
+	Node::update(delta);
+	if (control_tank >= 0) {
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
+			this->user_units[control_tank].tank_.rotate_body(1, false);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
+			this->user_units[control_tank].tank_.rotate_body(1, true);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
+			this->user_units[control_tank].tank_.rotate_weapon(1, false);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_E)) {
+			this->user_units[control_tank].tank_.rotate_weapon(1, true);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+			this->user_units[control_tank].tank_.move(1, false);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+			this->user_units[control_tank].tank_.move(1, true);
+		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
+			this->user_units[control_tank].tank_.fire(1);
+		}
+	}
+	for (int i = 0; i < user_units.size(); i++) {
+		user_units[i].tank_.sinchronize();
+	}
 }
 
 
@@ -436,3 +318,5 @@ void Visualizer::menuCloseCallback(Ref* pSender)
 
 }
 
+std::map<cocos2d::EventKeyboard::KeyCode,
+	std::chrono::high_resolution_clock::time_point> Visualizer::keys;

@@ -1,12 +1,13 @@
 #include "component.h"
 
-Component::Component(Position position,
+UnitComponent::UnitComponent(Position position,
 	std::string texture,
-    std::string name):
-		SceneObject(position, texture),
+    std::string name,
+	bool physic):
+		SceneObject(position, texture, physic),
 		name_(name)
 {}
 
-void Component::applyBonus(Bonus bonus){
+void UnitComponent::applyBonus(Bonus bonus){
 
 }

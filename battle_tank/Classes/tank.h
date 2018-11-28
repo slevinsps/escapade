@@ -12,16 +12,23 @@ public:
 		std::string name = "unknown tank",
 		int type = LIGHT,
 		Position position = Position(),
-		std::string = "red_circle.png");
+		std::string = "circle");
     Weapon& get_weapon();
     Body& get_body();
-    void move(int speed) override;
-    void rotate(double angle) override;
-    void fire() override;
+	
+	void move(float power, bool back) override;
+	
+	void rotate_body(float power, bool clockwise) override;
+	
+	void rotate_weapon(float power, bool clockwise) override;
+	
+	void fire(int shot) override;
 
 	void setModel(int type) override;
 
     void set_position(Position pos) override;
+
+    void sinchronize() override;
 
 private:
     Weapon weapon_;

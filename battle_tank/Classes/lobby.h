@@ -1,7 +1,7 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
-#include <vector>.h>
+#include <vector>
 
 #include "room.h"
 #include "loader.h"

@@ -5,6 +5,7 @@
 
 #define TAG_PLAYERS_TABLE 20
 #define TAG_PLAYERS_UNITS 30
+#include "BodyParser.h"
 
 class Visualizer : public BaseVisualizer, public cocos2d::Scene
 {
@@ -19,6 +20,11 @@ private:
 	void SetPhysicsWorld(cocos2d::PhysicsWorld *world) {
 		sceneWorld = world; 
 	};
+
+	static std::map<cocos2d::EventKeyboard::KeyCode,
+		std::chrono::high_resolution_clock::time_point> keys;
+	cocos2d::Label * label;
+
 public:
 
 	Visualizer() {}
@@ -36,15 +42,13 @@ public:
 
 	bool operator != (const Visualizer &other) const;
 
-	cocos2d::Sprite *body;
-
 	void work();
 
 	void add_players();
 
 	// Functions for key listeners
 
-	void chooseTank(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
 
 	// Functions necessary for the cocos2d::Scene
 

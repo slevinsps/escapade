@@ -6,7 +6,7 @@ Unit::Unit(Player player,
 	int type,
     Position position,
     std::string texture) :
-		SceneObject(position, texture),
+		SceneObject(position, texture, false),
 		player_(player),
 		team_id_(team_id),
 		name_(name),

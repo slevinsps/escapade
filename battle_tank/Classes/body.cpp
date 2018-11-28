@@ -1,14 +1,14 @@
 #include "body.h"
 
 Body::Body(Position position,
-	int max_health,
-	int rotation_speed,
-	int speed,
-	int speed_back,
-	int current_rotation_angle,
+	float max_health,
+	float rotation_speed,
+	float speed,
+	float speed_back,
+	float current_rotation_angle,
 	std::string name,
 	std::string texture) :
-	Component(position, texture, name),
+	UnitComponent(position, texture, name, true),
 	health_(max_health),
 	max_health_(max_health),
 	rotation_(rotation_speed, current_rotation_angle),
@@ -43,4 +43,28 @@ ForwardMovement Body::get_forward_movement() const{
 
 void Body::set_forward_movement(ForwardMovement fw) {
 	forward_ = fw;
+}
+
+void Body::set_speed(int speed) {
+	forward_.setSpeed(speed);
+}
+
+void Body::set_max_speed(int speed) {
+	forward_.setMaxSpeed(speed);
+}
+
+void Body::set_max_backspeed(int speed) {
+	forward_.setMaxBackSpeed(speed);
+}
+
+Body Body::getLightBody(Position pos) {
+	return Body(pos, 100, 2,
+		60, 40, 0, "light body",
+		"tank_light_body");
+}
+
+Body Body::getHeavyBody(Position pos) {
+	return Body(pos, 300, 1,
+		20, 10, 0, "heavy body",
+		"tank_heavy_body");
 }

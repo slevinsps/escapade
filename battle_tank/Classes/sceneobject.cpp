@@ -11,16 +11,42 @@ bool SceneObject::has_sprite() const {
 }
 
 SceneObject::SceneObject(Position position,
-	std::string texture) {
+	std::string filename, bool physic) {
 	position_ = position;
 
-	sprite = nullptr;
-	sprite = cocos2d::Sprite::create(texture);
-	if (sprite == nullptr) {
-		problemLoading(texture);
-		sprite = cocos2d::Sprite::create("error.png");
+	std::string filename_png = filename + ".png";
+	std::string filename_json = filename + ".json";
+
+	sprite = cocos2d::Sprite::create(filename_png);
+	// Проверяем - существует ли json-файл
+	if (sprite) {
+		if (physic) {
+			if (BodyParser::getInstance()->parseJsonFile(filename_json))
+			{
+				// Создаём физическое тело. Второй параметр - имя тела(не путать с именем файла)
+				auto spriteBody = BodyParser::getInstance()->bodyFormJson(sprite,
+					filename, PhysicsMaterial(1.0f, 0.7f, 0.5f));
+				if (spriteBody != nullptr)
+				{
+					// Устанавливаем тело для спрайта
+					spriteBody->setGravityEnable(false);
+					spriteBody->setLinearDamping(0.5);
+					sprite->setPhysicsBody(spriteBody);
+					CCLOG("%s connected", filename_json.c_str());
+				}
+				else
+				{
+					CCLOG("%s not connected", filename_json.c_str());
+				}
+			}
+			else
+			{
+				CCLOG("%s not found", filename_json.c_str());
+			}
+		}
+		sprite->setPosition(position_.toVec2());
 	} else {
-		sprite->setPosition(position.toVec2());
+		CCLOG("%s not found", filename_png.c_str());
 	}
 }
 
