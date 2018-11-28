@@ -2,8 +2,8 @@
 
 Weapon::Weapon(Position position,
 	int damage,
-	int recharge_one,
-	int recharge_all,
+	milliseconds recharge_one,
+	milliseconds recharge_all,
 	float angle,
 	int amount_bullets,
 	float rotation_speed,
@@ -16,7 +16,7 @@ Weapon::Weapon(Position position,
     max_amount_bullets_(amount_bullets),
     rotation_(rotation_speed, angle)
 {
-	last_time_shooted = get_time() - recharge_one_;
+	last_time_shooted = high_resolution_clock::now() - recharge_one_;
     for(int i = 0; i < max_amount_bullets_; ++i) {
         Bullet bullet(position);
         bullets_.push_back(bullet);
@@ -24,10 +24,10 @@ Weapon::Weapon(Position position,
 		
 }
 
-int Weapon::get_recharge_one() const {
+milliseconds Weapon::get_recharge_one() const {
 	return recharge_one_;
 }
-int Weapon::get_recharge_all() const {
+milliseconds Weapon::get_recharge_all() const {
 	return recharge_all_;
 }
 int Weapon::get_damage() const {
@@ -54,14 +54,15 @@ void Weapon::recharge_bullets() {
 void Weapon::apply_damage_bonus(Bonus bonus){}
 
 void Weapon::fire(){
-	int time_now = get_time();
+	steady_clock::time_point time_now = steady_clock::now();
 	CCLOG("NOOO %d %d", time_now, cur_amount_bullets_);
 	if (cur_amount_bullets_ > 0) {
-		CCLOG("HMMMM %d %d", time_now, last_time_shooted);
-		if (time_now- last_time_shooted > recharge_one_) {
-			CCLOG("BEGIN %d %d", last_time_shooted, cur_amount_bullets_);
+		CCLOG("HMMMM %lu %lu", time_now, last_time_shooted);
+		if (time_now - last_time_shooted > recharge_one_) {
+			CCLOG("BEGIN %lu %lu", last_time_shooted, cur_amount_bullets_);
 			int index = --cur_amount_bullets_;
 			bullets_[index].sprite->setRotation(this->sprite->getRotation());
+			CCLOG("My rotation %f", this->sprite->getRotation());
 			bullets_[index].sprite->setPosition(this->sprite->getPosition());
 			bullets_[index].move();
 			last_time_shooted = time_now;
@@ -86,13 +87,13 @@ void Weapon::set_angle(float angle) {
 }
 
 Weapon Weapon::getLightWeapon(Position pos) {
-	return Weapon(pos, 10, 1, 1, 0, 20,
+	return Weapon(pos, 10, 40ms, 300ms, 0, 50,
 		2, "light weapon",
 		"tank_light_weapon");
 }
 
 Weapon Weapon::getHeavyWeapon(Position pos) {
-	return Weapon(pos, 40, 2, 10, 0, 4,
+	return Weapon(pos, 40, 1000ms, 2000ms, 0, 4,
 		1 , "hard weapon",
 		"tank_heavy_weapon");
 }

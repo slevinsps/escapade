@@ -12,6 +12,8 @@
 #define WEAPON_AMOUNT_BULLETS 4
 #define WEAPON_ROTATION_SPEED 20
 
+using namespace std::chrono;
+
 class Weapon: public UnitComponent
 {
 public:
@@ -19,10 +21,10 @@ public:
     // Дальше идут необязательные параметры конкретной модели
     // Поскольку не планируется изменение картинки, она
     // стоит в конце
-    Weapon(Position position = Position(),
-		int damage = WEAPON_DEFAULT_DAMAGE,
-		int recharge_one = WEAPON_DEFAULT_RECHANGE_ONE,
-		int recharge_all = WEAPON_DEFAULT_RECHANGE_ALL,
+    Weapon(Position position,
+		int damage,
+		milliseconds recharge_one,
+		milliseconds recharge_all,
 		float angle = 0,
 		int amount_bullets = WEAPON_AMOUNT_BULLETS,
 		float rotation_speed = WEAPON_ROTATION_SPEED,
@@ -34,14 +36,14 @@ public:
     int incr_damage(int);
     int decr_damage(int);
 
-	int get_time() { 
+	long int get_time() {
 		return static_cast<long int>(
-			std::chrono::duration_cast<std::chrono::nanoseconds>(
-				std::chrono::high_resolution_clock::now().time_since_epoch()).count()); 
+			duration_cast<nanoseconds>(
+				high_resolution_clock::now().time_since_epoch()).count()); 
 	}
 
-    int get_recharge_one() const;
-	int get_recharge_all() const;
+	milliseconds get_recharge_one() const;
+	milliseconds get_recharge_all() const;
 	int get_damage() const;
     int get_max_amount_bullets() const;
     int get_cur_amount_bullets() const;
@@ -65,14 +67,14 @@ public:
 
 private:
     int damage_;
-	int recharge_one_;
-	int recharge_all_;
+	milliseconds recharge_one_;
+	milliseconds recharge_all_;
     int cur_amount_bullets_;
     int max_amount_bullets_;
     std::vector<Bullet> bullets_;
     RotateMovement rotation_;
 
-	int last_time_shooted;
+	steady_clock::time_point last_time_shooted;
 };
 
 #endif // WEAPON_H

@@ -6,8 +6,8 @@
 #include "forward_movement.h"
 #include "rotational_movement.h"
 
-#define BULLET_DEFAULT_RANGE 50
-#define BULLET_DEFAULT_FORWARD_SPEED 10
+#define BULLET_DEFAULT_RANGE 200
+#define BULLET_DEFAULT_FORWARD_SPEED 100
 #define BULLET_DEFAULT_ROTATION_SPEED 0
 
 class Bullet : public SceneObject

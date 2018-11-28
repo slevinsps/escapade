@@ -41,7 +41,7 @@ Scene* Visualizer::createScene()
 	// Создаём сцену с физикой
 	auto scene = Scene::createWithPhysics();
 	// Устанавливаем DEBUGDRAW_ALL, чтобы границы всех физических объектов обводились красной линией
-	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
 	// Создаём слой
 	auto layer = Visualizer::create();
@@ -98,6 +98,7 @@ void Visualizer::add_players() {
 		amount = cocos2d::Label::createWithTTF("No players", "fonts/Marker Felt.ttf", 24);
 	}
 	else {
+		control_tank = 0;
 		amount = cocos2d::Label::createWithTTF("Players:"+
 			std::to_string(user_units.size()),
 			"fonts/Marker Felt.ttf", 24);
@@ -258,8 +259,30 @@ bool Visualizer::init()
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
 
+	loadingBar = cocos2d::ui::LoadingBar::create("LoadingBarFile.png");
+	loadingBar->setName("LoadingBar");
+	//loadingBar->loadTexture("cocosgui/sliderProgress.png");
+	loadingBar->setPercent(50);
+	loadingBar->setDirection(cocos2d::ui::LoadingBar::Direction::RIGHT);
+	loadingBar->setPosition(Vec2(200, 200));
+	this->addChild(loadingBar);
+	this->schedule(schedule_selector(Visualizer::updateProgress), 0.025f);
+
 	this->scheduleUpdate();
 	return true;
+}
+
+void Visualizer::updateProgress(float dt)
+{
+	static int counter = 0;
+	counter++;
+	if (counter > 100)
+	{
+		//this->scheduleOnce(schedule_selector(Scene::GoToScene), 0);
+
+		unschedule(schedule_selector(Visualizer::updateProgress));
+	}
+	loadingBar->setPercent(counter);
 }
 
 bool Visualizer::isKeyPressed(EventKeyboard::KeyCode code) {

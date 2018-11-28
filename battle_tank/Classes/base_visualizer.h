@@ -18,7 +18,7 @@ public:
 	int load_user_units() {
 		// Приходит из другой сцены, пока так
 		
-		int amount = 2;
+		int amount = 5;
 		// Загрузка пользователей
 		std::vector<User> load_users;
 

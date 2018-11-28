@@ -5,7 +5,9 @@ Tank::Tank(Player player,
 	Position position,
 	std::string texture) :
 	Unit(player, team_id, name, type, 
-		position, texture) {
+		position, texture),
+	weapon_(Weapon::getLightWeapon()) {
+	
 	setModel(type);
 }
 

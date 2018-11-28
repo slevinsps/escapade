@@ -2,6 +2,7 @@
 #define VISUALIZER_H
 #include "base_visualizer.h"
 #include "cocos2d.h"
+#include "ui/CocosGUI.h"
 
 #define TAG_PLAYERS_TABLE 20
 #define TAG_PLAYERS_UNITS 30
@@ -24,6 +25,10 @@ private:
 	static std::map<cocos2d::EventKeyboard::KeyCode,
 		std::chrono::high_resolution_clock::time_point> keys;
 	cocos2d::Label * label;
+
+	void updateProgress(float dt);
+
+	cocos2d::ui::LoadingBar* loadingBar;
 
 public:
 
