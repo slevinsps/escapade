@@ -28,6 +28,8 @@ public:
 
     void set_position(Position pos) override;
 
+	void center_weapon() override;
+
     void sinchronize() override;
 
 private:

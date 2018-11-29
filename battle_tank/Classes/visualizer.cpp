@@ -312,6 +312,9 @@ void Visualizer::update(float delta) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
 			this->user_units[control_tank].tank_.move(1, true);
 		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
+			this->user_units[control_tank].tank_.center_weapon();
+		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
 			this->user_units[control_tank].tank_.fire(1);
 		}

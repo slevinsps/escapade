@@ -129,3 +129,7 @@ void Tank::sinchronize() {
 void Tank::fire(int shot) {
 	weapon_.fire();
 }
+
+void Tank::center_weapon() {
+	weapon_.center();
+}

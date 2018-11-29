@@ -79,6 +79,14 @@ void Weapon::fire(){
 	}
 };
 
+
+// Из за синхронизации, не имеет смысла
+// Переписать поворот корпуса/пушки на поворот под конкретный угол с 
+// помощью action, но сначала надо решить проблему синхронизации
+void Weapon::center() {
+	rotation_.angle_zero();
+}
+
 float Weapon::get_angle_speed() const{
 	return rotation_.get_speed();
 }

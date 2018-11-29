@@ -61,6 +61,9 @@ public:
 
 	void fire();
 
+	// Отцентрировать пушку
+	void center();
+
 	// Получить экземпляры слабой и сильной пушек
 
 	static Weapon getLightWeapon(Position pos = Position());
@@ -75,6 +78,8 @@ private:
     int max_amount_bullets_;
     std::vector<Bullet> bullets_;
     RotateMovement rotation_;
+
+	void angle_to_zero();
 
 	steady_clock::time_point last_time_shooted;
 };
