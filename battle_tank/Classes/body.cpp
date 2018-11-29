@@ -13,7 +13,11 @@ Body::Body(Position position,
 	max_health_(max_health),
 	rotation_(rotation_speed, current_rotation_angle),
 	forward_(speed, speed_back) {
-	bar_ = ComponentProgressBar(position, max_health, "health");
+	bar_ = new ComponentProgressBar(position, max_health, "health");
+}
+
+Body::~Body() {
+	;
 }
 
 int Body::get_health() const{

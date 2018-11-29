@@ -26,6 +26,8 @@ public:
 		std::string name = "default body",
 		std::string texture = "tank_light_body");
 
+	~Body();
+
     void apply_health_bonus(Bonus& bonus);
     void apply_speed_bonus(Bonus& bonus);
     void decrement_helth(int decr);

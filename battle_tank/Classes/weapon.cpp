@@ -16,13 +16,17 @@ Weapon::Weapon(Position position,
     max_amount_bullets_(amount_bullets),
     rotation_(rotation_speed, angle)
 {
-	bar_ = ComponentProgressBar(position, amount_bullets, "health");
+	bar_ = new ComponentProgressBar(position, amount_bullets, "recharge");
 	last_time_shooted = high_resolution_clock::now() - recharge_one_;
     for(int i = 0; i < max_amount_bullets_; ++i) {
         Bullet bullet(position);
         bullets_.push_back(bullet);
     }
 		
+}
+
+Weapon::~Weapon() {
+	;
 }
 
 milliseconds Weapon::get_recharge_one() const {
@@ -50,22 +54,21 @@ std::vector<Bullet>& Weapon::get_bullets() {
 
 void Weapon::recharge_bullets() {
 	cur_amount_bullets_ = max_amount_bullets_;
+	bar_->set_current(max_amount_bullets_);
 }
 
 void Weapon::apply_damage_bonus(Bonus bonus){}
 
 void Weapon::fire(){
 	steady_clock::time_point time_now = steady_clock::now();
-	CCLOG("NOOO %d %d", time_now, cur_amount_bullets_);
 	if (cur_amount_bullets_ > 0) {
-		CCLOG("HMMMM %lu %lu", time_now, last_time_shooted);
 		if (time_now - last_time_shooted > recharge_one_) {
-			CCLOG("BEGIN %lu %lu", last_time_shooted, cur_amount_bullets_);
 			int index = --cur_amount_bullets_;
 			bullets_[index].sprite->setRotation(this->sprite->getRotation());
-			CCLOG("My rotation %f", this->sprite->getRotation());
 			bullets_[index].sprite->setPosition(this->sprite->getPosition());
 			bullets_[index].move();
+
+			bar_->set_current(cur_amount_bullets_);
 			last_time_shooted = time_now;
 		}
 	}

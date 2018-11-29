@@ -16,9 +16,17 @@ public:
 		std::string texture,
         std::string name,
 		bool physic);
+
+	// Вынесено из протектеда, поскольку нужно ставить тег
+	ComponentProgressBar* bar_;
+
+	UnitComponent::~UnitComponent() {
+		//if (bar_)
+		//	delete bar_;
+	}
+
 protected:
     std::string name_;
-	ComponentProgressBar bar_;
 
     virtual void applyBonus(Bonus bonus);
 };

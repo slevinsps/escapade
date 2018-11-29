@@ -116,7 +116,9 @@ void Visualizer::add_players() {
 				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
 				// Опять же это связано с тем, что нигде не возвращаются ссылки
 				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
+				user_units[i].tank_.get_body().bar_->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
+				user_units[i].tank_.get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
 
@@ -135,10 +137,13 @@ void Visualizer::add_players() {
 				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
 				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
 
+
 				addChild(user_units[i].tank_.sprite, 0);
 				addChild(user_units[i].tank_.unit_name);
 				addChild(user_units[i].tank_.get_body().sprite, 0);
+				addChild(user_units[i].tank_.get_body().bar_, 0);
 				addChild(user_units[i].tank_.get_weapon().sprite, 0);
+				addChild(user_units[i].tank_.get_weapon().bar_, 0);
 			} 
 			//else {
 			//	printf("err");

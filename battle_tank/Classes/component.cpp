@@ -6,7 +6,9 @@ UnitComponent::UnitComponent(Position position,
 	bool physic):
 		SceneObject(position, texture, physic),
 		name_(name)
-{}
+{
+	bar_ = nullptr;
+}
 
 void UnitComponent::applyBonus(Bonus bonus){
 

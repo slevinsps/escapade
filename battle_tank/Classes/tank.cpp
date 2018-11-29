@@ -114,7 +114,9 @@ void Tank::sinchronize() {
 
 	weapon_.sprite->setPosition(pos);
 	sprite->setPosition(pos);
-	unit_name->setPosition(x, y + 20);
+	unit_name->setPosition(x, y + 15);
+	body_.bar_->setPosition(x, y - 15);
+	weapon_.bar_->setPosition(x, y - 17);
 
 	// ѕоворот пушки измен€етс€ в соотвествии с поворотом корпуса +
 	// в пушке хранитс€ угол поворота оруди€

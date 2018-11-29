@@ -28,6 +28,7 @@ int Bullet::move() {
 
 	float k = range_ / length;
 
+	sprite->stopAllActions();
 	sprite->setOpacity(255);
 	sprite->setPosition(sprite->getPosition() + Vec2(ax, ay) * 20);
 

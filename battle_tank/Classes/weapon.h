@@ -31,6 +31,8 @@ public:
         std::string name = "default weapon",
         std::string texture = "tank_light_weapon");
 
+	~Weapon();
+
     void apply_damage_bonus(Bonus bonus);
     
     int incr_damage(int);

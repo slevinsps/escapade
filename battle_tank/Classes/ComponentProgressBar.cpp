@@ -12,19 +12,21 @@ ComponentProgressBar::ComponentProgressBar(Position pos, int max, std::string fi
 
 	background = cocos2d::Sprite::create("res/" + filename + "_back.png");
 
-	amount = cocos2d::Label::createWithTTF(std::to_string(max_), "fonts/Marker Arial.ttf", 8);
-	amount->setPosition(cocos2d::Vec2(30, 0));
+	//amount = cocos2d::Label::createWithTTF(std::to_string(max_), "fonts/arial.ttf", 5);
+	//amount->setPosition(cocos2d::Vec2(13, 0));
 
-	loading_bar->setScale(0.2f);
-	background->setScale(0.2f);
+	loading_bar->setScale(0.15f);
+	background->setScale(0.15f);
 
-	addChild(amount, 3);
+	//addChild(amount, 3);
 	addChild(loading_bar, 2);
 	addChild(background, 1);
 	setPosition(pos.toVec2());
 }
 
 void ComponentProgressBar::set_current(int current) {
+	loading_bar->setPercent(static_cast<float>(current) / max_ * 100);
+	//amount->setString(std::to_string(current));
 	curr_ = current;
 }
 void ComponentProgressBar::set_max(int max) {
