@@ -16,6 +16,7 @@ Weapon::Weapon(Position position,
     max_amount_bullets_(amount_bullets),
     rotation_(rotation_speed, angle)
 {
+	bar_ = ComponentProgressBar(position, amount_bullets, "health");
 	last_time_shooted = high_resolution_clock::now() - recharge_one_;
     for(int i = 0; i < max_amount_bullets_; ++i) {
         Bullet bullet(position);

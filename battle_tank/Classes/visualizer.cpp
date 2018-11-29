@@ -152,7 +152,7 @@ void Visualizer::add_players() {
 	amount->setPosition(Vec2(100, 250));
 	addChild(amount);
 }
-
+#include "ui/CocosGUI.h"
 // on "init" you need to initialize your instance
 bool Visualizer::init()
 {
@@ -212,33 +212,11 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-
-	/*
-	// Смещаем на 50 точек наверх и на 10 вправо, за две секунды:
-	auto moveBy = MoveBy::create(5, Vec2(300, 300));
-	heavy_body->runAction(moveBy);
-	moveBy = MoveBy::create(5, Vec2(300, -200));
-	heavy_body->runAction(moveBy);
-	*/
-	/*
-	// создаем несколько действий
-	auto moveBy = MoveBy::create(2, Vec2(300, 100));
-	auto fadeTo = FadeTo::create(2.0f, 3.0f);
-	auto scaleBy = ScaleBy::create(2.0f, 5.0f);
-
-	// создаем Spawn
-	auto mySpawn = Spawn::createWithTwoActions(scaleBy, fadeTo);
-
-	// объединяем все в последовательность
-	auto seq = Sequence::create(moveBy, mySpawn, moveBy, nullptr);
-
-	// запускаем
-	heavy_body->runAction(seq);
-	*/
-
 	//std::thread thread1(&Visualizer::work, this);
 
 	//thread1.detach();
+
+	
 	
 	add_players();
 

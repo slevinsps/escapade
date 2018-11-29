@@ -18,7 +18,7 @@ public:
     // Поскольку не планируется изменение картинки, она
     // стоит в конце
 	Body(Position position = Position(),
-		float max_health = BODY_MAX_HEALTH,
+		int max_health = BODY_MAX_HEALTH,
 		float rotation_speed = BODY_DEFAULT_ROTATION_SPEED,
 		float speed = BODY_DEFAULT_ROTATION_SPEED,
 		float speed_back = BODY_DEFAULT_ROTATION_SPEED,

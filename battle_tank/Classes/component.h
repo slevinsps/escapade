@@ -5,6 +5,7 @@
 
 #include "sceneobject.h"
 #include "bonus.h"
+#include "ComponentProgressBar.h"
 
 class UnitComponent : public SceneObject
 {
@@ -17,6 +18,7 @@ public:
 		bool physic);
 protected:
     std::string name_;
+	ComponentProgressBar bar_;
 
     virtual void applyBonus(Bonus bonus);
 };

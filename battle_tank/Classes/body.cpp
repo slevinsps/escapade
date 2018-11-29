@@ -1,7 +1,7 @@
 #include "body.h"
 
 Body::Body(Position position,
-	float max_health,
+	int max_health,
 	float rotation_speed,
 	float speed,
 	float speed_back,
@@ -12,7 +12,9 @@ Body::Body(Position position,
 	health_(max_health),
 	max_health_(max_health),
 	rotation_(rotation_speed, current_rotation_angle),
-	forward_(speed, speed_back) {}
+	forward_(speed, speed_back) {
+	bar_ = ComponentProgressBar(position, max_health, "health");
+}
 
 int Body::get_health() const{
 	return health_;
