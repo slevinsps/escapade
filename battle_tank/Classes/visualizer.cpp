@@ -89,6 +89,20 @@ void Visualizer::work() {
 
 }
 
+void Visualizer::updateTimer(float dt)
+{
+	// Получается из комнаты. А пока так.
+	static seconds time = 60s;
+	if (time <= 0s)
+	{
+		//this->scheduleOnce(schedule_selector(Scene::GoToScene), 0);
+
+		unschedule(schedule_selector(Visualizer::updateTimer));
+	}
+	time--;
+	label_timer->setString(std::to_string(time.count()));
+}
+
 void Visualizer::add_players() {
 	if (user_units.size() == 0) {
 		load_user_units();
@@ -242,30 +256,31 @@ bool Visualizer::init()
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
 
-	loadingBar = cocos2d::ui::LoadingBar::create("LoadingBarFile.png");
-	loadingBar->setName("LoadingBar");
-	//loadingBar->loadTexture("cocosgui/sliderProgress.png");
-	loadingBar->setPercent(50);
-	loadingBar->setDirection(cocos2d::ui::LoadingBar::Direction::RIGHT);
-	loadingBar->setPosition(Vec2(200, 200));
-	this->addChild(loadingBar);
-	this->schedule(schedule_selector(Visualizer::updateProgress), 0.025f);
+	label_timer = cocos2d::Label::create();
+	label_timer->setPosition(visibleSize.width / 2, visibleSize.height);
+
+	cocos2d::Sprite* sprite_timer  = cocos2d::Sprite::create("timer_frame.png");
+	sprite_timer->setPosition(visibleSize.width / 2, visibleSize.height);
+
+	sprite_timer->setTag(TAG_BATTLE);
+	label_timer->setTag(TAG_BATTLE);
+	label_timer->setScale(2);
+	sprite_timer->setScale(3);
+	this->addChild(label_timer, 5);
+	this->addChild(sprite_timer, 4);
+
+	label_timer->setString(std::to_string(60));
+
+	// Установка цвета
+	auto color = Color4B(1, 50, 32, 255);
+	auto colorLayer = new cocos2d::LayerColor;
+	colorLayer->initWithColor(color);
+	addChild(colorLayer, -100);
+
+	this->schedule(schedule_selector(Visualizer::updateTimer), 1.f);
 
 	this->scheduleUpdate();
 	return true;
-}
-
-void Visualizer::updateProgress(float dt)
-{
-	static int counter = 0;
-	counter++;
-	if (counter > 100)
-	{
-		//this->scheduleOnce(schedule_selector(Scene::GoToScene), 0);
-
-		unschedule(schedule_selector(Visualizer::updateProgress));
-	}
-	loadingBar->setPercent(counter);
 }
 
 bool Visualizer::isKeyPressed(EventKeyboard::KeyCode code) {
@@ -305,6 +320,7 @@ void Visualizer::update(float delta) {
 		user_units[i].tank_.sinchronize();
 	}
 }
+
 
 
 void Visualizer::menuCloseCallback(Ref* pSender)

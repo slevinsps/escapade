@@ -1,11 +1,13 @@
 #ifndef VISUALIZER_H
 #define VISUALIZER_H
+
 #include "base_visualizer.h"
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 
 #define TAG_PLAYERS_TABLE 20
 #define TAG_PLAYERS_UNITS 30
+#define TAG_BATTLE 40
 #include "BodyParser.h"
 
 class Visualizer : public BaseVisualizer, public cocos2d::Scene
@@ -26,9 +28,11 @@ private:
 		std::chrono::high_resolution_clock::time_point> keys;
 	cocos2d::Label * label;
 
-	void updateProgress(float dt);
+	void updateTimer(float dt);
 
 	cocos2d::ui::LoadingBar* loadingBar;
+	cocos2d::Label* label_timer;
+
 
 public:
 
