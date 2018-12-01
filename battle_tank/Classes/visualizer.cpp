@@ -41,7 +41,7 @@ Scene* Visualizer::createScene()
 	// Создаём сцену с физикой
 	auto scene = Scene::createWithPhysics();
 	// Устанавливаем DEBUGDRAW_ALL, чтобы границы всех физических объектов обводились красной линией
-	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
 	// Создаём слой
 	auto layer = Visualizer::create();
@@ -89,6 +89,20 @@ void Visualizer::work() {
 
 }
 
+void Visualizer::updateTimer(float dt)
+{
+	// Получается из комнаты. А пока так.
+	static seconds time = 60s;
+	if (time <= 0s)
+	{
+		//this->scheduleOnce(schedule_selector(Scene::GoToScene), 0);
+
+		unschedule(schedule_selector(Visualizer::updateTimer));
+	}
+	time--;
+	label_timer->setString(std::to_string(time.count()));
+}
+
 void Visualizer::add_players() {
 	if (user_units.size() == 0) {
 		load_user_units();
@@ -98,6 +112,7 @@ void Visualizer::add_players() {
 		amount = cocos2d::Label::createWithTTF("No players", "fonts/Marker Felt.ttf", 24);
 	}
 	else {
+		control_tank = 0;
 		amount = cocos2d::Label::createWithTTF("Players:"+
 			std::to_string(user_units.size()),
 			"fonts/Marker Felt.ttf", 24);
@@ -115,7 +130,9 @@ void Visualizer::add_players() {
 				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
 				// Опять же это связано с тем, что нигде не возвращаются ссылки
 				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
+				user_units[i].tank_.get_body().bar_->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
+				user_units[i].tank_.get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
 				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
 
@@ -134,10 +151,13 @@ void Visualizer::add_players() {
 				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
 				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
 
+
 				addChild(user_units[i].tank_.sprite, 0);
 				addChild(user_units[i].tank_.unit_name);
 				addChild(user_units[i].tank_.get_body().sprite, 0);
+				addChild(user_units[i].tank_.get_body().bar_, 0);
 				addChild(user_units[i].tank_.get_weapon().sprite, 0);
+				addChild(user_units[i].tank_.get_weapon().bar_, 0);
 			} 
 			//else {
 			//	printf("err");
@@ -151,7 +171,7 @@ void Visualizer::add_players() {
 	amount->setPosition(Vec2(100, 250));
 	addChild(amount);
 }
-
+#include "ui/CocosGUI.h"
 // on "init" you need to initialize your instance
 bool Visualizer::init()
 {
@@ -211,33 +231,11 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-
-	/*
-	// Смещаем на 50 точек наверх и на 10 вправо, за две секунды:
-	auto moveBy = MoveBy::create(5, Vec2(300, 300));
-	heavy_body->runAction(moveBy);
-	moveBy = MoveBy::create(5, Vec2(300, -200));
-	heavy_body->runAction(moveBy);
-	*/
-	/*
-	// создаем несколько действий
-	auto moveBy = MoveBy::create(2, Vec2(300, 100));
-	auto fadeTo = FadeTo::create(2.0f, 3.0f);
-	auto scaleBy = ScaleBy::create(2.0f, 5.0f);
-
-	// создаем Spawn
-	auto mySpawn = Spawn::createWithTwoActions(scaleBy, fadeTo);
-
-	// объединяем все в последовательность
-	auto seq = Sequence::create(moveBy, mySpawn, moveBy, nullptr);
-
-	// запускаем
-	heavy_body->runAction(seq);
-	*/
-
 	//std::thread thread1(&Visualizer::work, this);
 
 	//thread1.detach();
+
+	
 	
 	add_players();
 
@@ -257,6 +255,29 @@ bool Visualizer::init()
 		keys.erase(keyCode);
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
+
+	label_timer = cocos2d::Label::create();
+	label_timer->setPosition(visibleSize.width / 2, visibleSize.height);
+
+	cocos2d::Sprite* sprite_timer  = cocos2d::Sprite::create("timer_frame.png");
+	sprite_timer->setPosition(visibleSize.width / 2, visibleSize.height);
+
+	sprite_timer->setTag(TAG_BATTLE);
+	label_timer->setTag(TAG_BATTLE);
+	label_timer->setScale(2);
+	sprite_timer->setScale(3);
+	this->addChild(label_timer, 5);
+	this->addChild(sprite_timer, 4);
+
+	label_timer->setString(std::to_string(60));
+
+	// Установка цвета
+	auto color = Color4B(1, 50, 32, 255);
+	auto colorLayer = new cocos2d::LayerColor;
+	colorLayer->initWithColor(color);
+	addChild(colorLayer, -100);
+
+	this->schedule(schedule_selector(Visualizer::updateTimer), 1.f);
 
 	this->scheduleUpdate();
 	return true;
@@ -291,6 +312,9 @@ void Visualizer::update(float delta) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
 			this->user_units[control_tank].tank_.move(1, true);
 		}
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
+			this->user_units[control_tank].tank_.center_weapon();
+		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
 			this->user_units[control_tank].tank_.fire(1);
 		}
@@ -299,6 +323,7 @@ void Visualizer::update(float delta) {
 		user_units[i].tank_.sinchronize();
 	}
 }
+
 
 
 void Visualizer::menuCloseCallback(Ref* pSender)

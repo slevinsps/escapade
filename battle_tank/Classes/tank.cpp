@@ -5,7 +5,9 @@ Tank::Tank(Player player,
 	Position position,
 	std::string texture) :
 	Unit(player, team_id, name, type, 
-		position, texture) {
+		position, texture),
+	weapon_(Weapon::getLightWeapon()) {
+	
 	setModel(type);
 }
 
@@ -112,7 +114,9 @@ void Tank::sinchronize() {
 
 	weapon_.sprite->setPosition(pos);
 	sprite->setPosition(pos);
-	unit_name->setPosition(x, y + 20);
+	unit_name->setPosition(x, y + 15);
+	body_.bar_->setPosition(x, y - 15);
+	weapon_.bar_->setPosition(x, y - 17);
 
 	// ѕоворот пушки измен€етс€ в соотвествии с поворотом корпуса +
 	// в пушке хранитс€ угол поворота оруди€
@@ -124,4 +128,8 @@ void Tank::sinchronize() {
 
 void Tank::fire(int shot) {
 	weapon_.fire();
+}
+
+void Tank::center_weapon() {
+	weapon_.center();
 }

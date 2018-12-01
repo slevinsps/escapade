@@ -78,6 +78,9 @@ public:
 	// clockwise - флаг движения по часовой
 	virtual void rotate_weapon(float power, bool clockwise) {};
 
+	// Отцентрировать пушку
+	virtual void center_weapon() {};
+
 	// Тип выстрела - см. структуру shot_types
     virtual void fire(int shot) {};
 };

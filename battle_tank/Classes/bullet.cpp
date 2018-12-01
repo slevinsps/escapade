@@ -14,7 +14,8 @@ Bullet::Bullet(
 
 int Bullet::move() {
 	auto physic = sprite->getPhysicsBody();
-	auto angle_ = Movement::get_angle(physic->getRotation());
+	auto angle_ = Movement::get_angle(sprite->getRotation());
+	CCLOG("Your rotation %f", this->sprite->getRotation());
 
 	float angle_radians = angle_ / 180.f * M_PI;
 
@@ -27,11 +28,15 @@ int Bullet::move() {
 
 	float k = range_ / length;
 
-	auto flyBullet = MoveTo::create(range_/forward_.getMaxSpeed(), sprite->getPosition() + Vec2(ax, ay)*k);
-	
-	sprite->setPosition(sprite->getPosition() + Vec2(ax, ay)*30);
+	sprite->stopAllActions();
+	sprite->setOpacity(255);
+	sprite->setPosition(sprite->getPosition() + Vec2(ax, ay) * 20);
 
-	sprite->runAction(flyBullet);
+	auto flyBullet = MoveTo::create(range_ / forward_.getMaxSpeed(), sprite->getPosition() + Vec2(ax, ay)*k);
+	auto missing = FadeOut::create(0.8f);
+
+	//sprite->stopAllActions();
+	sprite->runAction(Sequence::create(flyBullet->clone(), missing->clone(), nullptr));
 
 	return 0;
 }
