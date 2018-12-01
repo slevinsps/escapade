@@ -7,9 +7,7 @@
 class Tank : public Unit
 {
 public:
-	Tank(Player player,
-		int team_id = 0,
-		std::string name = "unknown tank",
+	Tank(std::string name = "unknown tank",
 		int type = LIGHT,
 		Position position = Position(),
 		std::string = "circle");

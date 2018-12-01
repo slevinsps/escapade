@@ -1,10 +1,9 @@
 #include "tank.h"
 
-Tank::Tank(Player player,
-	int team_id, std::string name, int type,
+Tank::Tank(std::string name, int type,
 	Position position,
 	std::string texture) :
-	Unit(player, team_id, name, type, 
+	Unit(name, type, 
 		position, texture),
 	weapon_(Weapon::getLightWeapon()) {
 	
@@ -70,6 +69,7 @@ void Tank::move(float power, bool back) {
 
 	physic->setVelocity(cocos2d::Vec2(ax, ay));
 	body_.set_speed(powf(ax * ax + ay * ay, 0.5f));
+	sinchronize();
 
 	//weapon_.sprite->getPhysicsBody()->setVelocity(cocos2d::Vec2(ax, ay));
 }
@@ -112,6 +112,7 @@ void Tank::sinchronize() {
 	float x = pos.x;
 	float y = pos.y;
 
+	body_.sprite->setPosition(pos);
 	weapon_.sprite->setPosition(pos);
 	sprite->setPosition(pos);
 	unit_name->setPosition(x, y + 15);

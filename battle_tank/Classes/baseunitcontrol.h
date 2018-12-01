@@ -4,8 +4,10 @@
 class BaseUnitControl
 {
 public:
-    BaseUnitControl(){}
-    ~BaseUnitControl(){}
-    
+	BaseUnitControl() {}
+	~BaseUnitControl() {}
+	virtual void init(Unit &unit) {};
+
+	virtual void run(Unit &unit) {};
 };
 #endif // BASEUNITCONTROL_H

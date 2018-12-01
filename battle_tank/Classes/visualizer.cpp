@@ -104,40 +104,37 @@ void Visualizer::updateTimer(float dt)
 }
 
 void Visualizer::add_players() {
-	if (user_units.size() == 0) {
-		load_user_units();
-	}
 	
-	if (user_units.size() == 0) {
+	if (ground.algorithms_.size() == 0) {
 		amount = cocos2d::Label::createWithTTF("No players", "fonts/Marker Felt.ttf", 24);
 	}
 	else {
 		control_tank = 0;
 		amount = cocos2d::Label::createWithTTF("Players:"+
-			std::to_string(user_units.size()),
+			std::to_string(ground.algorithms_.size()),
 			"fonts/Marker Felt.ttf", 24);
 
-		for (int i = 0; i < user_units.size(); i++)
+		for (int i = 0; i < ground.algorithms_.size(); i++)
 		{
-			if (user_units[i].tank_.unit_name) {
+			if (ground.scene_.getUnits()[i].unit_name) {
 
 				//removeChildByTag(TAG_PLAYERS_UNITS);
 
-				user_units[i].set_position(Position(i * 100 + 50, 100));
+				ground.scene_.getUnits()[i].set_position(Position(i * 100 + 50, 100));
 				
 				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
 				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
 				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
 				// Опять же это связано с тем, что нигде не возвращаются ссылки
-				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_body().bar_->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_body().sprite->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_body().bar_->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].unit_name->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].sprite->setTag(TAG_PLAYERS_UNITS);
 
-				int size = user_units[i].tank_.get_weapon().get_max_amount_bullets();
-				auto arr = user_units[i].tank_.get_weapon().get_bullets();
+				int size = ground.scene_.getUnits()[i].get_weapon().get_max_amount_bullets();
+				auto arr = ground.scene_.getUnits()[i].get_weapon().get_bullets();
 				//CCLOG("LATE");
 				for (int j = 0; j < size; j++) {
 					
@@ -149,15 +146,15 @@ void Visualizer::add_players() {
 				}
 				
 				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
-				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
+				ground.scene_.getUnits()[i].sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
 
 
-				addChild(user_units[i].tank_.sprite, 0);
-				addChild(user_units[i].tank_.unit_name);
-				addChild(user_units[i].tank_.get_body().sprite, 0);
-				addChild(user_units[i].tank_.get_body().bar_, 0);
-				addChild(user_units[i].tank_.get_weapon().sprite, 0);
-				addChild(user_units[i].tank_.get_weapon().bar_, 0);
+				addChild(ground.scene_.getUnits()[i].sprite, 0);
+				addChild(ground.scene_.getUnits()[i].unit_name);
+				addChild(ground.scene_.getUnits()[i].get_body().sprite, 0);
+				addChild(ground.scene_.getUnits()[i].get_body().bar_, 0);
+				addChild(ground.scene_.getUnits()[i].get_weapon().sprite, 0);
+				addChild(ground.scene_.getUnits()[i].get_weapon().bar_, 0);
 			} 
 			//else {
 			//	printf("err");
@@ -295,32 +292,32 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			this->user_units[control_tank].tank_.rotate_body(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_body(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			this->user_units[control_tank].tank_.rotate_body(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_body(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
-			this->user_units[control_tank].tank_.rotate_weapon(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_E)) {
-			this->user_units[control_tank].tank_.rotate_weapon(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_weapon(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-			this->user_units[control_tank].tank_.move(1, false);
+			ground.scene_.getUnits()[control_tank].move(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
-			this->user_units[control_tank].tank_.move(1, true);
+			ground.scene_.getUnits()[control_tank].move(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
-			this->user_units[control_tank].tank_.center_weapon();
+			ground.scene_.getUnits()[control_tank].center_weapon();
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
-			this->user_units[control_tank].tank_.fire(1);
+			ground.scene_.getUnits()[control_tank].fire(1);
 		}
 	}
-	for (int i = 0; i < user_units.size(); i++) {
-		user_units[i].tank_.sinchronize();
+	for (int i = 0; i < ground.scene_.getUnits().size(); i++) {
+		ground.scene_.getUnits()[i].sinchronize();
 	}
 }
 

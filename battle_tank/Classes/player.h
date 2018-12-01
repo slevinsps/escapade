@@ -2,25 +2,29 @@
 #define PLAYER_H
 
 #include "user.h"
+#include "TankTeam.h"
 
-class Player: public User
+class Player: public User, public FightingUnits
 {
 public:
-    Player(int kills = 0, int deaths = 0);
+	Player(User user, int team_id, int life = 1);
 
-	Player(User user);
+	int get_life() const;
 
-    int get_kills() const;
+	// Если подобран бонус
+	void increase_life();
 
-    void increase_kills();
+	// Если начался новый раунд
+	void new_match();
 
-    int get_deaths() const;
+	void increase_deaths();
 
-    void increase_deaths();
+	void change_team_id(int id);
 
+	int get_team_id() const;
 private:
-    int kills_;
-    int deaths_;
+	int life_;
+	TankTeam team_;
 };
 
 #endif // PLAYER_H

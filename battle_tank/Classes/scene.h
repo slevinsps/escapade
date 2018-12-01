@@ -9,28 +9,31 @@
 #include "map.h"
 #include "loader.h"
 #include "bonuscontrol.h"
+#include "tank.h"
 
 
 // Tank Scene
-class TScene : public Loader
+class TScene
 {
 public:
+	// Временное решение, пока нет препятствий и бонусов
+	TScene(std::vector<Tank> units) { units_ = units; }
+
+	// Ниже не отредактированные функции, отредактируем завтра
+
 	TScene() = default;
-	TScene(std::vector<Unit> units,
+	TScene(std::vector<Tank> units,
 		BattleMap map,
           bonusControl bonuses) :
              units_(units), map_(map), bonuses_(bonuses){};
 
-    int load(Socket socket) override;
-    int send(Socket socket) override;
+    std::vector<Tank>& getUnits();
+    void setUnits(std::vector<Tank> units);
 
-    std::vector<Unit> getUnits() const;
-    void setUnits(std::vector<Unit> units);
-
-	BattleMap getMap() const;
+	BattleMap& getMap();
     void setMap(BattleMap map);
 
-    bonusControl getBonusControl() const;
+    bonusControl& getBonusControl();
     void setBonusControl(bonusControl bonus);
 
     bool operator == (const TScene &other) const;
@@ -38,11 +41,8 @@ public:
     bool operator != (const TScene &other) const;
 
 private:
-    std::vector<Unit> units_;
+    std::vector<Tank> units_;
 	BattleMap map_;
     bonusControl bonuses_;
-
-    // Функция, проверяющая какие объекты с какими
-    void intersect_objects();
 };
 #endif // SCENE_H
