@@ -18,6 +18,12 @@ public:
 
     bool operator != (const Position &other) const;
 
+	Position& operator=(const Position& t) {
+		this->x_ = t.get_x();
+		this->y_ = t.get_y();
+		return *this;
+	}
+
     int get_x() const;
     void set_x(int x);
 

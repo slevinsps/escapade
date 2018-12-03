@@ -38,19 +38,61 @@ void Tank::set_position(Position pos) {
 	body_.sprite->setPosition(vec);
 	weapon_.sprite->setPosition(vec);
 	sprite->setPosition(vec);
-
-	weapon_.position_ = position_;
-	body_.position_ = position_;
 }
 
 #include <cmath>
 
-void Tank::move(float power, bool back) {
-	if (!(power >= 0.f && power < 1.f)) {
+
+
+std::mutex g_move;
+void Tank::move(float distance, bool back) {
+
+	/*distance = 1;
+	//this->body_.sprite->stopAllActions();
+	auto angle_ = this->body_.rotation_.get_current_angle();
+	CCLOG("Your rotation %f", this->sprite->getRotation());
+
+	float angle_radians = angle_ / 180.f * M_PI;
+	float ax = sinf(angle_radians);
+	float ay = cosf(angle_radians);
+
+	float length = powf(ax * ax + ay * ay, 0.5);
+
+	float k = distance / length;
+	float max_speed = 20;
+	if (back) {
+		max_speed = body_.get_forward_movement().getMaxBackSpeed();
+		ax *= -1;
+		ay *= -1;
+	}
+	else {
+		max_speed = body_.get_forward_movement().getMaxSpeed();
+	}
+
+	max_speed = 20;
+	auto flyBullet = MoveTo::create(distance / max_speed, this->body_.sprite->getPosition() + Vec2(ax, ay)*k);
+	//auto missing = FadeOut::create(0.8f);
+
+	//sprite->stopAllActions();
+	
+	this->body_.sprite->runAction(flyBullet->clone());
+	Sleep(10);
+	g_move.unlock();*/
+	float max_speed = 1;
+	if (back) {
+		max_speed = -body_.get_forward_movement().getMaxBackSpeed();
+	}
+	else {
+		max_speed = body_.get_forward_movement().getMaxSpeed();
+	}
+
+	this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement().get_current_angle());
+	sinchronize();
+	/*if (!(power >= 0.f && power < 1.f)) {
 		power = 1.f;
 	}
 	auto physic = body_.sprite->getPhysicsBody();
-	auto angle_ = Movement::get_angle(physic->getRotation());
+	auto angle_ = this->body_.rotation_.get_current_angle();
 
 	float angle_radians = angle_ / 180.f * M_PI;
 
@@ -71,21 +113,13 @@ void Tank::move(float power, bool back) {
 	body_.set_speed(powf(ax * ax + ay * ay, 0.5f));
 	sinchronize();
 
-	//weapon_.sprite->getPhysicsBody()->setVelocity(cocos2d::Vec2(ax, ay));
+	//weapon_.sprite->getPhysicsBody()->setVelocity(cocos2d::Vec2(ax, ay));*/
 }
 
-void Tank::rotate_body(float power, bool clockwise) {
-	float body_angle = body_.sprite->getRotation();
-
-	float anle_add = body_.get_rotation_movement().get_speed() * power;
-	if (clockwise) {
-		body_angle += anle_add;
-	}
-	else {
-		body_angle -= anle_add;
-	}
-
-	body_.sprite->setRotation(body_angle);
+void Tank::rotate_body(float angle) {
+	sinchronize();
+	body_.rotation_.rotate(angle);
+	sinchronize();
 }
 
 void Tank::rotate_weapon(float power, bool clockwise) {
@@ -102,28 +136,33 @@ void Tank::rotate_weapon(float power, bool clockwise) {
 	weapon_.set_angle(weapon_angle);
 }
 
-void Tank::sinchronize() {
 
+
+void Tank::sinchronize() {
 	// Ставим пушку в то же место, что и корпус
-	body_.sprite->getPhysicsBody()->setAngularVelocity(0);
+	//body_.sprite->getPhysicsBody()->setAngularVelocity(0);
 	body_.sprite->getPhysicsBody()->resetForces();
 	
-	auto pos = body_.sprite->getPosition();
-	float x = pos.x;
-	float y = pos.y;
+	auto pos = body_.get_forward_movement().get_pos();// prite->getPosition();
+	
+	float x = pos.get_x();
+	float y = pos.get_y();
+	//CCLOG("POSSSS %f   %f\n", x, y);
 
-	body_.sprite->setPosition(pos);
-	weapon_.sprite->setPosition(pos);
-	sprite->setPosition(pos);
+	body_.sprite->setPosition(pos.toVec2());
+	weapon_.sprite->setPosition(pos.toVec2());
+	sprite->setPosition(pos.toVec2());
 	unit_name->setPosition(x, y + 15);
 	body_.bar_->setPosition(x, y - 15);
 	weapon_.bar_->setPosition(x, y - 17);
 
 	// Поворот пушки изменяется в соотвествии с поворотом корпуса +
 	// в пушке хранится угол поворота орудия
+	body_.sprite->setRotation(body_.get_angle());
 	weapon_.sprite->setRotation(body_.sprite->getRotation() + weapon_.get_angle());
 
 	sprite->setRotation(sprite->getRotation() + 1);
+
 }
 
 

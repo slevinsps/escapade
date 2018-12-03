@@ -68,7 +68,7 @@ public:
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой
-    virtual void rotate_body(float power, bool clockwise) {};
+    virtual void rotate_body(float angle) {};
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой

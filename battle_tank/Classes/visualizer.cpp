@@ -61,33 +61,52 @@ static void problemLoading(const char* filename)
 	printf("Error while loading: %s\n", filename);
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
-
-void Visualizer::work() {
-	;
-	/*
+std::mutex g_lock1;
+void Visualizer::work(int i) {
+	g_lock1.lock();
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
-
 	while (1) {
-		if (!this)
-			return;
-		if (this->body == nullptr)
-			return;
-		if (this->body->numberOfRunningActions() == 0) {
-			if (this->body->getPositionX() < 0) {
-				this->body->stopAllActions();
-				this->body->runAction(MoveBy::create(2, Vec2(600, 0)));
-			}
-			else if (this->body->getPositionX() > 300) {
-				this->body->stopAllActions();
-				this->body->runAction(MoveBy::create(2, Vec2(-600, 0)));
-			}
-		}
-		Sleep(100);
-	}
-	*/
+		CCLOG("Coord 0 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
+		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
+			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
+			//ground.scene_.getUnits()[0].rotate_body(90);
+			ground.scene_.getUnits()[i].move(50, false);
+			ground.scene_.getUnits()[i].fire(1);
+			//Sleep(100);
+			ground.scene_.getUnits()[i].rotate_body(40);
+		//}
+		//Sleep(100);
 
+
+	}
+	g_lock1.unlock();
 }
+
+
+
+std::mutex g_lock11;
+void Visualizer::work1(int i) {
+	g_lock11.lock();
+	auto right = MoveBy::create(2, Vec2(600, 0));
+	auto left = MoveBy::create(2, Vec2(-600, 0));
+	while (1) {
+		CCLOG("Coord 1 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
+		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
+			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
+			//ground.scene_.getUnits()[0].rotate_body(90);
+			ground.scene_.getUnits()[i].move(50, false);
+			ground.scene_.getUnits()[i].rotate_body(180);
+		//}
+		//Sleep(100);
+		
+		
+	}
+	g_lock11.unlock();
+	
+}
+
+
 
 void Visualizer::updateTimer(float dt)
 {
@@ -121,6 +140,8 @@ void Visualizer::add_players() {
 				//removeChildByTag(TAG_PLAYERS_UNITS);
 
 				ground.scene_.getUnits()[i].set_position(Position(i * 100 + 50, 100));
+				ground.scene_.getUnits()[i].get_body().get_forward_movement().set_pos(Position(i * 100 + 50, 100));
+				//CCLOG("FFFFF %f %f \n", ground.scene_.getUnits()[i].get_body().get_forward_movement().get_pos().get_x(), ground.scene_.getUnits()[i].get_body().get_forward_movement().get_pos().get_y());
 				
 				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
 				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
@@ -228,13 +249,20 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	//std::thread thread1(&Visualizer::work, this);
-
-	//thread1.detach();
+	
 
 	
 	
 	add_players();
+
+
+	std::thread thread1(&Visualizer::work1, this, 1);
+	thread1.detach();
+
+	std::thread thread0(&Visualizer::work, this, 0);
+
+	thread0.detach();
+
 
 	auto eventListener = EventListenerKeyboard::create();
 
@@ -292,10 +320,10 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			ground.scene_.getUnits()[control_tank].rotate_body(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_body(-5);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			ground.scene_.getUnits()[control_tank].rotate_body(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_body(5);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
 			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
@@ -316,6 +344,7 @@ void Visualizer::update(float delta) {
 			ground.scene_.getUnits()[control_tank].fire(1);
 		}
 	}
+	//work1(1);
 	for (int i = 0; i < ground.scene_.getUnits().size(); i++) {
 		ground.scene_.getUnits()[i].sinchronize();
 	}
