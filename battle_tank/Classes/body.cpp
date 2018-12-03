@@ -50,7 +50,7 @@ ForwardMovement& Body::get_forward_movement() {
 }
 
 void Body::set_angle(float angle) {
-	this->rotation_.rotate(angle);
+	this->rotation_.rotate(angle, 0);
 }
 float Body::get_angle() const {
 	return this->rotation_.get_current_angle();
@@ -63,16 +63,6 @@ void Body::set_forward_movement(ForwardMovement fw) {
 void Body::set_speed(int speed) {
 	forward_.setSpeed(speed);
 }
-
-
-void Body::set_angle(float angle) {
-	this->rotation_.rotate(angle);
-}
-
-float Body::get_angle() {
-	return this->rotation_.get_current_angle();
-}
-
 
 void Body::set_max_speed(int speed) {
 	forward_.setMaxSpeed(speed);

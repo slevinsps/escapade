@@ -47,7 +47,7 @@ void Tank::set_position(Position pos) {
 
 #include <cmath>
 
-void Tank::move(float distance, bool back) {
+void Tank::move(float distance, bool back, bool keyboard) {
 if (!is_runnable()) {
 		return;
 	}
@@ -90,7 +90,7 @@ if (!is_runnable()) {
 		max_speed = body_.get_forward_movement().getMaxSpeed();
 	}
 
-	this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement().get_current_angle());
+	this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement().get_current_angle(), keyboard);
 	sinchronize();
 	/*if (!(power >= 0.f && power < 1.f)) {
 
@@ -121,9 +121,9 @@ if (!is_runnable()) {
 	//weapon_.sprite->getPhysicsBody()->setVelocity(cocos2d::Vec2(ax, ay));*/
 }
 
-void Tank::rotate_body(float angle) {
+void Tank::rotate_body(float angle, bool keyboard) {
 	sinchronize();
-	body_.rotation_.rotate(angle);
+	body_.get_rotation_movement().rotate(angle, keyboard);
 	sinchronize();
 }
 

@@ -36,6 +36,7 @@ BattleGround BattleGround::offline(User user, int amount) {
 		load_alg.push_back(UnitControl());
 
 		Tank tank("Ivan"+std::to_string(i), i % 2);
+		tank.launch();
 		load_tanks.push_back(tank);
 	}
 

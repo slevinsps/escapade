@@ -4,6 +4,7 @@
 #include <thread>
 #include <mutex>
 #include "cocos2d.h"
+#include "Movement.h"
 
 class RotateMovement : public Movement
 {
@@ -22,24 +23,13 @@ public:
 
 	~RotateMovement();
 
-	RotateMovement(const RotateMovement& t) {
-		this->speed_ = t.speed_;
-		this->current_angle_ = t.current_angle_;
-	}
-
-	RotateMovement& operator=(const RotateMovement& t) {
-		this->speed_ = t.speed_;
-		this->current_angle_ = t.current_angle_;
-		return *this;
-	}
-
 	float get_current_angle() const;
 
-	void set_current_angle(int angle);
+	void set_current_angle(float angle);
 
 	void angle_zero();
 
-	void rotate(float angle_param);
+	void rotate(float angle_param, bool keyboard);
 
 	float get_speed() const;
 

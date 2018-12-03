@@ -67,11 +67,11 @@ public:
 
 	// power - процент от максимальной скорости
 	// back - флаг движения назад
-	virtual void move(float power, bool back) {};
+	virtual void move(float power, bool back, bool keyboard) {};
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой
-    virtual void rotate_body(float angle) {};
+    virtual void rotate_body(float angle, bool keyboard) {};
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой

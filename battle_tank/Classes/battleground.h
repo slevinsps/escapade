@@ -13,7 +13,7 @@ public:
     BattleGround(TScene& tscene,
                  Room room,
                  std::vector<UnitControl>& bundles);
-    virtual ~BattleGround();
+	virtual ~BattleGround() {};
 
 	TScene& get_scene();
 
