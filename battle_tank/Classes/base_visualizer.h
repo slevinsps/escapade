@@ -1,5 +1,6 @@
 #ifndef BASE_VISUALIZER_H
 #define BASE_VISUALIZER_H
+
 #include "BattleGround.h"
 #include "RoomLayer.h"
 
@@ -12,8 +13,7 @@ public:
 		CCLOG("just compare %d - %d", roomLayer_->room_, &ground.room_);
 	};
 	//virtual ~BaseVisualizer();
-
-	
+  
 	// Return i if user_units[i] exists, else  -1
 	int get_user_unit(int i) {
 		if (i < 0 || i >= ground.algorithms_.size()) {
@@ -58,7 +58,7 @@ public:
 	}
 
 protected:
-	int control_tank; // выбор танка для управления с клавиатуры
+	int control_tank; // ГўГ»ГЎГ®Г° ГІГ Г­ГЄГ  Г¤Г«Гї ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї Г± ГЄГ«Г ГўГЁГ ГІГіГ°Г»
 
 	RoomLayer* roomLayer_;
 	BattleGround ground;

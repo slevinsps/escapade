@@ -41,14 +41,14 @@ public:
 	// Обязательная функция запуска, ставит runnable в true
 	// если runnable false поток управления прекращает работу
 	void launch();
+	
+	// Есть ли управление
+	bool is_runnable() const;
 
 	// Вызывается при уничтожении юнита, ставит runnable в false
 	void destroy();
 	// Все сеттеры доступны только тогда, когда runnable = false
 	
-	// Есть ли управление
-	bool is_runnable() const;
-
     std::string get_name() const;
 
     bool operator == (const Unit &other) const;
@@ -71,7 +71,7 @@ public:
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой
-    virtual void rotate_body(float power, bool clockwise) {};
+    virtual void rotate_body(float angle) {};
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой

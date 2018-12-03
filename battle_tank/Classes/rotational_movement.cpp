@@ -1,14 +1,17 @@
 #include "rotational_movement.h"
+#include "cocos2d.h"
+
 
 RotateMovement::RotateMovement(float speed, float current_angle) :
-    current_angle_(current_angle),
+	current_angle_(current_angle),
 	speed_(speed)
 {}
 
-RotateMovement::~RotateMovement(){}
-
+RotateMovement::~RotateMovement() {}
+std::mutex get_current_angle_lock;
 float RotateMovement::get_current_angle() const {
-    return current_angle_;
+	//std::lock_guard<std::mutex> lock(get_current_angle_lock);
+	return current_angle_;
 }
 
 float RotateMovement::get_speed() const {
@@ -39,7 +42,7 @@ void RotateMovement::angle_to_zero() {
 	}
 }
 
-void RotateMovement::angle_zero(){
+void RotateMovement::angle_zero() {
 	std::thread thread(&RotateMovement::angle_to_zero, this);
 	thread.detach();
 }
@@ -69,14 +72,12 @@ void RotateMovement::angle_to_value(float angle_param) {
 			set_current_angle(angle);
 			Sleep(10);
 		}
-
 		g_lock.unlock();
 	}
 	else
 		CCLOG("Not Block\n");
 
 }
-
 
 void RotateMovement::rotate(float angle_param) {
 	std::thread thread(&RotateMovement::angle_to_value, this, angle_param);
@@ -85,8 +86,9 @@ void RotateMovement::rotate(float angle_param) {
 
 void RotateMovement::set_current_angle(float angle) {
     current_angle_ = angle;
+
 }
 bool RotateMovement::operator == (const RotateMovement &other) {
-    return (get_current_angle() == other.get_current_angle() &&
+	return (get_current_angle() == other.get_current_angle() &&
 		get_speed() == other.get_speed());
 }

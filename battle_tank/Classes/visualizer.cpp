@@ -32,23 +32,23 @@ Visualizer::Visualizer(Visualizer &&visualizer) {
 }
 */
 
-// Ниже кокосовские вещи
+// ГЌГЁГ¦ГҐ ГЄГ®ГЄГ®Г±Г®ГўГ±ГЄГЁГҐ ГўГҐГ№ГЁ
 
 USING_NS_CC;
 
 Scene* Visualizer::createScene()
 {
-	// Создаём сцену с физикой
+	// Г‘Г®Г§Г¤Г ВёГ¬ Г±Г¶ГҐГ­Гі Г± ГґГЁГ§ГЁГЄГ®Г©
 	auto scene = Scene::createWithPhysics();
-	// Устанавливаем DEBUGDRAW_ALL, чтобы границы всех физических объектов обводились красной линией
+	// Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ DEBUGDRAW_ALL, Г·ГІГ®ГЎГ» ГЈГ°Г Г­ГЁГ¶Г» ГўГ±ГҐГµ ГґГЁГ§ГЁГ·ГҐГ±ГЄГЁГµ Г®ГЎГєГҐГЄГІГ®Гў Г®ГЎГўГ®Г¤ГЁГ«ГЁГ±Гј ГЄГ°Г Г±Г­Г®Г© Г«ГЁГ­ГЁГҐГ©
 	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
-	// Создаём слой
+	// Г‘Г®Г§Г¤Г ВёГ¬ Г±Г«Г®Г©
 	auto layer = Visualizer::create();
-	// и передаём в него указатель на физический мир
+	// ГЁ ГЇГҐГ°ГҐГ¤Г ВёГ¬ Гў Г­ГҐГЈГ® ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  ГґГЁГ§ГЁГ·ГҐГ±ГЄГЁГ© Г¬ГЁГ°
 	layer->SetPhysicsWorld(scene->getPhysicsWorld());
 
-	// Добавляем созданный слой
+	// Г„Г®ГЎГ ГўГ«ГїГҐГ¬ Г±Г®Г§Г¤Г Г­Г­Г»Г© Г±Г«Г®Г©
 	scene->addChild(layer);
 
 	return scene;
@@ -61,37 +61,56 @@ static void problemLoading(const char* filename)
 	printf("Error while loading: %s\n", filename);
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
-
-void Visualizer::work() {
-	;
-	/*
+std::mutex g_lock1;
+void Visualizer::work(int i) {
+	g_lock1.lock();
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
-
 	while (1) {
-		if (!this)
-			return;
-		if (this->body == nullptr)
-			return;
-		if (this->body->numberOfRunningActions() == 0) {
-			if (this->body->getPositionX() < 0) {
-				this->body->stopAllActions();
-				this->body->runAction(MoveBy::create(2, Vec2(600, 0)));
-			}
-			else if (this->body->getPositionX() > 300) {
-				this->body->stopAllActions();
-				this->body->runAction(MoveBy::create(2, Vec2(-600, 0)));
-			}
-		}
-		Sleep(100);
-	}
-	*/
+		CCLOG("Coord 0 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
+		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
+			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
+			//ground.scene_.getUnits()[0].rotate_body(90);
+			ground.scene_.getUnits()[i].move(50, false);
+			ground.scene_.getUnits()[i].fire(1);
+			//Sleep(100);
+			ground.scene_.getUnits()[i].rotate_body(40);
+		//}
+		//Sleep(100);
 
+
+	}
+	g_lock1.unlock();
 }
+
+
+
+std::mutex g_lock11;
+void Visualizer::work1(int i) {
+	g_lock11.lock();
+	auto right = MoveBy::create(2, Vec2(600, 0));
+	auto left = MoveBy::create(2, Vec2(-600, 0));
+	while (1) {
+		CCLOG("Coord 1 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
+		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
+			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
+			//ground.scene_.getUnits()[0].rotate_body(90);
+			ground.scene_.getUnits()[i].move(50, false);
+			ground.scene_.getUnits()[i].rotate_body(180);
+		//}
+		//Sleep(100);
+		
+		
+	}
+	g_lock11.unlock();
+	
+}
+
+
 
 void Visualizer::updateTimer(float dt)
 {
-	// Получается из комнаты. А пока так.
+	// ГЏГ®Г«ГіГ·Г ГҐГІГ±Гї ГЁГ§ ГЄГ®Г¬Г­Г ГІГ». ГЂ ГЇГ®ГЄГ  ГІГ ГЄ.
 	static seconds time = 10s;
 	if (time <= 0s)
 	{
@@ -100,10 +119,10 @@ void Visualizer::updateTimer(float dt)
 		/*
 		auto myScene = Scene::create();
 
-		// Смена выцветанием
+		// Г‘Г¬ГҐГ­Г  ГўГ»Г¶ГўГҐГІГ Г­ГЁГҐГ¬
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5, myScene, Color3B(0, 255, 255)));
 
-		// Кувырок по X
+		// ГЉГіГўГ»Г°Г®ГЄ ГЇГ® X
 		Director::getInstance()->replaceScene(TransitionFlipX::create(2, myScene));
 		*/
 	}
@@ -112,19 +131,18 @@ void Visualizer::updateTimer(float dt)
 }
 
 void Visualizer::add_players() {
-	
 	int unit_size = ground.scene_.getUnits().size();
 	if (unit_size == 0) {
-		amount = cocos2d::Label::createWithTTF("Нет игроков", "fonts/Marker Felt.ttf", 12);
+		amount = cocos2d::Label::createWithTTF("ГЌГҐГІ ГЁГЈГ°Г®ГЄГ®Гў", "fonts/Marker Felt.ttf", 12);
 	}
 	else {
 		control_tank = 0;
-		amount = cocos2d::Label::createWithTTF("Игроков:"+
+		amount = cocos2d::Label::createWithTTF("Г€ГЈГ°Г®ГЄГ®Гў:"+
 		std::to_string(unit_size),
 		"fonts/Marker Felt.ttf", 12);
 
-		int i = 0; // Уникальный идентификатор лежим в теге, удобно
-		// Проблема с ссылками поправлена
+		int i = 0; // Г“Г­ГЁГЄГ Г«ГјГ­Г»Г© ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г° Г«ГҐГ¦ГЁГ¬ Гў ГІГҐГЈГҐ, ГіГ¤Г®ГЎГ­Г®
+		// ГЏГ°Г®ГЎГ«ГҐГ¬Г  Г± Г±Г±Г»Г«ГЄГ Г¬ГЁ ГЇГ®ГЇГ°Г ГўГ«ГҐГ­Г 
 		for (Unit& unit : ground.scene_.getUnits()) {
 			unit.set_position(Position(i * 100 + 50, 100));
 			std::vector<Node*> nodes;
@@ -160,21 +178,21 @@ bool Visualizer::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/*
-	Физика - https://habr.com/post/342478/
+	Г”ГЁГ§ГЁГЄГ  - https://habr.com/post/342478/
 	*/
 
-	//Создаём рамку размером visibleSize, то есть во весь экран, с
-	//физическим материалом по умолчанию и толщиной рамки 3 пикселя
+	//Г‘Г®Г§Г¤Г ВёГ¬ Г°Г Г¬ГЄГі Г°Г Г§Г¬ГҐГ°Г®Г¬ visibleSize, ГІГ® ГҐГ±ГІГј ГўГ® ГўГҐГ±Гј ГЅГЄГ°Г Г­, Г±
+	//ГґГЁГ§ГЁГ·ГҐГ±ГЄГЁГ¬ Г¬Г ГІГҐГ°ГЁГ Г«Г®Г¬ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ ГЁ ГІГ®Г«Г№ГЁГ­Г®Г© Г°Г Г¬ГЄГЁ 3 ГЇГЁГЄГ±ГҐГ«Гї
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize,
 		PHYSICSBODY_MATERIAL_DEFAULT, 7);
-	// Создаём новый узел, то есть объект сцены
+	// Г‘Г®Г§Г¤Г ВёГ¬ Г­Г®ГўГ»Г© ГіГ§ГҐГ«, ГІГ® ГҐГ±ГІГј Г®ГЎГєГҐГЄГІ Г±Г¶ГҐГ­Г»
 	auto edgeNode = Node::create();
-	// Устанавливаем на позицию по центру экрана
+	// Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ Г­Г  ГЇГ®Г§ГЁГ¶ГЁГѕ ГЇГ® Г¶ГҐГ­ГІГ°Гі ГЅГЄГ°Г Г­Г 
 	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 25);
-	// Добавляем к узлу физическое тело
+	// Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГЄ ГіГ§Г«Гі ГґГЁГ§ГЁГ·ГҐГ±ГЄГ®ГҐ ГІГҐГ«Г®
 	edgeNode->setPhysicsBody(edgeBody);
 
-	//Добавляем узел к нашей сцене
+	//Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГіГ§ГҐГ« ГЄ Г­Г ГёГҐГ© Г±Г¶ГҐГ­ГҐ
 	this->addChild(edgeNode);
 
 	/////////////////////////////
@@ -205,17 +223,24 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	//std::thread thread1(&Visualizer::work, this);
-
-	//thread1.detach();
+	
 
 	
 	
 	add_players();
 
+
+	std::thread thread1(&Visualizer::work1, this, 1);
+	thread1.detach();
+
+	std::thread thread0(&Visualizer::work, this, 0);
+
+	thread0.detach();
+
+
 	auto eventListener = EventListenerKeyboard::create();
 
-	// Для того, чтобы можно было держать кнопку - https://www.gamefromscratch.com/post/2014/10/07/Cocos2d-x-Tutorial-Series-Handling-the-Keyboard.aspx
+	// Г„Г«Гї ГІГ®ГЈГ®, Г·ГІГ®ГЎГ» Г¬Г®Г¦Г­Г® ГЎГ»Г«Г® Г¤ГҐГ°Г¦Г ГІГј ГЄГ­Г®ГЇГЄГі - https://www.gamefromscratch.com/post/2014/10/07/Cocos2d-x-Tutorial-Series-Handling-the-Keyboard.aspx
 	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
 
 	eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
@@ -245,7 +270,7 @@ bool Visualizer::init()
 
 	label_timer->setString(std::to_string(60));
 
-	// Установка цвета
+	// Г“Г±ГІГ Г­Г®ГўГЄГ  Г¶ГўГҐГІГ 
 	auto color = Color4B(1, 50, 32, 255);
 	auto colorLayer = new cocos2d::LayerColor;
 	colorLayer->initWithColor(color);
@@ -316,10 +341,10 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			ground.scene_.getUnits()[control_tank].rotate_body(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_body(-5);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			ground.scene_.getUnits()[control_tank].rotate_body(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_body(5);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
 			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
@@ -340,10 +365,9 @@ void Visualizer::update(float delta) {
 			ground.scene_.getUnits()[control_tank].fire(1);
 		}
 	}
+	//work1(1);
 	for (int i = 0; i < ground.scene_.getUnits().size(); i++) {
-		if (ground.scene_.getUnits()[i].is_alive()) {
-			ground.scene_.getUnits()[i].sinchronize();
-		}
+		ground.scene_.getUnits()[i].sinchronize();
 	}
 }
 

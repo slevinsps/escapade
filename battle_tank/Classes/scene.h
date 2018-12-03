@@ -22,20 +22,14 @@ class TScene
 {
 public:
 	// Временное решение, пока нет препятствий и бонусов
+
 	TScene(std::vector<Tank> units) { 
 		units_ = units;
 		init();
 	}
 
-	// Ниже не отредактированные функции, отредактируем завтра
-	
 	TScene() = default;
-	/*
-	TScene(std::vector<Tank> units,
-		BattleMap map,
-          bonusControl bonuses) :
-             units_(units), map_(map), bonuses_(bonuses){};
-	*/
+  
     std::vector<Tank>& getUnits();
     void setUnits(std::vector<Tank> units);
 

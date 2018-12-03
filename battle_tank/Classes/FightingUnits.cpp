@@ -31,20 +31,20 @@ void FightingUnits::increase_deaths() {
 	deaths_++;
 }
 
-// Нанесение урона танком
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 void FightingUnits::increase_damage_done(int damage) {
 	damage_done_ += damage;
 }
-// Получение урона
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 void FightingUnits::increase_damage_received(int damage) {
 	damage_received_ += damage;
 }
 
-// Нанесение урона танком
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 int  FightingUnits::get_damage_done() const {
 	return damage_done_;
 }
-// Получение урона
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 int FightingUnits::get_damage_received() const {
 	return damage_received_;
 }

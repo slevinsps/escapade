@@ -22,17 +22,9 @@ TScene& BattleGround::get_scene() {
 std::vector<UnitControl>& BattleGround::get_algorithms() {
     return algorithms_;
 }
-/*
-void BattleGround::set_control_bundle(std::vector<UserControlBundle> bundles) {
-    bundles_ = bundles;
-}
-*/
-BattleGround::~BattleGround() {
-
-}
 
 BattleGround BattleGround::offline(User user, int amount) {
-	// Загрузка пользователей, алгоритмов, танков
+	// Г‡Г ГЈГ°ГіГ§ГЄГ  ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ©, Г Г«ГЈГ®Г°ГЁГІГ¬Г®Гў, ГІГ Г­ГЄГ®Гў
 	std::vector<User> load_users;
 	std::vector<UnitControl> load_alg;
 	std::vector<Tank> load_tanks;

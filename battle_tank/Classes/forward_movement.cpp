@@ -1,9 +1,6 @@
 #include "forward_movement.h"
+#include <thread>
 
-ForwardMovement::ForwardMovement(int max_speed, int max_back_speed) : max_back_speed_(max_back_speed){
-	max_speed_ = max_speed;
-	current_speed_ = 0;
-}
 ForwardMovement::~ForwardMovement(){}
 
 bool ForwardMovement::operator == (const ForwardMovement &other) {
@@ -22,15 +19,6 @@ int ForwardMovement::getMaxBackSpeed() const {
 	return max_back_speed_;
 }
 
-void ForwardMovement::setSpeed(int speed) {
-	current_speed_ = speed;
-}
-void ForwardMovement::setMaxSpeed(int speed) {
-	max_speed_ = speed;
-}
-void ForwardMovement::setMaxBackSpeed(int speed) {
-	max_back_speed_ = speed;
-}
 
 void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 	g_move_tread.lock();
@@ -79,4 +67,21 @@ void ForwardMovement::move(float distance, float speed, float angle) {
 
 	std::thread thread1(&ForwardMovement::move_to_distace, this, distance, speed, angle);
 	thread1.join();
+}
+
+
+void ForwardMovement::setSpeed(int speed) {
+	current_speed_ = speed;
+}
+void ForwardMovement::setMaxSpeed(int speed) {
+	max_speed_ = speed;
+}
+void ForwardMovement::setMaxBackSpeed(int speed) {
+	max_back_speed_ = speed;
+}
+
+ForwardMovement::ForwardMovement(int max_speed, int max_back_speed) : max_back_speed_(max_back_speed) {
+	max_speed_ = max_speed;
+	current_speed_ = 0;
+	this->stop = false;
 }
