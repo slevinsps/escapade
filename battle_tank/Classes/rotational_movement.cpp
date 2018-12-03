@@ -53,7 +53,7 @@ void RotateMovement::angle_to_value(float angle_param) {
 		float decr = get_speed();
 		int mul = 1;
 
-		float angle = get_angle(get_current_angle());
+		float angle = Movement::get_angle(get_current_angle());
 		float angle_target = angle + angle_param;
 		int znak = 1;
 		if (angle < angle_target) {
@@ -79,9 +79,14 @@ void RotateMovement::angle_to_value(float angle_param) {
 
 }
 
-void RotateMovement::rotate(float angle_param) {
+void RotateMovement::rotate(float angle_param, bool keyboard) {
 	std::thread thread(&RotateMovement::angle_to_value, this, angle_param);
-	thread.join();
+	if (keyboard) {
+		thread.detach();
+	}
+	else {
+		thread.join();
+	}
 }
 
 void RotateMovement::set_current_angle(float angle) {

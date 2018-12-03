@@ -66,15 +66,15 @@ void Visualizer::work(int i) {
 	g_lock1.lock();
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
-	while (1) {
+	while (ground.scene_.getUnits()[i].is_runnable()) {
 		CCLOG("Coord 0 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
 		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
 			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
-			//ground.scene_.getUnits()[0].rotate_body(90);
-			ground.scene_.getUnits()[i].move(50, false);
+			//ground.scene_.getUnits()[0].rotate_body(90, 0);
+			ground.scene_.getUnits()[i].move(50, false, 0);
 			ground.scene_.getUnits()[i].fire(1);
 			//Sleep(100);
-			ground.scene_.getUnits()[i].rotate_body(40);
+			ground.scene_.getUnits()[i].rotate_body(40, 0);
 		//}
 		//Sleep(100);
 
@@ -90,13 +90,13 @@ void Visualizer::work1(int i) {
 	g_lock11.lock();
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
-	while (1) {
+	while (ground.scene_.getUnits()[i].is_runnable()) {
 		CCLOG("Coord 1 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
 		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
 			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
-			//ground.scene_.getUnits()[0].rotate_body(90);
-			ground.scene_.getUnits()[i].move(50, false);
-			ground.scene_.getUnits()[i].rotate_body(180);
+			//ground.scene_.getUnits()[0].rotate_body(90, 0);
+			ground.scene_.getUnits()[i].move(50, false, 0);
+			ground.scene_.getUnits()[i].rotate_body(180, 0);
 		//}
 		//Sleep(100);
 		
@@ -115,7 +115,9 @@ void Visualizer::updateTimer(float dt)
 	if (time <= 0s)
 	{
 		unschedule(schedule_selector(Visualizer::updateTimer));
-
+		for (Unit& unit : ground.scene_.getUnits()) {
+			unit.destroy();
+		}
 		/*
 		auto myScene = Scene::create();
 
@@ -133,18 +135,19 @@ void Visualizer::updateTimer(float dt)
 void Visualizer::add_players() {
 	int unit_size = ground.scene_.getUnits().size();
 	if (unit_size == 0) {
-		amount = cocos2d::Label::createWithTTF("Íåò èãðîêîâ", "fonts/Marker Felt.ttf", 12);
+		amount = cocos2d::Label::createWithTTF("Нет игроков", "fonts/Marker Felt.ttf", 12);
 	}
 	else {
 		control_tank = 0;
-		amount = cocos2d::Label::createWithTTF("Èãðîêîâ:"+
+		amount = cocos2d::Label::createWithTTF("Игроков:"+
 		std::to_string(unit_size),
 		"fonts/Marker Felt.ttf", 12);
 
 		int i = 0; // Óíèêàëüíûé èäåíòèôèêàòîð ëåæèì â òåãå, óäîáíî
 		// Ïðîáëåìà ñ ññûëêàìè ïîïðàâëåíà
-		for (Unit& unit : ground.scene_.getUnits()) {
+		for (Tank& unit : ground.scene_.getUnits()) {
 			unit.set_position(Position(i * 100 + 50, 100));
+			unit.get_body().get_forward_movement().set_pos(Position(i * 100 + 50, 100));
 			std::vector<Node*> nodes;
 			unit.SceneNodes(nodes);
 			for (Node* node : nodes) {
@@ -232,7 +235,6 @@ bool Visualizer::init()
 
 	std::thread thread1(&Visualizer::work1, this, 1);
 	thread1.detach();
-
 	std::thread thread0(&Visualizer::work, this, 0);
 
 	thread0.detach();
@@ -341,10 +343,10 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			ground.scene_.getUnits()[control_tank].rotate_body(-5);
+			ground.scene_.getUnits()[control_tank].rotate_body(-5, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			ground.scene_.getUnits()[control_tank].rotate_body(5);
+			ground.scene_.getUnits()[control_tank].rotate_body(5, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
 			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
@@ -353,10 +355,10 @@ void Visualizer::update(float delta) {
 			ground.scene_.getUnits()[control_tank].rotate_weapon(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-			ground.scene_.getUnits()[control_tank].move(1, false);
+			ground.scene_.getUnits()[control_tank].move(1, false, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
-			ground.scene_.getUnits()[control_tank].move(1, true);
+			ground.scene_.getUnits()[control_tank].move(1, true, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
 			ground.scene_.getUnits()[control_tank].center_weapon();
@@ -376,6 +378,10 @@ void Visualizer::update(float delta) {
 void Visualizer::menuCloseCallback(Ref* pSender)
 {
 	//Close the cocos2d-x game scene and quit the application
+	for (Unit& unit : ground.scene_.getUnits()) {
+		unit.destroy();
+	}
+	Sleep(100);
 	Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

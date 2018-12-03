@@ -25,9 +25,9 @@ public:
 		sprite->setTexture("died135.png");
 	}
 	
-	void move(float distance, bool back) override;
+	void move(float distance, bool back, bool keyboard) override;
 
-	void rotate_body(float angle) override;
+	void rotate_body(float angle, bool keyboard) override;
 	
 	void rotate_weapon(float power, bool clockwise) override;
 	

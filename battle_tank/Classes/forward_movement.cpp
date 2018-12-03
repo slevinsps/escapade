@@ -45,7 +45,7 @@ void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 		L = abs(y_dist - y);
 
 	float sx = (x_dist - x) / L;
-	double sy = (y_dist - y) / L;
+	float sy = (y_dist - y) / L;
 	for (int i = 1; i <= L / speed + 1; i++) {
 		x += speed * sx;
 		y += speed * sy;
@@ -62,11 +62,17 @@ void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 }
 
 
-void ForwardMovement::move(float distance, float speed, float angle) {
+void ForwardMovement::move(float distance, float speed, float angle, bool keyboard) {
 	//sinchronize();
 
 	std::thread thread1(&ForwardMovement::move_to_distace, this, distance, speed, angle);
-	thread1.join();
+	if (keyboard) {
+		thread1.join();
+	}
+	else {
+		thread1.join();
+	}
+	
 }
 
 

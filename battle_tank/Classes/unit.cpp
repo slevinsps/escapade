@@ -40,6 +40,7 @@ void Unit::setModel(int type) {
 	if (!runnable) {
 		type_ = type;
 	}
+}
   
 bool Unit::is_runnable() const {
 	return runnable;
