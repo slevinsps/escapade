@@ -1,66 +1,53 @@
 #include "unit.h"
 
-Unit::Unit(Player player,
-	int team_id,
-    std::string name,
+Unit::Unit(std::string name,
 	int type,
     Position position,
     std::string texture) :
 		SceneObject(position, texture, false),
-		player_(player),
-		team_id_(team_id),
 		name_(name),
 		type_(type)
 	{
-
+	runnable = false;
 	unit_name = cocos2d::Label::createWithTTF(
 		name, "fonts/Marker Felt.ttf", 10);
 	};
 
-bool Unit::is_friend(const Unit& unit) const {
-    return unit.get_team_id() == get_team_id();
+void Unit::launch() {
+	runnable = true;
 }
 
-int Unit::get_team_id() const {
-    return team_id_;
+// Вызывается при уничтожении юнита, ставит runnable в false
+void Unit::destroy() {
+	runnable = false;
 }
 
 std::string Unit::get_name() const {
     return name_;
 }
 
-Player Unit::get_player() const {
-    return player_;
-}
-
-void Unit::set_player(Player player) {
-    player_ = player;
-}
-
 Unit::~Unit(){};
 
 void Unit::setName(std::string name) {
-	name_ = name;
-	unit_name = cocos2d::Label::createWithTTF(
-		name, "fonts/Marker Felt.ttf", 10);
+	if (!runnable) {
+		name_ = name;
+		unit_name = cocos2d::Label::createWithTTF(
+			name, "fonts/Marker Felt.ttf", 10);
+	}
 }
 
 void Unit::setModel(int type) {
-	type_ = type;
-}
-
-void Unit::set_team_id(int id) {
-	team_id_ = id;
+	if (!runnable) {
+		type_ = type;
+	}
 }
 
 bool Unit::operator == (const Unit &other) const
 {
-    return this->get_name() == other.get_name() &&
-            this->get_player() == other.get_player();
+	return this->name_ == other.name_;
 }
 
 bool Unit::operator != (const Unit &other) const
 {
-    return this->get_name() != other.get_name() ||
-            this->get_player() != other.get_player();
+    return this->name_ != other.name_;
 }

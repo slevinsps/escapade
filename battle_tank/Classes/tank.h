@@ -7,18 +7,16 @@
 class Tank : public Unit
 {
 public:
-	Tank(Player player,
-		int team_id = 0,
-		std::string name = "unknown tank",
+	Tank(std::string name = "unknown tank",
 		int type = LIGHT,
 		Position position = Position(),
 		std::string = "circle");
     Weapon& get_weapon();
     Body& get_body();
 	
-	void move(float power, bool back) override;
-	
-	void rotate_body(float power, bool clockwise) override;
+	void move(float distance, bool back) override;
+
+	void rotate_body(float angle) override;
 	
 	void rotate_weapon(float power, bool clockwise) override;
 	

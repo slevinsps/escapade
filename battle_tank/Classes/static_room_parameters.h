@@ -1,39 +1,65 @@
 #ifndef STATIC_ROOM_PARAMETERS_H
 #define STATIC_ROOM_PARAMETERS_H
 
+#include <chrono>
+
+#define ERROR_WRONG_STATUS -3
+#define STATUS_ERROR -4 // Если произошел сбой(допустим пропало интернет соединение)
+#define STATUS_FINISHED -2
+#define STATUS_PREPARING -1
+#define STATUS_ONGOING 0
+
+using namespace std::chrono;
+/*
+Название может ввести в заблуждение.
+Это класс параметров, которые устанавливаются до запуска или после окончания
+битвы. Эти данные отображаются в лобби
+*/
 class StaticRoomParameters
 {
 public:
-    StaticRoomParameters();
-    StaticRoomParameters(int amount_of_players,
-                 int status,
-                 int time_limit,
-                 int time_start,
-                 int max_amount_of_matches) :
-                     max_amount_of_players_(amount_of_players),\
-                     time_limit_(time_limit),
-                     time_start_(time_start),
-                     max_amount_of_matches_(max_amount_of_matches){}
+	StaticRoomParameters(size_t amount_of_players,
+		seconds time_limit,
+		size_t max_amount_of_matches);
     virtual ~StaticRoomParameters();
 
-    int get_max_of_players() const;
-    void set_max_of_players(int);
+	// Идет набор игроков(актуально для онлайна)
+	void prepare();
 
-    int get_time_limit() const;
-    void set_time_limit(int);
+	// Игра запущена
+	void start();
 
-    int get_time_start() const;
-    void set_time_start(int);
+	// Игра прекращена
+	void finish();
 
-    int get_max_of_matches() const;
-    void set_max_of_matches(int);
+	// Геттеры приватных полей
 
+	size_t players() const;
+
+	seconds get_time_limit() const;
+
+	steady_clock::time_point get_time_start(int &error) const;
+
+	steady_clock::time_point get_time_end(int &error) const;
+
+	size_t matches() const;
+
+	static StaticRoomParameters default();
 
 private:
-    int max_amount_of_players_;
-    int time_limit_;
-    int time_start_;
-    int max_amount_of_matches_;
+	// Максимальное кол-во раундов и игроков
+	size_t max_amount_of_matches_;
+	size_t max_amount_of_players_;
+
+	// Продолжительность раунда
+    seconds time_limit_;
+
+	// Время запуска и окончания битвы
+	steady_clock::time_point time_start_;
+	steady_clock::time_point time_end_;
+
+	// Состояние битвы
+	int status_;
 };
 
 #endif // STATIC_ROOM_PARAMETERS_H

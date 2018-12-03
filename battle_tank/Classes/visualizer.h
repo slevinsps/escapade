@@ -51,8 +51,8 @@ public:
 
 	bool operator != (const Visualizer &other) const;
 
-	void work();
-
+	void work(int i);
+	void work1(int i);
 	void add_players();
 
 	// Functions for key listeners

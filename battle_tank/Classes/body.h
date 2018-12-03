@@ -13,10 +13,10 @@
 class Body : public UnitComponent
 {
 public:
-    // Ожидается позиция юнита, поэтому она задается явно
-    // Дальше идут необязательные параметры конкретной модели
-    // Поскольку не планируется изменение картинки, она
-    // стоит в конце
+	// Ожидается позиция юнита, поэтому она задается явно
+	// Дальше идут необязательные параметры конкретной модели
+	// Поскольку не планируется изменение картинки, она
+	// стоит в конце
 	Body(Position position = Position(),
 		int max_health = BODY_MAX_HEALTH,
 		float rotation_speed = BODY_DEFAULT_ROTATION_SPEED,
@@ -28,18 +28,20 @@ public:
 
 	~Body();
 
-    void apply_health_bonus(Bonus& bonus);
-    void apply_speed_bonus(Bonus& bonus);
-    void decrement_helth(int decr);
-    void increment_helth(int incr);
-    int get_health() const;
-    int get_max_health() const;
+	void apply_health_bonus(Bonus& bonus);
+	void apply_speed_bonus(Bonus& bonus);
+	void decrement_helth(int decr);
+	void increment_helth(int incr);
+	int get_health() const;
+	int get_max_health() const;
+	float get_angle();
+	void set_angle(float speed);
 
-    RotateMovement get_rotation_movement() const;
-    void set_rotation_movement(RotateMovement);
+	RotateMovement& get_rotation_movement();
+	void set_rotation_movement(RotateMovement);
 
-    ForwardMovement get_forward_movement() const;
-    void set_forward_movement(ForwardMovement);
+	ForwardMovement& get_forward_movement();
+	void set_forward_movement(ForwardMovement);
 
 	void set_speed(int speed);
 	void set_max_speed(int speed);
@@ -52,10 +54,12 @@ public:
 	static Body getHeavyBody(Position pos = Position());
 
 protected:
-    int max_health_;
-    int health_;
-    RotateMovement rotation_;
-    ForwardMovement forward_;
+	int max_health_;
+	int health_;
+	ForwardMovement forward_;
+public:
+	RotateMovement rotation_;
+
 };
 
 #endif // BODY_H

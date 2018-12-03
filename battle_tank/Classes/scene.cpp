@@ -1,28 +1,21 @@
 #include "scene.h"
 
-int TScene::load(Socket socket) {
-    return 0;
-}
 
-int TScene::send(Socket socket) {
-    return 0;
-}
-
-std::vector<Unit> TScene::getUnits() const {
+std::vector<Tank>& TScene::getUnits() {
     return units_;
 }
-void TScene::setUnits(std::vector<Unit> units) {
+void TScene::setUnits(std::vector<Tank> units) {
     units_= units;
 }
 
-BattleMap TScene::getMap() const {
+BattleMap& TScene::getMap() {
     return map_;
 }
 void TScene::setMap(BattleMap map) {
     map_ = map;
 }
 
-bonusControl TScene::getBonusControl() const {
+bonusControl& TScene::getBonusControl() {
     return bonuses_;
 }
 void TScene::setBonusControl(bonusControl bonuses) {
@@ -31,10 +24,10 @@ void TScene::setBonusControl(bonusControl bonuses) {
 
 bool TScene::operator == (const TScene &other) const
 {
-    return this->units_ == other.getUnits();
+    return this->units_ == other.units_;
 }
 
 bool TScene::operator != (const TScene &other) const
 {
-    return this->units_ != other.getUnits();
+    return this->units_ != other.units_;
 }

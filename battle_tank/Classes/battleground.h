@@ -5,42 +5,30 @@
 
 #include "scene.h"
 #include "room.h"
-#include "visualizer.h"
 #include "user_control_bundle.h"
 
 class BattleGround
 {
 public:
-    BattleGround(int time,
-		TScene& scene,
+    BattleGround(TScene& tscene,
                  Room room,
-                 std::vector<UserControlBundle>& bundles,
-                 Visualizer& visualizer);
+                 std::vector<UnitControl>& bundles);
     virtual ~BattleGround();
 
-    int get_time() const;
-    void set_time(int);
-    void add_bundle(UserControlBundle);
-
-    int run_battle();
-    int stop_battle();
+    //void add_bundle(UserControlBundle);
 
     Room get_room() const;
     void set_room(Room room);
 
-    std::vector<UserControlBundle> get_control_bundle() const;
-    void set_control_bundle(std::vector<UserControlBundle> bundles);
+    //std::vector<UserControlBundle> get_control_bundle() const;
+    //void set_control_bundle(std::vector<UserControlBundle> bundles);
 
-    Visualizer get_vizualizer() const;
-    void set_vizualizer(Visualizer& visualizer);
+	static BattleGround offline(User user, int amount);
 
-    void update_scene();
-
-private:
-    Visualizer visualizer_;
-    int time_;
 	TScene scene_;
-    Room room_;
-    std::vector<UserControlBundle> bundles_;
+	Room room_;
+	std::vector<UnitControl> algorithms_;
+private:
+	;
 };
 #endif // BATTLEGROUND_H

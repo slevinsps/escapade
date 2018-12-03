@@ -3,10 +3,12 @@
 #include "scene.h"
 #include "user_control_bundle.h"
 #include "Tank.h"
+#include "BattleGround.h"
+
 class BaseVisualizer
 {
 public:
-	BaseVisualizer() { 
+	BaseVisualizer() : ground(BattleGround::offline(User("Escapade", 10), 6)) {
 		control_tank = -1; 
 	};
 	//virtual ~BaseVisualizer();
@@ -14,8 +16,11 @@ public:
 	TScene base_get_scene() const {
 		return tScene_;
 	};
-
+	/*
 	int load_user_units() {
+		User user("Escapade", 10);
+		ground = BattleGround::offline(user, 6);
+		
 		// ѕриходит из другой сцены, пока так
 		
 		int amount = 5;
@@ -51,13 +56,13 @@ public:
 		}
 		
 		user_units = std::move(load_user_units);
-
+		
 		return 0;
 	}
-
+	*/
 	// Return i if user_units[i] exists, else  -1
 	int get_user_unit(int i) {
-		if (i < 0 || i >= user_units.size()) {
+		if (i < 0 || i >= ground.algorithms_.size()) {
 			return -1;
 		}
 		return i;
@@ -102,7 +107,8 @@ protected:
 	TScene tScene_;
 	int control_tank; // выбор танка дл€ управлени€ с клавиатуры
 
-	std::vector<UserControlBundle> user_units;
+	//std::vector<UserControlBundle> user_units;
+	BattleGround ground;
 
 	void set_scene(TScene tScene) { tScene_ = tScene; }
 };

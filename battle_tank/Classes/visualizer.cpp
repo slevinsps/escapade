@@ -61,33 +61,52 @@ static void problemLoading(const char* filename)
 	printf("Error while loading: %s\n", filename);
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
-
-void Visualizer::work() {
-	;
-	/*
+std::mutex g_lock1;
+void Visualizer::work(int i) {
+	g_lock1.lock();
 	auto right = MoveBy::create(2, Vec2(600, 0));
 	auto left = MoveBy::create(2, Vec2(-600, 0));
-
 	while (1) {
-		if (!this)
-			return;
-		if (this->body == nullptr)
-			return;
-		if (this->body->numberOfRunningActions() == 0) {
-			if (this->body->getPositionX() < 0) {
-				this->body->stopAllActions();
-				this->body->runAction(MoveBy::create(2, Vec2(600, 0)));
-			}
-			else if (this->body->getPositionX() > 300) {
-				this->body->stopAllActions();
-				this->body->runAction(MoveBy::create(2, Vec2(-600, 0)));
-			}
-		}
-		Sleep(100);
-	}
-	*/
+		CCLOG("Coord 0 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
+		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
+			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
+			//ground.scene_.getUnits()[0].rotate_body(90);
+			ground.scene_.getUnits()[i].move(50, false);
+			ground.scene_.getUnits()[i].fire(1);
+			//Sleep(100);
+			ground.scene_.getUnits()[i].rotate_body(40);
+		//}
+		//Sleep(100);
 
+
+	}
+	g_lock1.unlock();
 }
+
+
+
+std::mutex g_lock11;
+void Visualizer::work1(int i) {
+	g_lock11.lock();
+	auto right = MoveBy::create(2, Vec2(600, 0));
+	auto left = MoveBy::create(2, Vec2(-600, 0));
+	while (1) {
+		CCLOG("Coord 1 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
+		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
+			//if (ground.scene_.getUnits()[0].sprite->getPositionX() < 0) {
+			//ground.scene_.getUnits()[0].rotate_body(90);
+			ground.scene_.getUnits()[i].move(50, false);
+			ground.scene_.getUnits()[i].rotate_body(180);
+		//}
+		//Sleep(100);
+		
+		
+	}
+	g_lock11.unlock();
+	
+}
+
+
 
 void Visualizer::updateTimer(float dt)
 {
@@ -104,40 +123,39 @@ void Visualizer::updateTimer(float dt)
 }
 
 void Visualizer::add_players() {
-	if (user_units.size() == 0) {
-		load_user_units();
-	}
 	
-	if (user_units.size() == 0) {
+	if (ground.algorithms_.size() == 0) {
 		amount = cocos2d::Label::createWithTTF("No players", "fonts/Marker Felt.ttf", 24);
 	}
 	else {
 		control_tank = 0;
 		amount = cocos2d::Label::createWithTTF("Players:"+
-			std::to_string(user_units.size()),
+			std::to_string(ground.algorithms_.size()),
 			"fonts/Marker Felt.ttf", 24);
 
-		for (int i = 0; i < user_units.size(); i++)
+		for (int i = 0; i < ground.algorithms_.size(); i++)
 		{
-			if (user_units[i].tank_.unit_name) {
+			if (ground.scene_.getUnits()[i].unit_name) {
 
 				//removeChildByTag(TAG_PLAYERS_UNITS);
 
-				user_units[i].set_position(Position(i * 100 + 50, 100));
+				ground.scene_.getUnits()[i].set_position(Position(i * 100 + 50, 100));
+				ground.scene_.getUnits()[i].get_body().get_forward_movement().set_pos(Position(i * 100 + 50, 100));
+				//CCLOG("FFFFF %f %f \n", ground.scene_.getUnits()[i].get_body().get_forward_movement().get_pos().get_x(), ground.scene_.getUnits()[i].get_body().get_forward_movement().get_pos().get_y());
 				
 				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
 				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
 				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
 				// Опять же это связано с тем, что нигде не возвращаются ссылки
-				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_body().bar_->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_body().sprite->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_body().bar_->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].unit_name->setTag(TAG_PLAYERS_UNITS);
+				ground.scene_.getUnits()[i].sprite->setTag(TAG_PLAYERS_UNITS);
 
-				int size = user_units[i].tank_.get_weapon().get_max_amount_bullets();
-				auto arr = user_units[i].tank_.get_weapon().get_bullets();
+				int size = ground.scene_.getUnits()[i].get_weapon().get_max_amount_bullets();
+				auto arr = ground.scene_.getUnits()[i].get_weapon().get_bullets();
 				//CCLOG("LATE");
 				for (int j = 0; j < size; j++) {
 					
@@ -149,15 +167,15 @@ void Visualizer::add_players() {
 				}
 				
 				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
-				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
+				ground.scene_.getUnits()[i].sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
 
 
-				addChild(user_units[i].tank_.sprite, 0);
-				addChild(user_units[i].tank_.unit_name);
-				addChild(user_units[i].tank_.get_body().sprite, 0);
-				addChild(user_units[i].tank_.get_body().bar_, 0);
-				addChild(user_units[i].tank_.get_weapon().sprite, 0);
-				addChild(user_units[i].tank_.get_weapon().bar_, 0);
+				addChild(ground.scene_.getUnits()[i].sprite, 0);
+				addChild(ground.scene_.getUnits()[i].unit_name);
+				addChild(ground.scene_.getUnits()[i].get_body().sprite, 0);
+				addChild(ground.scene_.getUnits()[i].get_body().bar_, 0);
+				addChild(ground.scene_.getUnits()[i].get_weapon().sprite, 0);
+				addChild(ground.scene_.getUnits()[i].get_weapon().bar_, 0);
 			} 
 			//else {
 			//	printf("err");
@@ -231,13 +249,20 @@ bool Visualizer::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	//std::thread thread1(&Visualizer::work, this);
-
-	//thread1.detach();
+	
 
 	
 	
 	add_players();
+
+
+	std::thread thread1(&Visualizer::work1, this, 1);
+	thread1.detach();
+
+	std::thread thread0(&Visualizer::work, this, 0);
+
+	thread0.detach();
+
 
 	auto eventListener = EventListenerKeyboard::create();
 
@@ -295,32 +320,33 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			this->user_units[control_tank].tank_.rotate_body(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_body(-5);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			this->user_units[control_tank].tank_.rotate_body(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_body(5);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
-			this->user_units[control_tank].tank_.rotate_weapon(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_E)) {
-			this->user_units[control_tank].tank_.rotate_weapon(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_weapon(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-			this->user_units[control_tank].tank_.move(1, false);
+			ground.scene_.getUnits()[control_tank].move(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
-			this->user_units[control_tank].tank_.move(1, true);
+			ground.scene_.getUnits()[control_tank].move(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
-			this->user_units[control_tank].tank_.center_weapon();
+			ground.scene_.getUnits()[control_tank].center_weapon();
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
-			this->user_units[control_tank].tank_.fire(1);
+			ground.scene_.getUnits()[control_tank].fire(1);
 		}
 	}
-	for (int i = 0; i < user_units.size(); i++) {
-		user_units[i].tank_.sinchronize();
+	//work1(1);
+	for (int i = 0; i < ground.scene_.getUnits().size(); i++) {
+		ground.scene_.getUnits()[i].sinchronize();
 	}
 }
 
