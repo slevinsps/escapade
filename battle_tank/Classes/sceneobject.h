@@ -14,6 +14,13 @@ public:
     Position(int x = 0, int y = 0);
     ~Position();
 
+	Position& operator=(const Position& t) {
+		this->x_ = t.get_x();
+		this->y_ = t.get_y();
+		return *this;
+	}
+
+
     bool operator == (const Position &other) const;
 
     bool operator != (const Position &other) const;

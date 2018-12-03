@@ -21,8 +21,7 @@ public:
 	ComponentProgressBar* bar_;
 
 	UnitComponent::~UnitComponent() {
-		//if (bar_)
-		//	delete bar_;
+		;
 	}
 
 protected:

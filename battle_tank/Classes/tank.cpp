@@ -43,9 +43,6 @@ void Tank::set_position(Position pos) {
 	body_.sprite->setPosition(vec);
 	weapon_.sprite->setPosition(vec);
 	sprite->setPosition(vec);
-
-	weapon_.position_ = position_;
-	body_.position_ = position_;
 }
 
 #include <cmath>

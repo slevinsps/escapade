@@ -28,6 +28,17 @@ public:
 
 	~Body();
 
+	Body& operator=(const Body& other) {
+		this->name_ = other.name_;
+		this->bar_ = other.bar_;
+		this->max_health_ = other.max_health_;
+		this->health_ = other.health_;
+
+		this->rotation_ = other.rotation_;
+		this->forward_ = other.forward_;
+		return *this;
+	}
+
     void apply_health_bonus(Bonus& bonus);
     void apply_speed_bonus(Bonus& bonus);
     void decrement_helth(int decr);
@@ -35,10 +46,14 @@ public:
     int get_health() const;
     int get_max_health() const;
 
-    RotateMovement get_rotation_movement() const;
+	void set_angle(float angle);
+
+	float get_angle() const;
+
+    RotateMovement& get_rotation_movement();
     void set_rotation_movement(RotateMovement);
 
-    ForwardMovement get_forward_movement() const;
+    ForwardMovement& get_forward_movement();
     void set_forward_movement(ForwardMovement);
 
 	void set_speed(int speed);
@@ -54,6 +69,7 @@ public:
 protected:
     int max_health_;
     int health_;
+
     RotateMovement rotation_;
     ForwardMovement forward_;
 };

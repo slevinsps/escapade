@@ -37,7 +37,7 @@ void Body::increment_helth(int incr) {
 	bar_->set_current(health_);
 }
 
-RotateMovement Body::get_rotation_movement() const{
+RotateMovement& Body::get_rotation_movement() {
 	return rotation_;
 }
 
@@ -45,8 +45,15 @@ void Body::set_rotation_movement(RotateMovement rm) {
 	rotation_ = rm;
 }
 
-ForwardMovement Body::get_forward_movement() const{
+ForwardMovement& Body::get_forward_movement() {
 	return forward_;
+}
+
+void Body::set_angle(float angle) {
+	this->rotation_.rotate(angle);
+}
+float Body::get_angle() const {
+	return this->rotation_.get_current_angle();
 }
 
 void Body::set_forward_movement(ForwardMovement fw) {
@@ -67,12 +74,12 @@ void Body::set_max_backspeed(int speed) {
 
 Body Body::getLightBody(Position pos) {
 	return Body(pos, 100, 2,
-		60, 40, 0, "light body",
+		2, 1, 0, "light body",
 		"tank_light_body");
 }
 
 Body Body::getHeavyBody(Position pos) {
 	return Body(pos, 300, 1,
-		20, 10, 0, "heavy body",
+		1, 1, 0, "heavy body",
 		"tank_heavy_body");
 }
