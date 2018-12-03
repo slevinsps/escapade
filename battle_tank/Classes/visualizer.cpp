@@ -2,7 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include <iostream>
 #include <thread>
-
+/*
 bool Visualizer::operator == (const Visualizer &other) const
 {
     return this->base_get_scene() == other.base_get_scene();
@@ -30,7 +30,7 @@ Visualizer::Visualizer(const Visualizer &visualizer) {
 Visualizer::Visualizer(Visualizer &&visualizer) {
 	this->set_scene(visualizer.base_get_scene());
 }
-
+*/
 
 // Ниже кокосовские вещи
 
@@ -92,84 +92,58 @@ void Visualizer::work() {
 void Visualizer::updateTimer(float dt)
 {
 	// Получается из комнаты. А пока так.
-	static seconds time = 60s;
+	static seconds time = 10s;
 	if (time <= 0s)
 	{
-		//this->scheduleOnce(schedule_selector(Scene::GoToScene), 0);
-
 		unschedule(schedule_selector(Visualizer::updateTimer));
+
+		/*
+		auto myScene = Scene::create();
+
+		// Смена выцветанием
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5, myScene, Color3B(0, 255, 255)));
+
+		// Кувырок по X
+		Director::getInstance()->replaceScene(TransitionFlipX::create(2, myScene));
+		*/
 	}
 	time--;
 	label_timer->setString(std::to_string(time.count()));
 }
 
 void Visualizer::add_players() {
-	if (user_units.size() == 0) {
-		load_user_units();
-	}
 	
-	if (user_units.size() == 0) {
-		amount = cocos2d::Label::createWithTTF("No players", "fonts/Marker Felt.ttf", 24);
+	int unit_size = ground.scene_.getUnits().size();
+	if (unit_size == 0) {
+		amount = cocos2d::Label::createWithTTF("Нет игроков", "fonts/Marker Felt.ttf", 12);
 	}
 	else {
 		control_tank = 0;
-		amount = cocos2d::Label::createWithTTF("Players:"+
-			std::to_string(user_units.size()),
-			"fonts/Marker Felt.ttf", 24);
+		amount = cocos2d::Label::createWithTTF("Игроков:"+
+		std::to_string(unit_size),
+		"fonts/Marker Felt.ttf", 12);
 
-		for (int i = 0; i < user_units.size(); i++)
-		{
-			if (user_units[i].tank_.unit_name) {
-
-				//removeChildByTag(TAG_PLAYERS_UNITS);
-
-				user_units[i].set_position(Position(i * 100 + 50, 100));
-				
-				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
-				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
-				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
-				// Опять же это связано с тем, что нигде не возвращаются ссылки
-				user_units[i].tank_.get_body().sprite->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_body().bar_->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.unit_name->setTag(TAG_PLAYERS_UNITS);
-				user_units[i].tank_.sprite->setTag(TAG_PLAYERS_UNITS);
-
-				int size = user_units[i].tank_.get_weapon().get_max_amount_bullets();
-				auto arr = user_units[i].tank_.get_weapon().get_bullets();
-				//CCLOG("LATE");
-				for (int j = 0; j < size; j++) {
-					
-					if (arr[j].sprite) {
-						arr[j].sprite->setTag(TAG_PLAYERS_UNITS);
-						addChild(arr[j].sprite, 0);
-					}
-					else { CCLOG("nullptr found"); }
-				}
-				
-				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
-				user_units[i].tank_.sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
-
-
-				addChild(user_units[i].tank_.sprite, 0);
-				addChild(user_units[i].tank_.unit_name);
-				addChild(user_units[i].tank_.get_body().sprite, 0);
-				addChild(user_units[i].tank_.get_body().bar_, 0);
-				addChild(user_units[i].tank_.get_weapon().sprite, 0);
-				addChild(user_units[i].tank_.get_weapon().bar_, 0);
-			} 
-			//else {
-			//	printf("err");
-			//}
+		int i = 0; // Уникальный идентификатор лежим в теге, удобно
+		// Проблема с ссылками поправлена
+		for (Unit& unit : ground.scene_.getUnits()) {
+			unit.set_position(Position(i * 100 + 50, 100));
+			std::vector<Node*> nodes;
+			unit.SceneNodes(nodes);
+			for (Node* node : nodes) {
+				node->setTag(TAG_PLAYERS_UNITS + i);
+				addChild(node, 0);
+			}
+			i++;
 		}
 	}
-	//amount = cocos2d::Label::createWithTTF("Hello World:" + user_units.size(), "fonts/Marker Felt.ttf", 24);
-	
-	removeChildByTag(TAG_PLAYERS_TABLE);
+	//removeChildByTag(TAG_PLAYERS_TABLE);
 	amount->setTag(TAG_PLAYERS_TABLE);
-	amount->setPosition(Vec2(100, 250));
+	amount->setPosition(Vec2(30, 280));
 	addChild(amount);
+	CCLOG("sooome %d %d", unit_size * roomLayer_->font_size, roomLayer_->font_size);
+	roomLayer_->setPosition(Vec2(30, 270 - unit_size * roomLayer_->font_size)); //240
+	addChild(roomLayer_);
+
 }
 #include "ui/CocosGUI.h"
 // on "init" you need to initialize your instance
@@ -277,9 +251,56 @@ bool Visualizer::init()
 	colorLayer->initWithColor(color);
 	addChild(colorLayer, -100);
 
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(Visualizer::onContactBegin, this);
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+	CCLOG("SEEEEET");
+
+	//contactListener->onContactBegin = CC_CALLBACK_1(TScene::onContactBegan, this);
+	//this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+
 	this->schedule(schedule_selector(Visualizer::updateTimer), 1.f);
 
 	this->scheduleUpdate();
+	return true;
+}
+
+bool Visualizer::onContactBegin(cocos2d::PhysicsContact &contact)
+{
+	PhysicsBody *a = contact.getShapeA()->getBody();
+	PhysicsBody *b = contact.getShapeB()->getBody();
+
+	if ((a->getCategoryBitmask() == BITMASK_ALIVE_UNIT) &&
+		(b->getCategoryBitmask() == BITMASK_BULLET)) {
+		int index_defender = a->getNode()->getTag() - TAG_PLAYERS_UNITS;
+	    int index_attacker = b->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		
+		ground.attack(index_defender, index_attacker);
+		roomLayer_->update_info(index_defender);
+		roomLayer_->update_info(index_attacker);
+
+
+	}
+	else if ((a->getCategoryBitmask() == BITMASK_BULLET) &&
+		(b->getCategoryBitmask() == BITMASK_ALIVE_UNIT)) {
+		int index_defender = b->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		int index_attacker = a->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		
+		ground.attack(index_defender, index_attacker);
+		roomLayer_->update_info(index_defender);
+		roomLayer_->update_info(index_attacker);
+
+		CCLOG("damaged %d and compare %d - %d", ground.room_.players_[index_attacker].get_damage_done(),
+			roomLayer_->room_->players_[index_attacker].get_damage_done(),
+			roomLayer_->room_, &ground.room_);
+	}
+	else if (a->getCategoryBitmask() == BITMASK_ALIVE_UNIT &&
+			 b->getCategoryBitmask() == BITMASK_ALIVE_UNIT) {
+		//CCLOG("TANKS FOUND HAS OCCURED");
+		;
+	}
+
+	CCLOG("NOOO %d and %d", a->getCategoryBitmask(), b->getCategoryBitmask());
 	return true;
 }
 
@@ -295,32 +316,34 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			this->user_units[control_tank].tank_.rotate_body(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_body(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			this->user_units[control_tank].tank_.rotate_body(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_body(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
-			this->user_units[control_tank].tank_.rotate_weapon(1, false);
+			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_E)) {
-			this->user_units[control_tank].tank_.rotate_weapon(1, true);
+			ground.scene_.getUnits()[control_tank].rotate_weapon(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-			this->user_units[control_tank].tank_.move(1, false);
+			ground.scene_.getUnits()[control_tank].move(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
-			this->user_units[control_tank].tank_.move(1, true);
+			ground.scene_.getUnits()[control_tank].move(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
-			this->user_units[control_tank].tank_.center_weapon();
+			ground.scene_.getUnits()[control_tank].center_weapon();
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
-			this->user_units[control_tank].tank_.fire(1);
+			ground.scene_.getUnits()[control_tank].fire(1);
 		}
 	}
-	for (int i = 0; i < user_units.size(); i++) {
-		user_units[i].tank_.sinchronize();
+	for (int i = 0; i < ground.scene_.getUnits().size(); i++) {
+		if (ground.scene_.getUnits()[i].is_alive()) {
+			ground.scene_.getUnits()[i].sinchronize();
+		}
 	}
 }
 

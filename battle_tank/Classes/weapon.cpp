@@ -4,6 +4,7 @@ Weapon::Weapon(Position position,
 	int damage,
 	milliseconds recharge_one,
 	milliseconds recharge_all,
+	int type,
 	float angle,
 	int amount_bullets,
 	float rotation_speed,
@@ -18,10 +19,16 @@ Weapon::Weapon(Position position,
 {
 	bar_ = new ComponentProgressBar(position, amount_bullets, "recharge");
 	last_time_shooted = high_resolution_clock::now() - recharge_one_;
-    for(int i = 0; i < max_amount_bullets_; ++i) {
-        Bullet bullet(position);
-        bullets_.push_back(bullet);
-    }
+	if (type == BULLET_TYPE_LIGHT) {
+		for (int i = 0; i < max_amount_bullets_; ++i) {
+			bullets_.push_back(Bullet::lightBullet(position));
+		}
+	}
+	else {
+		for (int i = 0; i < max_amount_bullets_; ++i) {
+			bullets_.push_back(Bullet::heavyBullet(position));
+		}
+	}
 		
 }
 
@@ -99,13 +106,13 @@ void Weapon::set_angle(float angle) {
 }
 
 Weapon Weapon::getLightWeapon(Position pos) {
-	return Weapon(pos, 10, 40ms, 300ms, 0, 50,
+	return Weapon(pos, 1, 40ms, 300ms, BULLET_TYPE_LIGHT, 0, 50,
 		2, "light weapon",
 		"tank_light_weapon");
 }
 
 Weapon Weapon::getHeavyWeapon(Position pos) {
-	return Weapon(pos, 40, 1000ms, 2000ms, 0, 4,
+	return Weapon(pos, 10, 1000ms, 2000ms, BULLET_TYPE_HEAVY, 0, 4,
 		1 , "hard weapon",
 		"tank_heavy_weapon");
 }

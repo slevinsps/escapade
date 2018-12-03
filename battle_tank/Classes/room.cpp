@@ -1,38 +1,28 @@
 #include "room.h"
 
-Room::Room(int max_amount_of_players, int max_of_matches):
-    static_parameters_(StaticRoomParameters(max_amount_of_players, 1,1,1,max_of_matches)),
-    isEverybodyOK_(false){
-   }
+Room::Room(StaticRoomParameters st,
+	DynamicRoomParameters dp,
+	std::vector<Player> players) :
+	static_parameters_(st),
+	dynamic_parameters_(dp),
+	players_(players){};
+
+Room Room::offline(User user, int amount) {
+	StaticRoomParameters sp = StaticRoomParameters::default();
+	DynamicRoomParameters dp(amount);
+	std::vector<Player> players(amount, Player(user, -1));
+
+	return Room(sp, dp, players);
+}
 
 bool Room::operator == (const Room &other) const
 {
-    return this->users_ == other.getUsers();
+    return this->players_ == other.players_;
 }
 
 bool Room::operator != (const Room &other) const
 {
-    return this->users_ != other.getUsers();
-}
-
-std::vector<User> Room::getUsers() const {
-    return users_;
+    return this->players_ != other.players_;
 }
 
 Room::~Room(){};
-
-int Room::load(Socket socket) {return 0;};
-int Room::send(Socket socket) {return 0;};
-
-int Room::add_user(User& user) {
-    users_.push_back(user);
-    return SUCCESS;
-}
-
-int Room::find_user(User &) {
-     return SUCCESS;
-}
-
-int Room::remove_user(User&) {
-     return SUCCESS;
-}

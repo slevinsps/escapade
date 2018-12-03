@@ -1,31 +1,27 @@
 #include "dynamic_room_parameters.h"
 
-DynamicRoomParameters::DynamicRoomParameters() :
-                 cur_amount_of_players_(0),
-                 status_(0),
-                 cur_amount_of_matches(0){}
+DynamicRoomParameters::DynamicRoomParameters(size_t players) { start(players); };
 
 DynamicRoomParameters::~DynamicRoomParameters(){}
 
-int DynamicRoomParameters::get_amount_of_players() const{
-    return cur_amount_of_players_;
+void DynamicRoomParameters::start(size_t players) {
+	cur_amount_of_players_ = players;
+	cur_amount_of_matches = 0;
 }
 
-void DynamicRoomParameters::set_amount_of_players(int players) {
-    cur_amount_of_players_ = players;
+void DynamicRoomParameters::new_match(size_t players) {
+	cur_amount_of_matches++;
+	cur_amount_of_players_ = players;
 }
 
-int DynamicRoomParameters::get_status() const {
-     return status_;
-}
-void DynamicRoomParameters::set_status(int status) {
-    status_ = status;
+void DynamicRoomParameters::kill() {
+	cur_amount_of_players_--;
 }
 
-int DynamicRoomParameters::get_amount_of_matches() const {
-     return cur_amount_of_matches;
+int DynamicRoomParameters::players() const {
+	return cur_amount_of_players_;
 }
 
-void DynamicRoomParameters::set_amount_of_matches(int matches) {
-     cur_amount_of_matches = matches;
+int DynamicRoomParameters::matchs() const {
+	return cur_amount_of_matches;
 }

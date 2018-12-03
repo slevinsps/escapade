@@ -23,32 +23,33 @@ enum shot_types {
 class Unit : public SceneObject
 {
 private:
-    int team_id_;
     std::string name_;
 	int type_;
-    Player player_;
+	bool runnable; // Флаг контроля
 
 public:
 	cocos2d::Label* unit_name;
 
     // Явное указание игрока и команды
-	Unit(Player player, int _team_id = 0,
-		std::string name = "unnamed unit",
+	Unit(std::string name = "unnamed unit",
 		int type = LIGHT,
          Position _position = Position(),
          std::string texture = "circle");
 
     ~Unit();
 
-    // Является ли юнит союзником
-    bool is_friend(const Unit& unit) const;
+	// Обязательная функция запуска, ставит runnable в true
+	// если runnable false поток управления прекращает работу
+	void launch();
 
-    int get_team_id() const;
+	// Вызывается при уничтожении юнита, ставит runnable в false
+	void destroy();
+	// Все сеттеры доступны только тогда, когда runnable = false
+	
+	// Есть ли управление
+	bool is_runnable() const;
 
     std::string get_name() const;
-
-    Player get_player() const;
-    void set_player(Player player);
 
     bool operator == (const Unit &other) const;
 
@@ -64,8 +65,6 @@ public:
 
 	virtual void set_position(Position pos) {};
 
-	void set_team_id(int id);
-
 	// power - процент от максимальной скорости
 	// back - флаг движения назад
 	virtual void move(float power, bool back) {};
@@ -76,13 +75,30 @@ public:
 
 	// power - процент от максимальной скорости
 	// clockwise - флаг движения по часовой
-	virtual void rotate_weapon(float power, bool clockwise) {};
+	virtual void rotate_weapon(float power, bool clockwise) {}
 
 	// Отцентрировать пушку
 	virtual void center_weapon() {};
 
 	// Тип выстрела - см. структуру shot_types
     virtual void fire(int shot) {};
+
+	// Нанести урон собственному танку
+	virtual void damage(int damage) {};
+
+	// Проверить, жив ли танк
+	virtual bool is_alive() { return false; };
+
+	// Ниже классы для визуализатора
+
+	// Массив объектов cocos2d::сцены(для добавления на сцену)
+	virtual void SceneNodes(std::vector<cocos2d::Node*>&) {}
+
+	// Получить компоненты юнита, участвующие в коллизиях
+	virtual void ColiisionObjects(std::vector<cocos2d::PhysicsBody*>&){}
+
+	// Получить атакующие объекты юнита(для танков - пули)
+	virtual void Attackers(std::vector<cocos2d::PhysicsBody*>&) {}
 };
 
 #endif // UNIT_H

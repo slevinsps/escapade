@@ -29,10 +29,12 @@ int Body::get_max_health() const{
 
 void Body::decrement_helth(int decr) {
 	health_ -= decr;
+	bar_->set_current(health_);
 }
 
 void Body::increment_helth(int incr) {
 	health_ += incr;
+	bar_->set_current(health_);
 }
 
 RotateMovement Body::get_rotation_movement() const{

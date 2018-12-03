@@ -2,7 +2,7 @@
 #define ROTATE_MOVEMENT_H
 
 #include <thread>
-#include <Windows.h>
+#include "cocos2d.h"
 
 #include "movement.h"
 

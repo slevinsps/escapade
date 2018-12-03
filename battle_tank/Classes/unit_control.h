@@ -8,6 +8,7 @@
 class UnitControl : public BaseUnitControl
 {
 public:
+
     UnitControl(){}
     ~UnitControl(){}
 
@@ -16,12 +17,13 @@ public:
 	// Сначала вызывается init, потом run,
 	// init необходим для инициализации переменных
 
-	void init(Unit& unit) {
+	void init(Unit &unit) override {
 		unit.setModel(LIGHT);
 		unit.setName("No name");
+		unit.launch(); // не удалять лаунч, иначе ваш танк сразу потеряет управление
 	}
 
-    void run(Unit& unit){
+    void run(Unit &unit) override {
 		;
     }
 };

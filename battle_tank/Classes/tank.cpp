@@ -1,10 +1,9 @@
 #include "tank.h"
 
-Tank::Tank(Player player,
-	int team_id, std::string name, int type,
+Tank::Tank(std::string name, int type,
 	Position position,
 	std::string texture) :
-	Unit(player, team_id, name, type, 
+	Unit(name, type, 
 		position, texture),
 	weapon_(Weapon::getLightWeapon()) {
 	
@@ -12,7 +11,9 @@ Tank::Tank(Player player,
 }
 
 void Tank::setModel(int type) {
-	
+	if (is_runnable()) {
+		return;
+	}
 	if (type == LIGHT) {
 		weapon_ = Weapon::getLightWeapon(position_);
 		body_ = Body::getLightBody(position_);
@@ -32,6 +33,9 @@ Body& Tank::get_body() {
 
 #include "cocos2d.h"
 void Tank::set_position(Position pos) {
+	if (!is_runnable()) {
+		return;
+	}
 	cocos2d::Vec2 vec = pos.toVec2();
 	cocos2d::Vec2 vec2 = cocos2d::Vec2(vec.x, vec.y + 20);
 
@@ -47,6 +51,9 @@ void Tank::set_position(Position pos) {
 #include <cmath>
 
 void Tank::move(float power, bool back) {
+	if (!is_runnable()) {
+		return;
+	}
 	if (!(power >= 0.f && power < 1.f)) {
 		power = 1.f;
 	}
@@ -70,11 +77,15 @@ void Tank::move(float power, bool back) {
 
 	physic->setVelocity(cocos2d::Vec2(ax, ay));
 	body_.set_speed(powf(ax * ax + ay * ay, 0.5f));
+	sinchronize();
 
 	//weapon_.sprite->getPhysicsBody()->setVelocity(cocos2d::Vec2(ax, ay));
 }
 
 void Tank::rotate_body(float power, bool clockwise) {
+	if (!is_runnable()) {
+		return;
+	}
 	float body_angle = body_.sprite->getRotation();
 
 	float anle_add = body_.get_rotation_movement().get_speed() * power;
@@ -89,6 +100,9 @@ void Tank::rotate_body(float power, bool clockwise) {
 }
 
 void Tank::rotate_weapon(float power, bool clockwise) {
+	if (!is_runnable()) {
+		return;
+	}
 	float weapon_angle = weapon_.get_angle();
 
 	float anle_add = weapon_.get_angle_speed() * power;
@@ -103,7 +117,9 @@ void Tank::rotate_weapon(float power, bool clockwise) {
 }
 
 void Tank::sinchronize() {
-
+	if (!is_runnable()) {
+		return;
+	}
 	// Ставим пушку в то же место, что и корпус
 	body_.sprite->getPhysicsBody()->setAngularVelocity(0);
 	body_.sprite->getPhysicsBody()->resetForces();
@@ -112,6 +128,7 @@ void Tank::sinchronize() {
 	float x = pos.x;
 	float y = pos.y;
 
+	body_.sprite->setPosition(pos);
 	weapon_.sprite->setPosition(pos);
 	sprite->setPosition(pos);
 	unit_name->setPosition(x, y + 15);
