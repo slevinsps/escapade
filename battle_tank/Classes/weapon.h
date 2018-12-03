@@ -25,6 +25,7 @@ public:
 		int damage,
 		milliseconds recharge_one,
 		milliseconds recharge_all,
+		int type,
 		float angle = 0,
 		int amount_bullets = WEAPON_AMOUNT_BULLETS,
 		float rotation_speed = WEAPON_ROTATION_SPEED,

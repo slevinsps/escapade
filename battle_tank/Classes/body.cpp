@@ -29,10 +29,12 @@ int Body::get_max_health() const {
 
 void Body::decrement_helth(int decr) {
 	health_ -= decr;
+	bar_->set_current(health_);
 }
 
 void Body::increment_helth(int incr) {
 	health_ += incr;
+	bar_->set_current(health_);
 }
 
 RotateMovement& Body::get_rotation_movement() {
@@ -45,6 +47,13 @@ void Body::set_rotation_movement(RotateMovement rm) {
 
 ForwardMovement& Body::get_forward_movement() {
 	return forward_;
+}
+
+void Body::set_angle(float angle) {
+	this->rotation_.rotate(angle);
+}
+float Body::get_angle() const {
+	return this->rotation_.get_current_angle();
 }
 
 void Body::set_forward_movement(ForwardMovement fw) {

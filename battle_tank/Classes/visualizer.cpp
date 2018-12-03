@@ -2,7 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include <iostream>
 #include <thread>
-
+/*
 bool Visualizer::operator == (const Visualizer &other) const
 {
     return this->base_get_scene() == other.base_get_scene();
@@ -30,25 +30,25 @@ Visualizer::Visualizer(const Visualizer &visualizer) {
 Visualizer::Visualizer(Visualizer &&visualizer) {
 	this->set_scene(visualizer.base_get_scene());
 }
+*/
 
-
-// Ниже кокосовские вещи
+// ГЌГЁГ¦ГҐ ГЄГ®ГЄГ®Г±Г®ГўГ±ГЄГЁГҐ ГўГҐГ№ГЁ
 
 USING_NS_CC;
 
 Scene* Visualizer::createScene()
 {
-	// Создаём сцену с физикой
+	// Г‘Г®Г§Г¤Г ВёГ¬ Г±Г¶ГҐГ­Гі Г± ГґГЁГ§ГЁГЄГ®Г©
 	auto scene = Scene::createWithPhysics();
-	// Устанавливаем DEBUGDRAW_ALL, чтобы границы всех физических объектов обводились красной линией
+	// Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ DEBUGDRAW_ALL, Г·ГІГ®ГЎГ» ГЈГ°Г Г­ГЁГ¶Г» ГўГ±ГҐГµ ГґГЁГ§ГЁГ·ГҐГ±ГЄГЁГµ Г®ГЎГєГҐГЄГІГ®Гў Г®ГЎГўГ®Г¤ГЁГ«ГЁГ±Гј ГЄГ°Г Г±Г­Г®Г© Г«ГЁГ­ГЁГҐГ©
 	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
-	// Создаём слой
+	// Г‘Г®Г§Г¤Г ВёГ¬ Г±Г«Г®Г©
 	auto layer = Visualizer::create();
-	// и передаём в него указатель на физический мир
+	// ГЁ ГЇГҐГ°ГҐГ¤Г ВёГ¬ Гў Г­ГҐГЈГ® ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  ГґГЁГ§ГЁГ·ГҐГ±ГЄГЁГ© Г¬ГЁГ°
 	layer->SetPhysicsWorld(scene->getPhysicsWorld());
 
-	// Добавляем созданный слой
+	// Г„Г®ГЎГ ГўГ«ГїГҐГ¬ Г±Г®Г§Г¤Г Г­Г­Г»Г© Г±Г«Г®Г©
 	scene->addChild(layer);
 
 	return scene;
@@ -110,84 +110,58 @@ void Visualizer::work1(int i) {
 
 void Visualizer::updateTimer(float dt)
 {
-	// Получается из комнаты. А пока так.
-	static seconds time = 60s;
+	// ГЏГ®Г«ГіГ·Г ГҐГІГ±Гї ГЁГ§ ГЄГ®Г¬Г­Г ГІГ». ГЂ ГЇГ®ГЄГ  ГІГ ГЄ.
+	static seconds time = 10s;
 	if (time <= 0s)
 	{
-		//this->scheduleOnce(schedule_selector(Scene::GoToScene), 0);
-
 		unschedule(schedule_selector(Visualizer::updateTimer));
+
+		/*
+		auto myScene = Scene::create();
+
+		// Г‘Г¬ГҐГ­Г  ГўГ»Г¶ГўГҐГІГ Г­ГЁГҐГ¬
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5, myScene, Color3B(0, 255, 255)));
+
+		// ГЉГіГўГ»Г°Г®ГЄ ГЇГ® X
+		Director::getInstance()->replaceScene(TransitionFlipX::create(2, myScene));
+		*/
 	}
 	time--;
 	label_timer->setString(std::to_string(time.count()));
 }
 
 void Visualizer::add_players() {
-	
-	if (ground.algorithms_.size() == 0) {
-		amount = cocos2d::Label::createWithTTF("No players", "fonts/Marker Felt.ttf", 24);
+	int unit_size = ground.scene_.getUnits().size();
+	if (unit_size == 0) {
+		amount = cocos2d::Label::createWithTTF("ГЌГҐГІ ГЁГЈГ°Г®ГЄГ®Гў", "fonts/Marker Felt.ttf", 12);
 	}
 	else {
 		control_tank = 0;
-		amount = cocos2d::Label::createWithTTF("Players:"+
-			std::to_string(ground.algorithms_.size()),
-			"fonts/Marker Felt.ttf", 24);
+		amount = cocos2d::Label::createWithTTF("Г€ГЈГ°Г®ГЄГ®Гў:"+
+		std::to_string(unit_size),
+		"fonts/Marker Felt.ttf", 12);
 
-		for (int i = 0; i < ground.algorithms_.size(); i++)
-		{
-			if (ground.scene_.getUnits()[i].unit_name) {
-
-				//removeChildByTag(TAG_PLAYERS_UNITS);
-
-				ground.scene_.getUnits()[i].set_position(Position(i * 100 + 50, 100));
-				ground.scene_.getUnits()[i].get_body().get_forward_movement().set_pos(Position(i * 100 + 50, 100));
-				//CCLOG("FFFFF %f %f \n", ground.scene_.getUnits()[i].get_body().get_forward_movement().get_pos().get_x(), ground.scene_.getUnits()[i].get_body().get_forward_movement().get_pos().get_y());
-				
-				// Данные поступают не по ссылкам, поэтому на самом деле теги не ставятся
-				// надо написать функцию set_tag в user_bundle, которая вызовет set_tag в
-				// tank, которая поставит тег всем, кроме пуль. Пулям тег поставить должна пушка
-				// Опять же это связано с тем, что нигде не возвращаются ссылки
-				ground.scene_.getUnits()[i].get_body().sprite->setTag(TAG_PLAYERS_UNITS);
-				ground.scene_.getUnits()[i].get_body().bar_->setTag(TAG_PLAYERS_UNITS);
-				ground.scene_.getUnits()[i].get_weapon().sprite->setTag(TAG_PLAYERS_UNITS);
-				ground.scene_.getUnits()[i].get_weapon().bar_->setTag(TAG_PLAYERS_UNITS);
-				ground.scene_.getUnits()[i].unit_name->setTag(TAG_PLAYERS_UNITS);
-				ground.scene_.getUnits()[i].sprite->setTag(TAG_PLAYERS_UNITS);
-
-				int size = ground.scene_.getUnits()[i].get_weapon().get_max_amount_bullets();
-				auto arr = ground.scene_.getUnits()[i].get_weapon().get_bullets();
-				//CCLOG("LATE");
-				for (int j = 0; j < size; j++) {
-					
-					if (arr[j].sprite) {
-						arr[j].sprite->setTag(TAG_PLAYERS_UNITS);
-						addChild(arr[j].sprite, 0);
-					}
-					else { CCLOG("nullptr found"); }
-				}
-				
-				//auto tintBy = TintBy::create(2.0f, 120.0f, 232.0f, 254.0f);
-				ground.scene_.getUnits()[i].sprite->runAction(TintBy::create(2.0f, rand() % 255, rand() % 255, rand() % 255));
-
-
-				addChild(ground.scene_.getUnits()[i].sprite, 0);
-				addChild(ground.scene_.getUnits()[i].unit_name);
-				addChild(ground.scene_.getUnits()[i].get_body().sprite, 0);
-				addChild(ground.scene_.getUnits()[i].get_body().bar_, 0);
-				addChild(ground.scene_.getUnits()[i].get_weapon().sprite, 0);
-				addChild(ground.scene_.getUnits()[i].get_weapon().bar_, 0);
-			} 
-			//else {
-			//	printf("err");
-			//}
+		int i = 0; // Г“Г­ГЁГЄГ Г«ГјГ­Г»Г© ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г° Г«ГҐГ¦ГЁГ¬ Гў ГІГҐГЈГҐ, ГіГ¤Г®ГЎГ­Г®
+		// ГЏГ°Г®ГЎГ«ГҐГ¬Г  Г± Г±Г±Г»Г«ГЄГ Г¬ГЁ ГЇГ®ГЇГ°Г ГўГ«ГҐГ­Г 
+		for (Unit& unit : ground.scene_.getUnits()) {
+			unit.set_position(Position(i * 100 + 50, 100));
+			std::vector<Node*> nodes;
+			unit.SceneNodes(nodes);
+			for (Node* node : nodes) {
+				node->setTag(TAG_PLAYERS_UNITS + i);
+				addChild(node, 0);
+			}
+			i++;
 		}
 	}
-	//amount = cocos2d::Label::createWithTTF("Hello World:" + user_units.size(), "fonts/Marker Felt.ttf", 24);
-	
-	removeChildByTag(TAG_PLAYERS_TABLE);
+	//removeChildByTag(TAG_PLAYERS_TABLE);
 	amount->setTag(TAG_PLAYERS_TABLE);
-	amount->setPosition(Vec2(100, 250));
+	amount->setPosition(Vec2(30, 280));
 	addChild(amount);
+	CCLOG("sooome %d %d", unit_size * roomLayer_->font_size, roomLayer_->font_size);
+	roomLayer_->setPosition(Vec2(30, 270 - unit_size * roomLayer_->font_size)); //240
+	addChild(roomLayer_);
+
 }
 #include "ui/CocosGUI.h"
 // on "init" you need to initialize your instance
@@ -204,21 +178,21 @@ bool Visualizer::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/*
-	Физика - https://habr.com/post/342478/
+	Г”ГЁГ§ГЁГЄГ  - https://habr.com/post/342478/
 	*/
 
-	//Создаём рамку размером visibleSize, то есть во весь экран, с
-	//физическим материалом по умолчанию и толщиной рамки 3 пикселя
+	//Г‘Г®Г§Г¤Г ВёГ¬ Г°Г Г¬ГЄГі Г°Г Г§Г¬ГҐГ°Г®Г¬ visibleSize, ГІГ® ГҐГ±ГІГј ГўГ® ГўГҐГ±Гј ГЅГЄГ°Г Г­, Г±
+	//ГґГЁГ§ГЁГ·ГҐГ±ГЄГЁГ¬ Г¬Г ГІГҐГ°ГЁГ Г«Г®Г¬ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ ГЁ ГІГ®Г«Г№ГЁГ­Г®Г© Г°Г Г¬ГЄГЁ 3 ГЇГЁГЄГ±ГҐГ«Гї
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize,
 		PHYSICSBODY_MATERIAL_DEFAULT, 7);
-	// Создаём новый узел, то есть объект сцены
+	// Г‘Г®Г§Г¤Г ВёГ¬ Г­Г®ГўГ»Г© ГіГ§ГҐГ«, ГІГ® ГҐГ±ГІГј Г®ГЎГєГҐГЄГІ Г±Г¶ГҐГ­Г»
 	auto edgeNode = Node::create();
-	// Устанавливаем на позицию по центру экрана
+	// Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ Г­Г  ГЇГ®Г§ГЁГ¶ГЁГѕ ГЇГ® Г¶ГҐГ­ГІГ°Гі ГЅГЄГ°Г Г­Г 
 	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 25);
-	// Добавляем к узлу физическое тело
+	// Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГЄ ГіГ§Г«Гі ГґГЁГ§ГЁГ·ГҐГ±ГЄГ®ГҐ ГІГҐГ«Г®
 	edgeNode->setPhysicsBody(edgeBody);
 
-	//Добавляем узел к нашей сцене
+	//Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГіГ§ГҐГ« ГЄ Г­Г ГёГҐГ© Г±Г¶ГҐГ­ГҐ
 	this->addChild(edgeNode);
 
 	/////////////////////////////
@@ -266,7 +240,7 @@ bool Visualizer::init()
 
 	auto eventListener = EventListenerKeyboard::create();
 
-	// Для того, чтобы можно было держать кнопку - https://www.gamefromscratch.com/post/2014/10/07/Cocos2d-x-Tutorial-Series-Handling-the-Keyboard.aspx
+	// Г„Г«Гї ГІГ®ГЈГ®, Г·ГІГ®ГЎГ» Г¬Г®Г¦Г­Г® ГЎГ»Г«Г® Г¤ГҐГ°Г¦Г ГІГј ГЄГ­Г®ГЇГЄГі - https://www.gamefromscratch.com/post/2014/10/07/Cocos2d-x-Tutorial-Series-Handling-the-Keyboard.aspx
 	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
 
 	eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
@@ -296,15 +270,62 @@ bool Visualizer::init()
 
 	label_timer->setString(std::to_string(60));
 
-	// Установка цвета
+	// Г“Г±ГІГ Г­Г®ГўГЄГ  Г¶ГўГҐГІГ 
 	auto color = Color4B(1, 50, 32, 255);
 	auto colorLayer = new cocos2d::LayerColor;
 	colorLayer->initWithColor(color);
 	addChild(colorLayer, -100);
 
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(Visualizer::onContactBegin, this);
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+	CCLOG("SEEEEET");
+
+	//contactListener->onContactBegin = CC_CALLBACK_1(TScene::onContactBegan, this);
+	//this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+
 	this->schedule(schedule_selector(Visualizer::updateTimer), 1.f);
 
 	this->scheduleUpdate();
+	return true;
+}
+
+bool Visualizer::onContactBegin(cocos2d::PhysicsContact &contact)
+{
+	PhysicsBody *a = contact.getShapeA()->getBody();
+	PhysicsBody *b = contact.getShapeB()->getBody();
+
+	if ((a->getCategoryBitmask() == BITMASK_ALIVE_UNIT) &&
+		(b->getCategoryBitmask() == BITMASK_BULLET)) {
+		int index_defender = a->getNode()->getTag() - TAG_PLAYERS_UNITS;
+	    int index_attacker = b->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		
+		ground.attack(index_defender, index_attacker);
+		roomLayer_->update_info(index_defender);
+		roomLayer_->update_info(index_attacker);
+
+
+	}
+	else if ((a->getCategoryBitmask() == BITMASK_BULLET) &&
+		(b->getCategoryBitmask() == BITMASK_ALIVE_UNIT)) {
+		int index_defender = b->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		int index_attacker = a->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		
+		ground.attack(index_defender, index_attacker);
+		roomLayer_->update_info(index_defender);
+		roomLayer_->update_info(index_attacker);
+
+		CCLOG("damaged %d and compare %d - %d", ground.room_.players_[index_attacker].get_damage_done(),
+			roomLayer_->room_->players_[index_attacker].get_damage_done(),
+			roomLayer_->room_, &ground.room_);
+	}
+	else if (a->getCategoryBitmask() == BITMASK_ALIVE_UNIT &&
+			 b->getCategoryBitmask() == BITMASK_ALIVE_UNIT) {
+		//CCLOG("TANKS FOUND HAS OCCURED");
+		;
+	}
+
+	CCLOG("NOOO %d and %d", a->getCategoryBitmask(), b->getCategoryBitmask());
 	return true;
 }
 

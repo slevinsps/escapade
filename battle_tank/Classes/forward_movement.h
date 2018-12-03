@@ -23,6 +23,24 @@ public:
 
     ~ForwardMovement();
 
+	ForwardMovement(const ForwardMovement& t) {
+		this->max_back_speed_ = t.max_back_speed_;
+		this->current_speed_ = t.current_speed_;
+		this->max_speed_ = t.max_speed_;
+		this->pos_object_ = t.pos_object_;
+		this->stop = t.stop;
+	}
+
+	ForwardMovement& operator=(const ForwardMovement& t) {
+		this->max_back_speed_ = t.max_back_speed_;
+		this->current_speed_ = t.current_speed_;
+		this->max_speed_ = t.max_speed_;
+		this->pos_object_ = t.pos_object_;
+		this->stop = t.stop;
+
+		return *this;
+	}
+
 	int getSpeed() const;
 	int getMaxSpeed() const;
 	int getMaxBackSpeed() const;
@@ -38,15 +56,16 @@ public:
 	//void set_pos(Position p) { pos_ = p; );
 	void move_to_distace(float distace, float speed, float angle);
 	void move(float distace, float speed, float angle);
-    bool operator == (const ForwardMovement &v1);
+
+  bool operator == (const ForwardMovement &v1);
 
 private:
 	std::mutex g_move_tread;
-    int max_back_speed_;
+  int max_back_speed_;
 	int current_speed_;
 	Position pos_object_;
 
-	// Не задается const, поскольку может меняться бонусом
+	// ГЌГҐ Г§Г Г¤Г ГҐГІГ±Гї const, ГЇГ®Г±ГЄГ®Г«ГјГЄГі Г¬Г®Г¦ГҐГІ Г¬ГҐГ­ГїГІГјГ±Гї ГЎГ®Г­ГіГ±Г®Г¬
 	int max_speed_;
 	bool stop;
 };

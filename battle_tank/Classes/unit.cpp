@@ -17,7 +17,7 @@ void Unit::launch() {
 	runnable = true;
 }
 
-// Вызывается при уничтожении юнита, ставит runnable в false
+// Г‚Г»Г§Г»ГўГ ГҐГІГ±Гї ГЇГ°ГЁ ГіГ­ГЁГ·ГІГ®Г¦ГҐГ­ГЁГЁ ГѕГ­ГЁГІГ , Г±ГІГ ГўГЁГІ runnable Гў false
 void Unit::destroy() {
 	runnable = false;
 }
@@ -40,6 +40,9 @@ void Unit::setModel(int type) {
 	if (!runnable) {
 		type_ = type;
 	}
+  
+bool Unit::is_runnable() const {
+	return runnable;
 }
 
 bool Unit::operator == (const Unit &other) const

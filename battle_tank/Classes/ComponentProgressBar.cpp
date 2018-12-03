@@ -4,8 +4,6 @@ ComponentProgressBar::ComponentProgressBar(Position pos, int max, std::string fi
 {
 	max_ = curr_ = max;
 
-	auto lay = Layer::create();
-
 	loading_bar = cocos2d::ui::LoadingBar::create("res/" + filename + "_active.png");
 	loading_bar->setDirection(cocos2d::ui::LoadingBar::Direction::LEFT);
 	loading_bar->setPercent(100);

@@ -17,7 +17,7 @@ public:
 
     void set_current_speed(int current_speed);
 	*/
-	static float get_angle(float ang);
+	static float get_angle(float ang_f);
 	/*
 private:
     int max_speed_;

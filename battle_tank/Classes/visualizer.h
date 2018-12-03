@@ -3,6 +3,7 @@
 
 #include "base_visualizer.h"
 #include "cocos2d.h"
+#include "RoomLayer.h"
 #include "ui/CocosGUI.h"
 
 #define TAG_PLAYERS_TABLE 20
@@ -14,9 +15,6 @@ class Visualizer : public BaseVisualizer, public cocos2d::Scene
 {
 private:
 	cocos2d::Label* amount;
-
-	float up; // скорость по оси Y
-	float right; // скорость по оси X
 
 	cocos2d::PhysicsWorld *sceneWorld;
 
@@ -33,6 +31,7 @@ private:
 	cocos2d::ui::LoadingBar* loadingBar;
 	cocos2d::Label* label_timer;
 
+	bool onContactBegin(cocos2d::PhysicsContact &contact);
 
 public:
 

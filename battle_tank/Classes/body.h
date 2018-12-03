@@ -28,20 +28,33 @@ public:
 
 	~Body();
 
-	void apply_health_bonus(Bonus& bonus);
-	void apply_speed_bonus(Bonus& bonus);
-	void decrement_helth(int decr);
-	void increment_helth(int incr);
-	int get_health() const;
-	int get_max_health() const;
-	float get_angle();
-	void set_angle(float speed);
+	Body& operator=(const Body& other) {
+		this->name_ = other.name_;
+		this->bar_ = other.bar_;
+		this->max_health_ = other.max_health_;
+		this->health_ = other.health_;
 
-	RotateMovement& get_rotation_movement();
-	void set_rotation_movement(RotateMovement);
+		this->rotation_ = other.rotation_;
+		this->forward_ = other.forward_;
+		return *this;
+	}
 
-	ForwardMovement& get_forward_movement();
-	void set_forward_movement(ForwardMovement);
+    void apply_health_bonus(Bonus& bonus);
+    void apply_speed_bonus(Bonus& bonus);
+    void decrement_helth(int decr);
+    void increment_helth(int incr);
+    int get_health() const;
+    int get_max_health() const;
+
+	void set_angle(float angle);
+
+	float get_angle() const;
+
+    RotateMovement& get_rotation_movement();
+    void set_rotation_movement(RotateMovement);
+
+    ForwardMovement& get_forward_movement();
+    void set_forward_movement(ForwardMovement);
 
 	void set_speed(int speed);
 	void set_max_speed(int speed);
@@ -54,12 +67,11 @@ public:
 	static Body getHeavyBody(Position pos = Position());
 
 protected:
-	int max_health_;
-	int health_;
-	ForwardMovement forward_;
-public:
-	RotateMovement rotation_;
+    int max_health_;
+    int health_;
 
+    RotateMovement rotation_;
+    ForwardMovement forward_;
 };
 
 #endif // BODY_H

@@ -11,7 +11,9 @@ Tank::Tank(std::string name, int type,
 }
 
 void Tank::setModel(int type) {
-	
+	if (is_runnable()) {
+		return;
+	}
 	if (type == LIGHT) {
 		weapon_ = Weapon::getLightWeapon(position_);
 		body_ = Body::getLightBody(position_);
@@ -31,6 +33,9 @@ Body& Tank::get_body() {
 
 #include "cocos2d.h"
 void Tank::set_position(Position pos) {
+	if (!is_runnable()) {
+		return;
+	}
 	cocos2d::Vec2 vec = pos.toVec2();
 	cocos2d::Vec2 vec2 = cocos2d::Vec2(vec.x, vec.y + 20);
 
@@ -42,11 +47,10 @@ void Tank::set_position(Position pos) {
 
 #include <cmath>
 
-
-
-std::mutex g_move;
 void Tank::move(float distance, bool back) {
-
+if (!is_runnable()) {
+		return;
+	}
 	/*distance = 1;
 	//this->body_.sprite->stopAllActions();
 	auto angle_ = this->body_.rotation_.get_current_angle();
@@ -89,6 +93,7 @@ void Tank::move(float distance, bool back) {
 	this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement().get_current_angle());
 	sinchronize();
 	/*if (!(power >= 0.f && power < 1.f)) {
+
 		power = 1.f;
 	}
 	auto physic = body_.sprite->getPhysicsBody();
@@ -123,6 +128,9 @@ void Tank::rotate_body(float angle) {
 }
 
 void Tank::rotate_weapon(float power, bool clockwise) {
+	if (!is_runnable()) {
+		return;
+	}
 	float weapon_angle = weapon_.get_angle();
 
 	float anle_add = weapon_.get_angle_speed() * power;
@@ -137,9 +145,11 @@ void Tank::rotate_weapon(float power, bool clockwise) {
 }
 
 
-
 void Tank::sinchronize() {
-	// Ñòàâèì ïóøêó â òî æå ìåñòî, ÷òî è êîðïóñ
+  if (!is_runnable()) {
+		return;
+	}
+	// Ã‘Ã²Ã Ã¢Ã¨Ã¬ Ã¯Ã³Ã¸ÃªÃ³ Ã¢ Ã²Ã® Ã¦Ã¥ Ã¬Ã¥Ã±Ã²Ã®, Ã·Ã²Ã® Ã¨ ÃªÃ®Ã°Ã¯Ã³Ã±
 	//body_.sprite->getPhysicsBody()->setAngularVelocity(0);
 	body_.sprite->getPhysicsBody()->resetForces();
 	
@@ -152,12 +162,13 @@ void Tank::sinchronize() {
 	body_.sprite->setPosition(pos.toVec2());
 	weapon_.sprite->setPosition(pos.toVec2());
 	sprite->setPosition(pos.toVec2());
+
 	unit_name->setPosition(x, y + 15);
 	body_.bar_->setPosition(x, y - 15);
 	weapon_.bar_->setPosition(x, y - 17);
 
-	// Ïîâîðîò ïóøêè èçìåíÿåòñÿ â ñîîòâåñòâèè ñ ïîâîðîòîì êîðïóñà +
-	// â ïóøêå õðàíèòñÿ óãîë ïîâîðîòà îðóäèÿ
+	// ÃÃ®Ã¢Ã®Ã°Ã®Ã² Ã¯Ã³Ã¸ÃªÃ¨ Ã¨Ã§Ã¬Ã¥Ã­Ã¿Ã¥Ã²Ã±Ã¿ Ã¢ Ã±Ã®Ã®Ã²Ã¢Ã¥Ã±Ã²Ã¢Ã¨Ã¨ Ã± Ã¯Ã®Ã¢Ã®Ã°Ã®Ã²Ã®Ã¬ ÃªÃ®Ã°Ã¯Ã³Ã±Ã  +
+	// Ã¢ Ã¯Ã³Ã¸ÃªÃ¥ ÃµÃ°Ã Ã­Ã¨Ã²Ã±Ã¿ Ã³Ã£Ã®Ã« Ã¯Ã®Ã¢Ã®Ã°Ã®Ã²Ã  Ã®Ã°Ã³Ã¤Ã¨Ã¿
 	body_.sprite->setRotation(body_.get_angle());
 	weapon_.sprite->setRotation(body_.sprite->getRotation() + weapon_.get_angle());
 
@@ -165,11 +176,16 @@ void Tank::sinchronize() {
 
 }
 
-
 void Tank::fire(int shot) {
+  if (!is_runnable()) {
+		return;
+	}
 	weapon_.fire();
 }
 
 void Tank::center_weapon() {
+  if (!is_runnable()) {
+		return;
+	}
 	weapon_.center();
 }

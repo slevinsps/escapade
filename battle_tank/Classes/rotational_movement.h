@@ -2,8 +2,8 @@
 #define ROTATE_MOVEMENT_H
 
 #include <thread>
-#include "movement.h"
 #include <mutex>
+#include "cocos2d.h"
 
 class RotateMovement : public Movement
 {
@@ -22,12 +22,24 @@ public:
 
 	~RotateMovement();
 
+	RotateMovement(const RotateMovement& t) {
+		this->speed_ = t.speed_;
+		this->current_angle_ = t.current_angle_;
+	}
+
+	RotateMovement& operator=(const RotateMovement& t) {
+		this->speed_ = t.speed_;
+		this->current_angle_ = t.current_angle_;
+		return *this;
+	}
+
 	float get_current_angle() const;
-	void angle_to_value(float angle_param);
-	void rotate(float angle_param);
+
 	void set_current_angle(int angle);
 
 	void angle_zero();
+
+	void rotate(float angle_param);
 
 	float get_speed() const;
 
@@ -37,6 +49,8 @@ private:
 	std::mutex g_lock;
 	float current_angle_;
 	float speed_;
+
+	void angle_to_value(float angle_param);
 
 	void angle_to_zero();
 };

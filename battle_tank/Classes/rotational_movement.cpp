@@ -47,7 +47,6 @@ void RotateMovement::angle_zero() {
 	thread.detach();
 }
 
-
 void RotateMovement::angle_to_value(float angle_param) {
 	if (g_lock.try_lock() == true) {
 		CCLOG("Block\n");
@@ -73,7 +72,6 @@ void RotateMovement::angle_to_value(float angle_param) {
 			set_current_angle(angle);
 			Sleep(10);
 		}
-		
 		g_lock.unlock();
 	}
 	else
@@ -81,14 +79,14 @@ void RotateMovement::angle_to_value(float angle_param) {
 
 }
 
-
 void RotateMovement::rotate(float angle_param) {
 	std::thread thread(&RotateMovement::angle_to_value, this, angle_param);
 	thread.join();
 }
 
-void RotateMovement::set_current_angle(int angle) {
-	current_angle_ = angle;
+void RotateMovement::set_current_angle(float angle) {
+    current_angle_ = angle;
+
 }
 bool RotateMovement::operator == (const RotateMovement &other) {
 	return (get_current_angle() == other.get_current_angle() &&
