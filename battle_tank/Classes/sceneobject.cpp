@@ -50,7 +50,7 @@ SceneObject::SceneObject(Position position,
 	}
 }
 
-Position::Position(int x, int y) : x_(x), y_(y){}
+Position::Position(float x, float y) : x_(x), y_(y){}
 
 Position::~Position(){}
 
@@ -63,18 +63,18 @@ Position::Position(cocos2d::Vec2 v) {
 	y_ = v.y;
 }
 
-int Position::get_x() const {
+float Position::get_x() const {
     return x_;
 }
-void Position::set_x(int x) {
+void Position::set_x(float x) {
     x_ = x;
 }
 
-int Position::get_y() const {
+float Position::get_y() const {
     return y_;
 }
 
-void Position::set_y(int y) {
+void Position::set_y(float y) {
     y_ = y;
 }
 

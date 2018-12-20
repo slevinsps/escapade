@@ -11,7 +11,7 @@
 class Position
 {
 public:
-    Position(int x = 0, int y = 0);
+    Position(float x = 0, float y = 0);
     ~Position();
 
     bool operator == (const Position &other) const;
@@ -24,17 +24,17 @@ public:
 		return *this;
 	}
 
-    int get_x() const;
-    void set_x(int x);
+	float get_x() const;
+    void set_x(float x);
 
-    int get_y() const;
-	void set_y(int y);
+	float get_y() const;
+	void set_y(float y);
 
 	cocos2d::Vec2 toVec2();
 	Position(cocos2d::Vec2 v);
 
 private:
-    int x_, y_;
+    float x_, y_;
 };
 
 class SceneObject

@@ -2,6 +2,7 @@
 #define FORWARD_MOVEMENT_H
 #include "movement.h"
 #include "sceneobject.h"
+#include "rotational_movement.h"
 
 class ForwardMovement : public Movement
 {
@@ -41,8 +42,8 @@ public:
 	void set_pos(Position pos_object_v) { pos_object_ = pos_object_v; };
 	Position& get_pos() { return pos_object_; };
 	//void set_pos(Position p) { pos_ = p; );
-	void move_to_distace(float distace, float speed, float angle);
-	void move(float distance, float speed, float angle, bool keyboard);
+	void move_to_distace(float distace, float speed, RotateMovement& r);
+	void move(float distance, float speed, RotateMovement& r, bool keyboard);
 
   bool operator == (const ForwardMovement &v1);
 

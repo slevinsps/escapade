@@ -1,10 +1,10 @@
 #include "rotational_movement.h"
 #include "cocos2d.h"
 
-
 RotateMovement::RotateMovement(float speed, float current_angle) :
 	current_angle_(current_angle),
-	speed_(speed)
+	speed_(speed),
+	flag_stop(false)
 {}
 
 RotateMovement::~RotateMovement() {}
@@ -31,6 +31,8 @@ void RotateMovement::angle_to_zero() {
 	}
 
 	while (angle > eps) {
+		if (flag_stop)
+			return;
 		if (angle - decr < eps) {
 			angle = 0;
 		}
@@ -49,6 +51,8 @@ void RotateMovement::angle_zero() {
 
 void RotateMovement::angle_to_value(float angle_param) {
 	if (g_lock.try_lock() == true) {
+		//f.set_stop(true);
+		
 		CCLOG("Block\n");
 		float decr = get_speed();
 		int mul = 1;
@@ -62,6 +66,10 @@ void RotateMovement::angle_to_value(float angle_param) {
 		}
 
 		while ((angle - angle_target) * znak > 0) {
+			if (flag_stop) {
+				g_lock.unlock();
+				return;
+			}
 			if ((angle - decr - angle_target) * znak < 0) {
 				angle = angle_target;
 				break;
@@ -72,6 +80,7 @@ void RotateMovement::angle_to_value(float angle_param) {
 			set_current_angle(angle);
 			Sleep(10);
 		}
+		//f.set_stop(false);
 		g_lock.unlock();
 	}
 	else
@@ -79,8 +88,9 @@ void RotateMovement::angle_to_value(float angle_param) {
 
 }
 
-void RotateMovement::rotate(float angle_param, bool keyboard) {
+void RotateMovement::rotate(float angle_param, bool keyboard) { 
 	std::thread thread(&RotateMovement::angle_to_value, this, angle_param);
+
 	if (keyboard) {
 		thread.detach();
 	}

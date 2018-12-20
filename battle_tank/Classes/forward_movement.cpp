@@ -20,8 +20,10 @@ int ForwardMovement::getMaxBackSpeed() const {
 }
 
 
-void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
-	g_move_tread.lock();
+void ForwardMovement::move_to_distace(float distace, float speed, RotateMovement& r) {
+	//speed = 1;
+	if (g_move_tread.try_lock() == false)
+		return;
 	if (speed < 0) {
 		speed *= -1;
 		distace *= -1;
@@ -31,13 +33,14 @@ void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 	float y, y_nach;
 	y_nach = y = get_pos().get_y();
 	float power = 2;
-	auto angle_ = angle;
+	auto angle_ = r.get_current_angle();
 
 	float angle_radians = angle_ / 180.f * M_PI;
 
 	float x_dist = x + distace * sinf(angle_radians);
 	float y_dist = y + distace * cosf(angle_radians);
-	//physic->setVelocity(cocos2d::Vec2(ax, ay));
+	float x_copy = x;
+	float y_copy = y;
 	float L = 1;
 	if (abs(x_dist - x) > abs(y_dist - y))
 		L = abs(x_dist - x);
@@ -47,13 +50,22 @@ void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 	float sx = (x_dist - x) / L;
 	float sy = (y_dist - y) / L;
 	for (int i = 1; i <= L / speed + 1; i++) {
-		x += speed * sx;
-		y += speed * sy;
-		set_pos(Position(x, y));
+		if (this->get_stop()) {
+			g_move_tread.unlock();
+			//this->set_stop(false);
+			return;
+		}
+
+
+		x_copy += speed * sx;
+		y_copy += speed * sy;
+		set_pos(Position(x_copy, y_copy));
 		//Sleep(100);
 		//body_.set_speed(powf(ax * ax + ay * ay, 0.5f));
-		Sleep(100);
+		Sleep(50);
 	}
+	
+
 	//physic->setVelocity(cocos2d::Vec2(0, 0));
 	//body_.set_speed(0);
 	//sinchronize();
@@ -62,12 +74,11 @@ void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 }
 
 
-void ForwardMovement::move(float distance, float speed, float angle, bool keyboard) {
+void ForwardMovement::move(float distance, float speed, RotateMovement& r, bool keyboard) {
 	//sinchronize();
-
-	std::thread thread1(&ForwardMovement::move_to_distace, this, distance, speed, angle);
+	std::thread thread1(&ForwardMovement::move_to_distace, this, distance, speed, std::ref(r));
 	if (keyboard) {
-		thread1.join();
+		thread1.detach();
 	}
 	else {
 		thread1.join();

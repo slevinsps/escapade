@@ -54,7 +54,7 @@ if (!is_runnable()) {
 	/*distance = 1;
 	//this->body_.sprite->stopAllActions();
 	auto angle_ = this->body_.rotation_.get_current_angle();
-	CCLOG("Your rotation %f", this->sprite->getRotation());
+	CCLOG("Your rotation %f", this->sprite->getRotation())
 
 	float angle_radians = angle_ / 180.f * M_PI;
 	float ax = sinf(angle_radians);
@@ -89,8 +89,7 @@ if (!is_runnable()) {
 	else {
 		max_speed = body_.get_forward_movement().getMaxSpeed();
 	}
-
-	this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement().get_current_angle(), keyboard);
+	this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement(), keyboard);
 	sinchronize();
 	/*if (!(power >= 0.f && power < 1.f)) {
 
@@ -123,7 +122,13 @@ if (!is_runnable()) {
 
 void Tank::rotate_body(float angle, bool keyboard) {
 	sinchronize();
+	//body_.get_forward_movement().set_stop(true);
+	//this->body_.get_forward_movement().move(distance, max_speed, this->body_.get_rotation_movement().get_current_angle(), keyboard);
+
+
+	
 	body_.get_rotation_movement().rotate(angle, keyboard);
+	
 	sinchronize();
 }
 
@@ -151,8 +156,7 @@ void Tank::sinchronize() {
 	}
 	// Ñòàâèì ïóøêó â òî æå ìåñòî, ÷òî è êîðïóñ
 	//body_.sprite->getPhysicsBody()->setAngularVelocity(0);
-	body_.sprite->getPhysicsBody()->resetForces();
-	
+
 	auto pos = body_.get_forward_movement().get_pos();// prite->getPosition();
 	
 	float x = pos.get_x();

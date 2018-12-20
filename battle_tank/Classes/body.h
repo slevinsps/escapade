@@ -24,7 +24,7 @@ public:
 		float speed_back = BODY_DEFAULT_ROTATION_SPEED,
 		float current_rotation_angle = BODY_DEFAULT_ANGLE,
 		std::string name = "default body",
-		std::string texture = "tank_light_body");
+		std::string texture = "tank_light_body") ;
 
 	~Body();
 

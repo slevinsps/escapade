@@ -35,11 +35,13 @@ public:
 
 	bool operator == (const RotateMovement &other);
 	
+	bool get_stop() { return flag_stop; }
+	void set_stop(bool fl) { flag_stop = fl; }
 private:
 	std::mutex g_lock;
 	float current_angle_;
 	float speed_;
-
+	bool flag_stop;
 	void angle_to_value(float angle_param);
 
 	void angle_to_zero();

@@ -12,9 +12,12 @@ Body::Body(Position position,
 	health_(max_health),
 	max_health_(max_health),
 	rotation_(rotation_speed, current_rotation_angle),
+	
 	forward_(speed, speed_back) {
-	bar_ = new ComponentProgressBar(position, max_health, "health");
-}
+		bar_ = new ComponentProgressBar(position, max_health, "health");
+		rotation_.set_stop(false);
+	}
+
 
 Body::~Body() {
 	;
@@ -50,7 +53,7 @@ ForwardMovement& Body::get_forward_movement() {
 }
 
 void Body::set_angle(float angle) {
-	this->rotation_.rotate(angle, 0);
+	//this->rotation_.rotate(angle, 0);
 }
 float Body::get_angle() const {
 	return this->rotation_.get_current_angle();

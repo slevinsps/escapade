@@ -6,6 +6,7 @@
 #include "scene.h"
 #include "room.h"
 #include "user_control_bundle.h"
+#include <time.h> 
 
 class BattleGround
 {
@@ -41,7 +42,7 @@ public:
 		scene_.getUnits()[defender].damage(damage);
 		room_.players_[defender].increase_damage_received(damage);
 		room_.players_[attacker].increase_damage_done(damage);
-
+		
 		if (!scene_.getUnits()[defender].is_alive()) {
 			scene_.make_died(scene_.getUnits()[defender]);
 			scene_.getUnits()[defender].destroy();
@@ -49,6 +50,13 @@ public:
 			room_.players_[attacker].increase_kills();
 		}
 	}
+
+	void attack_units_by_units(int defender, int attacker) {
+		srand(time(NULL));
+		scene_.getUnits()[defender].get_body().get_forward_movement().set_pos(Position(rand() % 450 + 50, rand() % 250 + 50));
+		scene_.getUnits()[attacker].get_body().get_forward_movement().set_pos(Position(rand() % 450 + 50, rand() % 250 + 50));
+	}
+
 	TScene scene_;
 	Room room_;
 	std::vector<UnitControl> algorithms_;

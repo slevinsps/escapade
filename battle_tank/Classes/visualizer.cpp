@@ -64,8 +64,6 @@ static void problemLoading(const char* filename)
 std::mutex g_lock1;
 void Visualizer::work(int i) {
 	g_lock1.lock();
-	auto right = MoveBy::create(2, Vec2(600, 0));
-	auto left = MoveBy::create(2, Vec2(-600, 0));
 	while (ground.scene_.getUnits()[i].is_runnable()) {
 		CCLOG("Coord 0 %d;", ground.scene_.getUnits()[i].sprite->getPositionY());
 		//if (ground.scene_.getUnits()[i].sprite->numberOfRunningActions() == 0) {
@@ -111,7 +109,7 @@ void Visualizer::work1(int i) {
 void Visualizer::updateTimer(float dt)
 {
 	// Ïîëó÷àåòñÿ èç êîìíàòû. À ïîêà òàê.
-	static seconds time = 10s;
+	static seconds time = 60s;
 	if (time <= 0s)
 	{
 		unschedule(schedule_selector(Visualizer::updateTimer));
@@ -323,6 +321,9 @@ bool Visualizer::onContactBegin(cocos2d::PhysicsContact &contact)
 	}
 	else if (a->getCategoryBitmask() == BITMASK_ALIVE_UNIT &&
 			 b->getCategoryBitmask() == BITMASK_ALIVE_UNIT) {
+		int index_defender = b->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		int index_attacker = a->getNode()->getTag() - TAG_PLAYERS_UNITS;
+		ground.attack_units_by_units(index_defender, index_attacker);
 		//CCLOG("TANKS FOUND HAS OCCURED");
 		;
 	}
@@ -343,21 +344,26 @@ void Visualizer::update(float delta) {
 	Node::update(delta);
 	if (control_tank >= 0) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
+			ground.scene_.getUnits()[control_tank].get_body().get_forward_movement().set_stop(true);
 			ground.scene_.getUnits()[control_tank].rotate_body(-5, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
+			ground.scene_.getUnits()[control_tank].get_body().get_forward_movement().set_stop(true);
 			ground.scene_.getUnits()[control_tank].rotate_body(5, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_Q)) {
+
 			ground.scene_.getUnits()[control_tank].rotate_weapon(1, false);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_E)) {
 			ground.scene_.getUnits()[control_tank].rotate_weapon(1, true);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+			ground.scene_.getUnits()[control_tank].get_body().get_forward_movement().set_stop(false);
 			ground.scene_.getUnits()[control_tank].move(1, false, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+			ground.scene_.getUnits()[control_tank].get_body().get_forward_movement().set_stop(false);
 			ground.scene_.getUnits()[control_tank].move(1, true, 1);
 		}
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_C)) {
@@ -377,11 +383,17 @@ void Visualizer::update(float delta) {
 
 void Visualizer::menuCloseCallback(Ref* pSender)
 {
+	CCLOG("RRRRR\n");
 	//Close the cocos2d-x game scene and quit the application
+	for (int i = 0; i < ground.scene_.getUnits().size(); i++) {
+		ground.scene_.getUnits()[i].get_body().get_forward_movement().set_stop(true);
+		ground.scene_.getUnits()[i].get_body().get_rotation_movement().set_stop(true);
+	}
+
 	for (Unit& unit : ground.scene_.getUnits()) {
 		unit.destroy();
 	}
-	Sleep(100);
+	Sleep(1000);
 	Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
