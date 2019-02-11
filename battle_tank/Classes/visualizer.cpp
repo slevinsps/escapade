@@ -62,6 +62,7 @@ static void problemLoading(const char* filename)
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 std::mutex g_lock1;
+bool Visualizer::operator!=(const Visualizer& other) const { return false; }
 void Visualizer::work(int i) {
 	g_lock1.lock();
 	auto right = MoveBy::create(2, Vec2(600, 0));
@@ -330,6 +331,8 @@ bool Visualizer::onContactBegin(cocos2d::PhysicsContact &contact)
 	CCLOG("NOOO %d and %d", a->getCategoryBitmask(), b->getCategoryBitmask());
 	return true;
 }
+
+Visualizer::Visualizer(const Visualizer& visualizer) {}
 
 bool Visualizer::isKeyPressed(EventKeyboard::KeyCode code) {
 	// Check if the key is currently pressed by seeing it it's in the std::map keys

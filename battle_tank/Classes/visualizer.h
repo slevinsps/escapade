@@ -65,7 +65,7 @@ public:
 
 	// For ability to be called in AppDelegate
 	static cocos2d::Scene* createScene();
-
+	
 	// Launch in init
 	virtual bool init();
 

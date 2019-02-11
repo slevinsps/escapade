@@ -1,7 +1,8 @@
 #ifndef USER_H
 #define USER_H
-
 #include <string>
+
+const int kStandartUserIP = 5;
 
 enum statuses {
     WAITING = -2,
