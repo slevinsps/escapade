@@ -3,11 +3,10 @@
 UnitComponent::UnitComponent(Position position,
 	std::string texture,
     std::string name,
-	bool physic):
-		SceneObject(position, texture, physic),
+	bool physic): SpriteSceneObject(position, texture, texture, physic),
 		name_(name)
 {
-	bar_ = nullptr;
+  ;
 }
 
 void UnitComponent::applyBonus(Bonus bonus){

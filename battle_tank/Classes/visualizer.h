@@ -1,9 +1,9 @@
 #ifndef VISUALIZER_H
 #define VISUALIZER_H
 
+#include "RoomLayer.h"
 #include "base_visualizer.h"
 #include "cocos2d.h"
-#include "RoomLayer.h"
 #include "ui/CocosGUI.h"
 
 #define TAG_PLAYERS_TABLE 20
@@ -11,69 +11,104 @@
 #define TAG_BATTLE 40
 #include "BodyParser.h"
 
-class Visualizer : public BaseVisualizer, public cocos2d::Scene
-{
-private:
-	cocos2d::Label* amount;
+#include "map_cocos.h"
 
-	cocos2d::PhysicsWorld *sceneWorld;
+class Visualizer : public BaseVisualizer, public cocos2d::Scene {
+ private:
+  // экспериментальный подход
+  BattleMapCocos *map_;
 
-	void SetPhysicsWorld(cocos2d::PhysicsWorld *world) {
-		sceneWorld = world; 
-	};
+  //
+  cocos2d::Label *amount;
 
-	static std::map<cocos2d::EventKeyboard::KeyCode,
-		std::chrono::high_resolution_clock::time_point> keys;
-	cocos2d::Label * label;
+  cocos2d::PhysicsWorld *sceneWorld;
 
-	void updateTimer(float dt);
+  void SetPhysicsWorld(cocos2d::PhysicsWorld *world) { sceneWorld = world; };
 
-	cocos2d::ui::LoadingBar* loadingBar;
-	cocos2d::Label* label_timer;
+  static std::map<cocos2d::EventKeyboard::KeyCode,
+                  std::chrono::high_resolution_clock::time_point>
+      keys;
 
-	bool onContactBegin(cocos2d::PhysicsContact &contact);
+  void updateTimer(float dt);
 
-public:
+  cocos2d::Label *label_timer;
 
-	Visualizer() {}
-	~Visualizer() {};
+  bool onContactBegin(cocos2d::PhysicsContact &contact);
 
-	Visualizer(const Visualizer &visualizer);
+ public:
+  Visualizer() {
+    map_ = new BattleMapCocos("c");
+    addChild(map_->GetNode()->get());
+    server_->run();
+    //std::thread thread1(&Server::run, *server_);
+    // CCLOG("123aaa123");
+    //thread1.detach();
+  }
+  Visualizer(Server *server) : BaseVisualizer(server) {
+    // чтение карты тайлов
+    // auto map = TMXTiledMap::create("TileMap.tmx");
+    // addChild(map, 0, 99);  // с меткой "99"
 
-	Visualizer(Visualizer &&visualizer);
+    map_ = new BattleMapCocos("c");
+    addChild(map_->GetNode()->get());
+  }
+  ~Visualizer(){};
 
-	Visualizer& operator = (const Visualizer &other);
+  Visualizer(const Visualizer &visualizer);
 
-	Visualizer& operator = (Visualizer &&other);
+  Visualizer(Visualizer &&visualizer);
 
-	bool operator == (const Visualizer &other) const;
+  Visualizer &operator=(const Visualizer &other);
 
-	bool operator != (const Visualizer &other) const;
+  Visualizer &operator=(Visualizer &&other);
 
-	void work(int i);
-	void work1(int i);
-	void add_players();
+  bool operator==(const Visualizer &other) const;
 
-	// Functions for key listeners
+  bool operator!=(const Visualizer &other) const;
 
-	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
+  void add_players();
 
-	// Functions necessary for the cocos2d::Scene
+  void AddGroup(std::vector<cocos2d::Node *>, int i);
 
-	// Launch game loop - https://www.gamefromscratch.com/post/2014/10/11/Cocos2d-x-Tutorial-Series-Game-loops-Updates-and-Action-Handling.aspx
-	void update(float) override;
+  void synchronizeGroup(std::vector<cocos2d::Node *>, Vec2 position);
 
-	// For ability to be called in AppDelegate
-	static cocos2d::Scene* createScene();
-	
-	// Launch in init
-	virtual bool init();
+  void synchronizeAttackers(std::vector<cocos2d::Node *>, Weapon weapon);
 
-	// Last action before close
-	void menuCloseCallback(cocos2d::Ref* pSender);
+  void kill(std::vector<cocos2d::Node *>, int id);
 
-	// cocos2d prompt - implement the "static create()" method manually
-	CREATE_FUNC(Visualizer);
+  // Functions for key listeners
+
+  bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
+
+  // Functions necessary for the cocos2d::Scene
+
+  // Launch game loop -
+  // https://www.gamefromscratch.com/post/2014/10/11/Cocos2d-x-Tutorial-Series-Game-loops-Updates-and-Action-Handling.aspx
+  void update(float) override;
+
+  // For ability to be called in AppDelegate
+  static cocos2d::Scene *createScene();
+
+  // Launch in init
+  virtual bool init();
+
+  // Last action before close
+  void menuCloseCallback(cocos2d::Ref *pSender);
+
+  void LoadCreate(SceneObject *obj) override{
+
+  };
+  void LoadDestroy(SceneObject *obj) override{};
+
+  void synchronize() override;
+
+  // std::vector<std::vector<cocos2d::Node*>> all_nodes;
+
+  std::vector < std::vector<ComponentProgressBar *>> bars;
+  std::vector<cocos2d::Label*> names;
+
+  // cocos2d prompt - implement the "static create()" method manually
+  CREATE_FUNC(Visualizer);
 };
 
-#endif // VISUALIZER_H
+#endif  // VISUALIZER_H

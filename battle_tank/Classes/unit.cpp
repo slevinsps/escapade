@@ -1,16 +1,14 @@
 #include "unit.h"
 
-Unit::Unit(std::string name,
-	int type,
-    Position position,
-    std::string texture) :
-		SceneObject(position, texture, false),
+Unit::Unit(std::string name, int type, Position position,
+           std::string texture_create, std::string texture_destroyed)
+    : SpriteSceneObject(position, texture_create, texture_destroyed, false),
+      
 		name_(name),
 		type_(type)
 	{
+  CCLOG("Unit see %s", texture_destroyed);
 	runnable = false;
-	unit_name = cocos2d::Label::createWithTTF(
-		name, "fonts/Marker Felt.ttf", 10);
 	};
 
 void Unit::launch() {
@@ -31,8 +29,6 @@ Unit::~Unit(){};
 void Unit::setName(std::string name) {
 	if (!runnable) {
 		name_ = name;
-		unit_name = cocos2d::Label::createWithTTF(
-			name, "fonts/Marker Felt.ttf", 10);
 	}
 }
 
