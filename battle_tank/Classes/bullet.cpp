@@ -3,19 +3,19 @@ Bullet::Bullet(
 	Position pos, float range,
 	float forward_speed,
 	float rotation_speed,
+	float curr_angle,
 	int pass,
-	std::string texture) :
-	SceneObject(pos, texture, true),
+	std::string texture) : SpriteSceneObject(pos, texture, texture, true),
 	forward_(forward_speed, forward_speed),
-	rotation_(rotation_speed, sprite->getRotation()),
+      rotation_(rotation_speed, curr_angle),
 	pass_throught_units_times(pass),
 	range_(range) {
 	
 }
 
 int Bullet::move() {
-	auto physic = sprite->getPhysicsBody();
-	auto angle_ = Movement::get_angle(sprite->getRotation());
+	//auto physic = sprite->getPhysicsBody();
+  auto angle_ = Movement::get_angle(rotation_.get_current_angle());
 
 	float angle_radians = angle_ / 180.f * M_PI;
 
@@ -28,6 +28,7 @@ int Bullet::move() {
 
 	float k = range_ / length;
 
+	/*
 	sprite->stopAllActions();
 	sprite->setOpacity(255);
 	sprite->setPosition(sprite->getPosition() + Vec2(ax, ay) * 20);
@@ -36,6 +37,9 @@ int Bullet::move() {
 	auto missing = FadeOut::create(0.8f);
 
 	sprite->runAction(Sequence::create(flyBullet->clone(), missing->clone(), nullptr));
+        */
+    this->forward_.move(range_, forward_.getMaxSpeed(), angle_, true);
+    this->rotation_.set_current_angle(angle_);
 
 	return 0;
 }

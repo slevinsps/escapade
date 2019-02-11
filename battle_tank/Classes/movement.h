@@ -5,7 +5,9 @@
 class Movement
 {
 public:
-	Movement() {};
+  Movement(){
+	
+  };
 	/*
     virtual ~Movement();
 
@@ -18,6 +20,9 @@ public:
     void set_current_speed(int current_speed);
 	*/
 	static float get_angle(float ang_f);
+
+
+	  //  bool SetActive(bool active) { return active; }
 	/*
 private:
     int max_speed_;

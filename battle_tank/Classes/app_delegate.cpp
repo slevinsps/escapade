@@ -123,7 +123,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = HelloWorld::createScene();
 	auto scene = Visualizer::createScene();
     // run
-
     director->runWithScene(scene);
 
     return true;

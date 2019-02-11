@@ -22,6 +22,8 @@ int ForwardMovement::getMaxBackSpeed() const {
 
 void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 	g_move_tread.lock();
+  //this->active = true;
+	//this->active = true;
 	if (speed < 0) {
 		speed *= -1;
 		distace *= -1;
@@ -46,19 +48,23 @@ void ForwardMovement::move_to_distace(float distace, float speed, float angle) {
 
 	float sx = (x_dist - x) / L;
 	float sy = (y_dist - y) / L;
+        speed /= 10;
 	for (int i = 1; i <= L / speed + 1; i++) {
 		x += speed * sx;
 		y += speed * sy;
 		set_pos(Position(x, y));
+		//this->active = true;
 		//Sleep(100);
 		//body_.set_speed(powf(ax * ax + ay * ay, 0.5f));
-		Sleep(100);
+		Sleep(10);
 	}
 	//physic->setVelocity(cocos2d::Vec2(0, 0));
 	//body_.set_speed(0);
 	//sinchronize();
+    this->active = false;
 	g_move_tread.unlock();
-
+        if (IsActive()) CCLOG("this->active");
+   
 }
 
 
@@ -66,8 +72,9 @@ void ForwardMovement::move(float distance, float speed, float angle, bool keyboa
 	//sinchronize();
 
 	std::thread thread1(&ForwardMovement::move_to_distace, this, distance, speed, angle);
+
 	if (keyboard) {
-		thread1.join();
+          thread1.detach();
 	}
 	else {
 		thread1.join();
@@ -86,8 +93,10 @@ void ForwardMovement::setMaxBackSpeed(int speed) {
 	max_back_speed_ = speed;
 }
 
-ForwardMovement::ForwardMovement(int max_speed, int max_back_speed) : max_back_speed_(max_back_speed) {
+ForwardMovement::ForwardMovement(int max_speed, int max_back_speed)
+    : max_back_speed_(max_back_speed) {
 	max_speed_ = max_speed;
 	current_speed_ = 0;
 	this->stop = false;
+    active = false;
 }

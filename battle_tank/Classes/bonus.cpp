@@ -3,8 +3,7 @@
 Bonus::Bonus( int type,
        double coefficient,
         Position position,
-        std::string texture) :
-    SceneObject(position, texture),
+        std::string texture) : SpriteSceneObjectCocos(position, texture, texture),
     type_(type), coefficient_(coefficient){}
 
 void Bonus::set_type(int type) {

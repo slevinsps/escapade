@@ -2,9 +2,9 @@
 #define MAP_H
 
 #include <iostream>
+#include "sceneobject.h"
 
-class BattleMap
-{
+class BattleMap : public SceneObject {
 public:
 	BattleMap(std::string filename = "map.txt");
     ~BattleMap();

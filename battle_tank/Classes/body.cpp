@@ -12,8 +12,8 @@ Body::Body(Position position,
 	health_(max_health),
 	max_health_(max_health),
 	rotation_(rotation_speed, current_rotation_angle),
-	forward_(speed, speed_back) {
-	bar_ = new ComponentProgressBar(position, max_health, "health");
+      forward_(speed, speed_back) {
+  
 }
 
 Body::~Body() {
@@ -29,12 +29,10 @@ int Body::get_max_health() const {
 
 void Body::decrement_helth(int decr) {
 	health_ -= decr;
-	bar_->set_current(health_);
 }
 
 void Body::increment_helth(int incr) {
 	health_ += incr;
-	bar_->set_current(health_);
 }
 
 RotateMovement& Body::get_rotation_movement() {

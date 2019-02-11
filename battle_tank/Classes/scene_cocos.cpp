@@ -1,6 +1,6 @@
-#include "scene.h"
+#include "scene_cocos.h"
 
-
+/*
 std::vector<Tank>& TScene::getUnits() {
     return units_;
 }
@@ -31,3 +31,4 @@ bool TScene::operator != (const TScene &other) const
 {
     return this->units_ != other.units_;
 }
+*/

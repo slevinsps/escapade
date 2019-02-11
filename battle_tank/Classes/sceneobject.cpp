@@ -6,11 +6,11 @@ static void problemLoading(std::string filename)
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-bool SceneObject::has_sprite() const {
+bool SpriteSceneObjectCocos::has_sprite() const {
 	return sprite != nullptr;
 }
 
-SceneObject::SceneObject(Position position,
+void SpriteSceneObjectCocos::Init(Position position,
 	std::string filename, bool physic) {
 	position_ = position;
 
