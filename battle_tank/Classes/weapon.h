@@ -60,7 +60,7 @@ public:
 	float get_angle() const;
     void set_angle(float angle);
 
-	void fire();
+	void fire(float angle);
 
 	// Отцентрировать пушку
 	void center();
@@ -70,6 +70,11 @@ public:
 	static Weapon getLightWeapon(Position pos = Position());
 
 	static Weapon getHeavyWeapon(Position pos = Position());
+
+	int GetCurrBulletAmount() { return cur_amount_bullets_;
+	}
+
+	int GetMaxBulletAmount() { return max_amount_bullets_; }
 
 private:
     int damage_;

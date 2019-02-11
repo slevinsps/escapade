@@ -7,6 +7,8 @@
 #include "room.h"
 #include "user_control_bundle.h"
 
+const int kStandartPlayersAmount = 5;
+
 class BattleGround
 {
 public:
@@ -42,10 +44,8 @@ public:
 		room_.players_[defender].increase_damage_received(damage);
 		room_.players_[attacker].increase_damage_done(damage);
 
-		CCLOG("i found that %d attacks %d", attacker, defender);
-
 		if (!scene_.getUnits()[defender].is_alive()) {
-			scene_.make_died(defender);
+			scene_.make_died(scene_.getUnits()[defender]);
 			scene_.getUnits()[defender].destroy();
 			room_.players_[defender].increase_deaths();
 			room_.players_[attacker].increase_kills();

@@ -30,7 +30,6 @@ public:
 
 	Body& operator=(const Body& other) {
 		this->name_ = other.name_;
-		this->bar_ = other.bar_;
 		this->max_health_ = other.max_health_;
 		this->health_ = other.health_;
 

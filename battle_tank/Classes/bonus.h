@@ -11,7 +11,7 @@
 
 #include "sceneobject.h"
 
-class Bonus : public SceneObject
+class Bonus : public SpriteSceneObjectCocos
 {
 public:
     Bonus( int type = BONUS_TYPE_DAMAGE,

@@ -20,7 +20,6 @@ public:
 	void init(Unit &unit) override {
 		unit.setModel(LIGHT);
 		unit.setName("No name");
-		unit.launch(); // не удалять лаунч, иначе ваш танк сразу потеряет управление
 	}
 
     void run(Unit &unit) override {
